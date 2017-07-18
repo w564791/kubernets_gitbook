@@ -113,8 +113,11 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 * `kubelet、kube-proxy、kubectl`部署在其它 `Node`节点上，如果通过**安全端口**访问`kube-apiserver`，则必须先通过 TLS 证书认证，再通过 RBAC 授权
 
 * `--runtime-config`配置为`rbac.authorization.k8s.io/v1beta1`，表示运行时的apiVersion；
+
 * `--service-cluster-ip-range` 指定 Service Cluster IP 地址段，该地址段不能路由可达;
 * `--apiserver-count=3`设置集群中master数量
+
+启动`kube-apiserver`
 
 ```
 # systemctl daemon-reload
@@ -123,8 +126,162 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 ```bash
 # systemctl enable kube-apiserver
 # systemctl start kube-apiserver
-# systemctl status kube-apiserver
 ```
+
+## 配置和启动 kube-controller-manager
+
+**创建 kube-controller-manager的serivce配置文件**
+
+文件路径`/usr/lib/systemd/system/kube-controller-manager.service`
+
+```
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+[Service]
+EnvironmentFile=-/etc/kubernetes/config
+EnvironmentFile=-/etc/kubernetes/controller-manager
+ExecStart=/usr/local/kubernetes/server/bin/kube-controller-manager \
+$KUBE_LOGTOSTDERR \
+$KUBE_LOG_LEVEL \
+$KUBE_MASTER \
+$KUBE_CONTROLLER_MANAGER_ARGS
+Restart=on-failure
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
+```
+
+配置文件`/etc/kubernetes/controller-manager`
+
+```
+KUBE_MASTER="--master=http://127.0.0.1:8080"
+KUBE_CONTROLLER_MANAGER_ARGS="--address=127.0.0.1 --service-cluster-ip-range=10.254.0.0/16 --cluster-name=kubernetes --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem --root-ca-file=/etc/kubernetes/ssl/ca.pem --leader-elect=true"
+```
+
+* `--service-cluster-ip-range` 参数指定 `Cluster `中 `Service `的CIDR范围，该网络在各 Node 间必须路由不可达，必须和 `kube-apiserver` 中的参数一致;
+* `--leader-elect=true ` leader选举
+* `--address` 值必须为 `127.0.0.1`，因为当前` kube-apiserver` 期望 `scheduler `和 `controller-manager `在同一台机器;否则会报错
+
+* `--root-ca-file` 用来对 kube-apiserver 证书进行校验，**指定该参数后，才会在Pod 容器的 ServiceAccount 中放置该 CA 证书文件;**
+
+### 启动 kube-controller-manager
+
+```
+# systemctl daemon-reload
+# systemctl enable kube-controller-manager
+# systemctl start kube-controller-manager
+```
+
+## 配置和启动 kube-scheduler
+
+**创建 kube-scheduler的serivce配置文件**
+
+文件路径`/usr/lib/systemd/system/kube-scheduler.service`
+
+```bash
+[Unit]
+Description=Kubernetes Scheduler Plugin
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+[Service]
+EnvironmentFile=-/etc/kubernetes/config
+EnvironmentFile=-/etc/kubernetes/scheduler
+ExecStart=/usr/local/kubernetes/server/bin/kube-scheduler \
+$KUBE_LOGTOSTDERR \
+$KUBE_LOG_LEVEL \
+$KUBE_MASTER \
+$KUBE_SCHEDULER_ARGS
+Restart=on-failure
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
+```
+
+配置文件`/etc/kubernetes/schedule`
+
+```bash
+KUBE_MASTER="--master=http://127.0.0.1:8080"
+KUBE_SCHEDULER_ARGS="--leader-elect=true --address=127.0.0.1"
+
+```
+
+### 启动 kube-scheduler
+
+```bash
+$ systemctl daemon-reload
+$ systemctl enable kube-scheduler
+$ systemctl start kube-scheduler
+```
+
+## 验证 master 节点功能
+
+```
+]# kubectl get cs
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok
+etcd-1               Healthy   {"health": "true"}
+scheduler            Healthy   ok
+etcd-0               Healthy   {"health": "true"}
+etcd-2               Healthy   {"health": "true"}
+```
+
+其他2台master节点配置和本处一致
+
+## 配置和启动 Nginx\(作为3台master的load balancer \)
+
+* Nginx启动在k8s-1上,k8s-1作为复用为node,IP地址为192.168.103.143
+
+编译需要添加nginx的TCP转发模块,我这儿是以前编译好的,直接拿来用,编译参数如下
+
+```bash
+# ./nginx -V
+nginx version: nginx/1.8.1
+built by gcc 4.4.7 20120313 (Red Hat 4.4.7-4) (GCC)
+built with OpenSSL 1.0.1e-fips 11 Feb 2013
+TLS SNI support enabled
+configure arguments: --prefix=/usr/local/nginx --with-pcre=/usr/local/src/pcre-8.36 --with-zlib=/usr/local/src/zlib-1.2.8 --add-module=/usr/local/src/nginx_tcp_proxy_module-master/
+```
+
+看下配置文件
+
+```
+# grep -Ev "#|^$" nginx.conf vhost/10050.cnf
+nginx.conf:user              nginx;
+nginx.conf:worker_processes  1;
+nginx.conf:pid        /var/run/nginx.pid;
+nginx.conf:events {
+nginx.conf:    worker_connections  1024;
+nginx.conf:}
+nginx.conf:http {
+nginx.conf:    default_type  application/octet-stream;
+nginx.conf:    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+nginx.conf:                      '$status $body_bytes_sent "$http_referer" '
+nginx.conf:                      '"$http_user_agent" "$http_x_forwarded_for"';
+nginx.conf:    sendfile        on;
+nginx.conf:    keepalive_timeout  65;
+nginx.conf:
+nginx.conf:}
+nginx.conf:include vhost/10050.cnf;
+vhost/10050.cnf:tcp {
+vhost/10050.cnf:    upstream proxy_name {
+vhost/10050.cnf:        server k8s-2:6443;
+vhost/10050.cnf:        server k8s-3:6443;
+vhost/10050.cnf:        server k8s-4:6443;
+vhost/10050.cnf:        }
+vhost/10050.cnf:server {
+vhost/10050.cnf:        listen       443;
+vhost/10050.cnf:        proxy_pass  proxy_name;
+vhost/10050.cnf:        }
+vhost/10050.cnf:}
+```
+
+启动nginx
+
+```bash
+/usr/local/src/nginx/nginx/sbin/nginx -c /usr/local/src/ngin/nginx/conf/nginx.conf
+
+```
+
+使用nginx的地址访问apiserver
 
 
 
