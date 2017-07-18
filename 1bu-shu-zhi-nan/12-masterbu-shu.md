@@ -262,16 +262,22 @@ nginx.conf:
 nginx.conf:}
 nginx.conf:include vhost/10050.cnf;
 vhost/10050.cnf:tcp {
-vhost/10050.cnf:    upstream proxy_name {
+vhost/10050.cnf:   timeout 1d;
+vhost/10050.cnf:   proxy_read_timeout 10d;
+vhost/10050.cnf:   proxy_send_timeout 10d;
+vhost/10050.cnf:   proxy_connect_timeout 30;
+vhost/10050.cnf:   upstream proxy_name {
 vhost/10050.cnf:        server k8s-2:6443;
 vhost/10050.cnf:        server k8s-3:6443;
 vhost/10050.cnf:        server k8s-4:6443;
+vhost/10050.cnf:        check interval=60000 rise=2 fall=5 timeout=10000 type=tcp;
 vhost/10050.cnf:        }
 vhost/10050.cnf:server {
 vhost/10050.cnf:        listen       443;
 vhost/10050.cnf:        proxy_pass  proxy_name;
 vhost/10050.cnf:        }
 vhost/10050.cnf:}
+
 ```
 
 启动nginx
