@@ -329,27 +329,31 @@ last:效果图
 
 * 默认生成路径为~/.kube/config,_也可以用于dashboard,DNS的https认证,直接拷贝使用,我是直接拷贝到/etc/kubernetes/config2,然后挂载到容器里面作为dashboard的启动参数使用的. 如本文--kubecfg-file=/etc/kubernetes/config2_
 
-  export KUBE\_APISERVER="[https://k8s-2:6443](https://k8s-2:6443/)" $ \# 设置集群参数 $ kubectl config set-cluster kubernetes  
-  --certificate-authority=/etc/kubernetes/ssl/ca.pem  
-  --embed-certs=true  
-  --server=${KUBE\_APISERVER}
-
-  $ \# 设置客户端认证参数
-
-  $ kubectl config set-credentials admin  
-  --client-certificate=/etc/kubernetes/ssl/admin.pem  
-  --embed-certs=true  
-  --client-key=/etc/kubernetes/ssl/admin-key.pem
-
-  $ \# 设置上下文参数
-
-  $ kubectl config set-context kubernetes  
-  --cluster=kubernetes  
-  --user=admin
-
-  $ \# 设置默认上下文
-
-  $ kubectl config use-context kubernetes
+```
+export KUBE_APISERVER="https://k8s-1" 
+# 设置集群参数 
+# kubectl config set-cluster kubernetes
+--certificate-authority=/etc/kubernetes/ssl/ca.pem
+--embed-certs=true
+--server=${KUBE_APISERVER}
+# 设置客户端认证参数
+# kubectl config set-credentials admin
+--client-certificate=/etc/kubernetes/ssl/admin.pem
+--embed-certs=true
+--client-key=/etc/kubernetes/ssl/admin-key.pem
+# 设置上下文参数
+# kubectl config set-context kubernetes
+--cluster=kubernetes
+--user=admin
+# 设置默认上下文
+kubectl config use-context kubernetes
+```
 
 
+
+
+
+
+
+查看生成的文件格式:
 
