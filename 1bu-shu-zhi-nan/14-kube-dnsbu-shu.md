@@ -1,5 +1,13 @@
 #### [跳转至yaml下载地址](https://github.com/w564791/Kubernetes-Cluster/tree/master/yaml/DNS)
 
+##### 使用到的镜像\(他人备份的镜像\):
+
+```
+index.tenxcloud.com/jimmy/k8s-dns-sidecar-amd64         1.14.1              fc5e302d8309        4 months ago        44.52 MB
+index.tenxcloud.com/jimmy/k8s-dns-kube-dns-amd64        1.14.1              f8363dbf447b        4 months ago        52.36 MB
+index.tenxcloud.com/jimmy/k8s-dns-dnsmasq-nanny-amd64   1.14.1              1091847716ec        4 months ago        44.84 MB
+```
+
 #### 第一步 创建ConfigMap
 
 ```

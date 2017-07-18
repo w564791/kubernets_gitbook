@@ -1,5 +1,11 @@
 #### [跳转至yaml下载链接 ](https://github.com/w564791/Kubernetes-Cluster/tree/master/yaml/dashboard-tls)
 
+##### 使用到的镜像\(他人备份的镜像\):
+
+```
+index.tenxcloud.com/jimmy/kubernetes-dashboard-amd64    v1.6.0              416701f962f2        4 months ago        108.6 MB
+```
+
 #### 第一步 创建RBRC授权,必须要第一步创建,不然容器也起不来,后面创建也可以,没毛病
 
 ```
