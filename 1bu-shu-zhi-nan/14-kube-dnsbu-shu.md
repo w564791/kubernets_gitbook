@@ -17,7 +17,6 @@ metadata:
 # kubectl get -f kubedns-cm.yaml
 NAME       DATA      AGE
 kube-dns   0         2d
-
 ```
 
 #### 第二步 创建ServiceAccount
@@ -77,7 +76,14 @@ NAME       CLUSTER-IP   EXTERNAL-IP   PORT(S)         AGE
 kube-dns   10.254.0.2   <none>        53/UDP,53/TCP   2d
 ```
 
-* 将CLUSTER-IP
+* 将`--cluster-dns=10.254.0.2`选项添加到kubelet启动参数里,在启动的容器的`/etc/resolv.conf`便会自动加上如下内容:
+
+```
+#  kubectl exec busybox-rc-6xctm -n kube-system  -ti -- cat /etc/resolv.conf
+nameserver 10.254.0.2
+search kube-system.svc.cluster.local. svc.cluster.local. cluster.local. localdomain
+options ndots:5
+```
 
 #### 第四部 创建RC\(重要\)
 
@@ -93,7 +99,6 @@ kube-dns   10.254.0.2   <none>        53/UDP,53/TCP   2d
 
 ```
  --kubecfg-file string Location of kubecfg file for access to kubernetes master service; --kube-master-url overrides the URL part of this;if this is not provided, defaults to service account tokens
-
 ```
 
 `[root@k8s-1 kubedns]# cat kubedns-controller.yaml`
@@ -272,7 +277,7 @@ spec:
       serviceAccountName: kube-dns  #这里是连接apiserver使用的账户
 ```
 
-* 提供挂载卷
+提供挂载卷
 
 ```
 volumes:
@@ -287,7 +292,6 @@ name: ssl-certs-hosts
 * 挂载卷
 
 ```
-
 volumeMounts:
 - name: kube-dns-config
 mountPath: /kube-dns-config
@@ -304,10 +308,18 @@ readOnly: true
 ```
 image: index.tenxcloud.com/jimmy/k8s-dns-kube-dns-amd64:1.14.1
 args:
-- --kubecfg-file=/etc/kubernetes/config2 
+- --kubecfg-file=/etc/kubernetes/config2
 ```
 
 * `serviceAccountName: kube-dns` \#这里是连接`apiserver`使用的账户
+
+查看deploy
+
+```
+# kubectl get -f kubedns-controller.yaml
+NAME       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+kube-dns   1         1         1            1           2d      
+```
 
 
 

@@ -379,7 +379,6 @@ spec:
     targetPort: 80
   selector:
     name: nginx
-
 ```
 
 创建一个副本为1的nginx的RC
@@ -462,7 +461,6 @@ Commercial support is available at
 <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>
-
 ```
 
 
