@@ -277,7 +277,6 @@ vhost/10050.cnf:        listen       443;
 vhost/10050.cnf:        proxy_pass  proxy_name;
 vhost/10050.cnf:        }
 vhost/10050.cnf:}
-
 ```
 
 启动nginx
