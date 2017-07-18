@@ -313,5 +313,7 @@ $ cfssl-certinfo -cert kubernetes.pem
 # for i in k8s-1 k8s-2 k8s-3 k8s-4 ;do scp *pem root@$i:/etc/kubernetes/ssl/ ;done
 ```
 
+参考文档:
 
+\[1\]: https://o-my-chenjian.com/2017/04/25/Security-Settings-Of-K8s/
 
