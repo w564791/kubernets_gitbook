@@ -103,20 +103,17 @@ KUBE_ADMISSION_CONTROL="--admission-control=ServiceAccount,NamespaceLifecycle,Na
 KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s.io/v1beta1 --kubelet-https=true --experimental-bootstrap-token-auth --token-auth-file=/etc/kubernetes/token.csv  --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem --client-ca-file=/etc/kubernetes/ssl/ca.pem --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem --etcd-cafile=/etc/kubernetes/ssl/ca.pem --etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem --etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem --enable-swagger-ui=true --apiserver-count=3 --audit-log-maxage=30 --audit-log-maxbackup=3 --audit-log-maxsize=100 --audit-log-path=/var/lib/k8s/apiserver.log --event-ttl=1h"
 ```
 
-* --advertise-address :该地址为apiserver集群广播地址,此地址必须能为集群其他部分访问到,如果为空,则使用`--bind-address`，如果`--bind-address`未被制定,那么将使用主机的默认地址；
+* `--advertise-address` :该地址为`apiserver`集群广播地址,此地址必须能为集群其他部分访问到,如果为空,则使用`--bind-address`，如果`--bind-address`未被制定,那么将使用主机的默认地址；
 * `--etcd-servers :`指定etcd集群地址,这里使用https;
 
 * `--admission-control`,必须包含`ServiceAccount`;
 
 * `--authorization-mode=RBAC` 指定在安全端口使用 RBAC 授权模式，拒绝未通过授权的请求;
-* `kubelet、kube-proxy、kubectl `部署在其它 `Node `节点上，如果通过**安全端口**访问` kube-apiserver`，则必须先通过 TLS 证书认证，再通过 RBAC 授权
-*  --`runtime-config`配置为`rbac.authorization.k8s.io/v1beta1`，表示运行时的apiVersion；
+
+* `kubelet、kube-proxy、kubectl`部署在其它 `Node`节点上，如果通过**安全端口**访问`kube-apiserver`，则必须先通过 TLS 证书认证，再通过 RBAC 授权
+* --`runtime-config`配置为`rbac.authorization.k8s.io/v1beta1`，表示运行时的apiVersion；
 * `--service-cluster-ip-range` 指定 Service Cluster IP 地址段，该地址段不能路由可达;
-* `--apiserver-count=3 `设置集群中master数量
+* `--apiserver-count=3`设置集群中master数量
 * 
-```ini
-
-```
-
 
 
