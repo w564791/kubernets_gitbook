@@ -207,15 +207,15 @@ KUBE_SCHEDULER_ARGS="--leader-elect=true --address=127.0.0.1"
 ### 启动 kube-scheduler
 
 ```bash
-$ systemctl daemon-reload
-$ systemctl enable kube-scheduler
-$ systemctl start kube-scheduler
+# systemctl daemon-reload
+# systemctl enable kube-scheduler
+# systemctl start kube-scheduler
 ```
 
 ## 验证 master 节点功能
 
 ```
-]# kubectl get cs
+# kubectl get cs
 NAME                 STATUS    MESSAGE              ERROR
 controller-manager   Healthy   ok
 etcd-1               Healthy   {"health": "true"}
@@ -228,9 +228,9 @@ etcd-2               Healthy   {"health": "true"}
 
 ## 配置和启动 Nginx\(作为3台master的load balancer \)
 
-* Nginx启动在k8s-1上,k8s-1作为复用为node,IP地址为192.168.103.143
+* ##### Nginx启动在k8s-1上,k8s-1作为复用为node,IP地址为192.168.103.143
 
-编译需要添加nginx的TCP转发模块,我这儿是以前编译好的,直接拿来用,编译参数如下
+编译需要添加nginx的TCP转发模块,我这儿是以前编译好的,直接拿来用,编译参数如下\(Nginx现在已经原生支持TCP转发,我这里用得三方模块\)
 
 ```bash
 # ./nginx -V
@@ -379,8 +379,6 @@ selfLink: ""
 * 此时controller-manager的leader为k8s-4
 
 * 此时scheduler 的leader为k8s-3
-
-
 
 
 
