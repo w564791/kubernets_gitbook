@@ -132,3 +132,29 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 
 只需要加上`--endpoints https://k8s-4:2379`即可IP或域名必须是`kubernetes-csr.json`配置文件生成的证书里面已经签名的证书
 
+最后在etcd集群上创建`flanneld`使用的网段:
+
+```
+# etcdctl \
+   --endpoints https://k8s-4:2379
+   --ca-file=/etc/kubernetes/ssl/ca.pem \
+   --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
+   --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
+    set /k8s/network/config '{ "Network": "10.1.0.0/16" }'
+```
+
+查看信息
+
+```
+# etcdctl \
+   --endpoints https://k8s-4:2379
+   --ca-file=/etc/kubernetes/ssl/ca.pem \
+   --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
+   --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
+    get /k8s/network/config
+2017-07-18 09:42:07.371289 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
+{ "Network": "10.1.0.0/16" }
+```
+
+
+
