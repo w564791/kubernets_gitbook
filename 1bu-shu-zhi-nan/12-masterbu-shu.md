@@ -118,6 +118,8 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 
 * `--apiserver-count=3`设置集群中master数量
 
+* `--service-node-  port-rang`指定`svc`打开的端口范围
+
 启动`kube-apiserver`
 
 ```
