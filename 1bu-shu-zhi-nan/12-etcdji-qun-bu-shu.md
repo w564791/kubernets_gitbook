@@ -1,0 +1,136 @@
+# 创建高可用 etcd 集群
+
+`kuberntes`系统使用 `etcd`存储所有数据，此处介绍部署一个三节点高可用 `etcd`集群的步骤，这三个节点复用 `kubernetes master`机器，分别命名`为k8s-2、k8s-3、k8s-4：`
+
+```
+# cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.103.143 k8s-1
+192.168.103.147 k8s-2
+192.168.103.144 k8s-3
+192.168.103.146 k8s-4
+192.168.103.128 k8s-5
+```
+
+使用到的证书:
+
+* ca.pem
+* kubernetes-key.pem
+* kubernetes.pem
+
+下载二进制文件:
+
+* [etcd-v3.1.0](https://github.com/coreos/etcd/releases/download/v3.1.0/etcd-v3.1.0-linux-amd64.tar.gz)
+
+`systemd`启动文件: 三台`etcd`服务的配置都差不多,仅有`--name`部分有所改变,这里只列出一个配置文件\)
+
+```
+# hostname
+k8s-4
+#mkdir /var/lib/etcd/
+# cat /usr/lib/systemd/system/etcd.service
+```
+
+```
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+Documentation=https://github.com/coreos
+[Service]
+Type=notify
+WorkingDirectory=/var/lib/etcd/
+EnvironmentFile=-/etc/etcd/etcd.conf
+ExecStart=/usr/local/etcd-v3.1.5-linux-amd64/etcd\
+--name k8s-4\
+--cert-file=/etc/kubernetes/ssl/kubernetes.pem \
+--key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
+--peer-cert-file=/etc/kubernetes/ssl/kubernetes.pem \
+--peer-key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
+--trusted-ca-file=/etc/kubernetes/ssl/ca.pem \
+--peer-trusted-ca-file=/etc/kubernetes/ssl/ca.pem \
+--initial-advertise-peer-urls https://k8s-4:2380 \
+--listen-peer-urls https://k8s-4:2380 \
+--listen-client-urls https://k8s-4:2379,https://127.0.0.1:2379 \
+--advertise-client-urls https://k8s-4:2379 \
+--initial-cluster-token etcd-cluster-0 \
+--initial-cluster k8s-2=https://k8s-2:2380,k8s-3=https://k8s-3:2380,k8s-4=https://k8s-4:2380 \
+--initial-cluster-state new \
+--data-dir=/var/lib/etcd
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+```
+
+* 指定 `etcd`的工作目录为 `/var/lib/etcd`，数据目录为 `/var/lib/etcd`，需在启动服务前创建这两个目录；
+* 为了保证通信安全，需要指定 `etcd`的公私钥\(`cert-file`和`key-file`\)、`Peers`通信的公私钥和 `CA`证书\(`peer-cert-file`、`peer-key-file`、`peer-trusted-ca-file`\)、客户端的CA证书（`trusted-ca-file`）；
+* 创建`kubernetes.pem`证书时使用的`kubernetes-csr.json`文件的`hosts`字段包含所有`etcd`节点的`IP`，否则证书校验会出错；
+* `--initial-cluster-state`值为 `new`时，`--name` 的参数值必须位于 `--initial-cluster` 列表中；
+* EnvironmentFile=-/etc/etcd/etcd.conf  可以把参数写在这个配置文件里,更方便管理
+
+启动etcd集群,注意:etcd集群启动时,只有当2个或2个以上启动成功时启动状态返回0,否则启动失败;报错如下图
+
+## ![](https://github.com/w564791/Kubernetes-Cluster/raw/master/pic/err1.png "err1")
+
+## 验证服务
+
+查看集群状态
+
+```
+# etcdctl \
+   --endpoints https://k8s-4:2379
+   --ca-file=/etc/kubernetes/ssl/ca.pem \
+   --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
+   --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
+   cluster-health
+```
+
+```
+2017-07-17 17:35:54.028063 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
+2017-07-17 17:35:54.029048 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
+member a8b8c9e010602e4 is healthy: got healthy result from https://k8s-4:2379
+member 3e665d94ed27eb68 is healthy: got healthy result from https://k8s-3:2379
+member cd3bd399b989674c is healthy: got healthy result from https://k8s-2:2379
+cluster is healthy
+```
+
+查看成员列表
+
+```
+#etcdctl \
+   --endpoints https://k8s-4:2379
+   --ca-file=/etc/kubernetes/ssl/ca.pem \
+   --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
+   --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
+   member list
+```
+
+```
+2017-07-17 17:36:18.841086 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
+a8b8c9e010602e4: name=k8s-4 peerURLs=https://k8s-4:2380 clientURLs=https://k8s-4:2379 isLeader=true
+3e665d94ed27eb68: name=k8s-3 peerURLs=https://k8s-3:2380 clientURLs=https://k8s-3:2379 isLeader=false
+cd3bd399b989674c: name=k8s-2 peerURLs=https://k8s-2:2380 clientURLs=https://k8s-2:2379 isLeader=false
+```
+
+遇到的坑
+
+```
+#etcdctl \
+--ca-file=/etc/kubernetes/ssl/ca.pem \
+--cert-file=/etc/kubernetes/ssl/kubernetes.pem \
+--key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
+member list
+```
+
+```
+2017-07-17 17:42:00.878545 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
+client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP response "\x15\x03\x01\x00\x02\x02"
+; error #1: dial tcp 127.0.0.1:4001: getsockopt: connection refused
+```
+
+只需要加上`--endpoints https://k8s-4:2379`即可IP或域名必须是`kubernetes-csr.json`配置文件生成的证书里面已经签名的证书
+
+
+
