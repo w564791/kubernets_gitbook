@@ -9,7 +9,7 @@
 | kube-proxy.pem |  |  | ✔️ |  |  |  |
 | kube-proxy-key.pem |  |  | ✔️ |  |  |  |
 | admin.pem |  |  |  |  | ✔️ |  |
-| admin-key.pem |  |  |  |  | ✔️ |  |
+| admin-key.pem |  |  |  |  | ✔️ |   |
 
 ## 安装CFSSL
 
@@ -94,7 +94,7 @@ wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -o /usr/local/bin//cf
 
 "CN"：`Common Name，kube-apiserver` 从证书中提取该字段作为请求的用户名 `(User Name)`;浏览器使用该字段验证网站是否合法;
 
-"O"：`Organization，kube-apiserver`从证书中提取该字段作为请求用户所属的组` (Group)`;
+"O"：`Organization，kube-apiserver`从证书中提取该字段作为请求用户所属的组`(Group)`;
 
 #### 生成 CA 证书和私钥
 
@@ -146,8 +146,6 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
 # ls kuberntes*
 kubernetes.csr  kubernetes-csr.json  kubernetes-key.pem  kubernetes.pem
 ```
-
-
 
 ## 创建 admin 证书
 
