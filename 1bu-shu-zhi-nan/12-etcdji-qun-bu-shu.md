@@ -132,5 +132,3 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 
 只需要加上`--endpoints https://k8s-4:2379`即可IP或域名必须是`kubernetes-csr.json`配置文件生成的证书里面已经签名的证书
 
-
-
