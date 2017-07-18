@@ -340,5 +340,47 @@ openssl pkcs12 -export -in admin.pem -inkey admin-key.pem -out /etc/kubernetes/w
 }
 ```
 
+查看当前scheduler和controller-manager的leader\(apiserver无状态\)
+
+```
+# kubectl get ep -n kube-system kube-controller-manager kube-scheduler -o yaml
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Endpoints
+  metadata:
+    annotations:
+      control-plane.alpha.kubernetes.io/leader: '{"holderIdentity":"k8s-4","leaseDurationSeconds":15,"acquireTime":"2017-07-17T01:30:37Z","renewTime":"2017-07-18T05:28:37Z","leaderTransitions":0}'
+    creationTimestamp: 2017-07-17T01:30:37Z
+    name: kube-controller-manager
+    namespace: kube-system
+    resourceVersion: "328391"
+    selfLink: /api/v1/namespaces/kube-system/endpoints/kube-controller-manager
+    uid: 895ff5e1-6a8f-11e7-b2de-000c29194de3
+  subsets: []
+- apiVersion: v1
+  kind: Endpoints
+  metadata:
+    annotations:
+      control-plane.alpha.kubernetes.io/leader: '{"holderIdentity":"k8s-3","leaseDurationSeconds":15,"acquireTime":"2017-07-17T01:30:36Z","renewTime":"2017-07-18T05:28:35Z","leaderTransitions":0}'
+    creationTimestamp: 2017-07-17T01:30:36Z
+    name: kube-scheduler
+    namespace: kube-system
+    resourceVersion: "328392"
+    selfLink: /api/v1/namespaces/kube-system/endpoints/kube-scheduler
+    uid: 887f7e7e-6a8f-11e7-9362-000c29acf31a
+  subsets: []
+kind: List
+metadata: {}
+resourceVersion: ""
+selfLink: ""
+```
+
+* 此时controller-manager的leader为k8s-4
+
+* 此时scheduler 的leader为k8s-3
+
+
+
 
 
