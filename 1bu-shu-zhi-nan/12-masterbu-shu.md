@@ -111,9 +111,20 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 * `--authorization-mode=RBAC` 指定在安全端口使用 RBAC 授权模式，拒绝未通过授权的请求;
 
 * `kubelet、kube-proxy、kubectl`部署在其它 `Node`节点上，如果通过**安全端口**访问`kube-apiserver`，则必须先通过 TLS 证书认证，再通过 RBAC 授权
-* --`runtime-config`配置为`rbac.authorization.k8s.io/v1beta1`，表示运行时的apiVersion；
+
+* `--runtime-config`配置为`rbac.authorization.k8s.io/v1beta1`，表示运行时的apiVersion；
 * `--service-cluster-ip-range` 指定 Service Cluster IP 地址段，该地址段不能路由可达;
 * `--apiserver-count=3`设置集群中master数量
-* 
+
+```
+# systemctl daemon-reload
+```
+
+```bash
+# systemctl enable kube-apiserver
+# systemctl start kube-apiserver
+# systemctl status kube-apiserver
+```
+
 
 
