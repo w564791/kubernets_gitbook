@@ -327,7 +327,7 @@ last:效果图
 
 ##### 创建kubectl kubeconfig文件,此文件用于kubectl命令的 各项操作,
 
-* 默认生成路径为~/.kube/config,也可以用于dashboard,DNS的https认证,直接拷贝使用,我是直接拷贝到/etc/kubernetes/config2,然后挂载到容器里面作为dashboard的启动参数使用的. 如本文--kubecfg-file=/etc/kubernetes/config2
+* 默认生成路径为~/.kube/config,_也可以用于dashboard,DNS的https认证,直接拷贝使用,我是直接拷贝到/etc/kubernetes/config2,然后挂载到容器里面作为dashboard的启动参数使用的. 如本文--kubecfg-file=/etc/kubernetes/config2_
 
   export KUBE\_APISERVER="[https://k8s-2:6443](https://k8s-2:6443/)" $ \# 设置集群参数 $ kubectl config set-cluster kubernetes  
   --certificate-authority=/etc/kubernetes/ssl/ca.pem  
