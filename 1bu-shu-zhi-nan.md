@@ -5,7 +5,5 @@
 * [kube-dns部署](/1bu-shu-zhi-nan/14-kube-dnsbu-shu.md)
 * [dashboard部署](/1bu-shu-zhi-nan/15-dashboardbu-shu.md)
 
-本处部署结构\(这图自己画的,丑爆\)
-
-
+本处部署结构\(待上传\)
 
