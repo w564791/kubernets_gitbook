@@ -1,0 +1,282 @@
+# 部署node节点
+
+kubernetes node 节点包含如下组件：
+
+* Flanneld :版本 v0.7.0 [点击下载](https://github.com/coreos/flannel/releases/download/v0.7.0/flannel-v0.7.0-linux-amd64.tar.gz)
+* Docker1.12.5 
+* kubelet
+* kube-proxy
+
+## 配置Flanneld
+
+
+
+```
+# mkdir /usr/local/flannel && wget https://github.com/coreos/flannel/releases/download/v0.7.0/flannel-v0.7.0-linux-amd64.tar.gz -o /usr/local/flannel/
+# cd $_ && ls .
+-rw-r--r--. 1 root root 13M Jul 11 14:14 flannel-v0.7.0-linux-amd64.tar.gz
+# tar -xf  flannel-v0.7.0-linux-amd64.tar.gz &&ls -lh flanneld mk-docker-opts.sh
+-rwxr-xr-x 1 nginx nginx  65M Jan 11  2017 flanneld
+-rwxr-xr-x 1 nginx nginx 2.1K Dec 13  2016 mk-docker-opts.sh
+```
+
+创建启动脚本并赋予执行权限
+
+```
+cat flanneld-start
+```
+
+```
+#!/bin/sh
+exec /usr/local/flannel/flanneld \
+-etcd-endpoints=${FLANNEL_ETCD_ENDPOINTS:-${FLANNEL_ETCD}} \
+-etcd-prefix=${FLANNEL_ETCD_PREFIX:-${FLANNEL_ETCD_KEY}} \
+"$@"
+```
+
+```
+# chmoe +x flanneld-start
+```
+
+service配置文件`/usr/lib/systemd/system/flanneld.service`
+
+```
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network.target
+After=network-online.target
+Wants=network-online.target
+After=etcd.service
+Before=docker.service
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/flanneld
+EnvironmentFile=-/etc/sysconfig/docker-network
+ExecStart=/usr/local/flannel/flanneld-start $FLANNEL_OPTIONS
+ExecStartPost=/usr/local/flannel/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/docker
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+RequiredBy=docker.service
+```
+
+配置文件/etc/sysconfig/flanneld,此文件是强制需求
+
+```
+FLANNEL_ETCD_ENDPOINTS="https://k8s-2:2379,https://k8s-3:2379,https://k8s-4:2379"
+FLANNEL_ETCD_PREFIX="/k8s/network"
+FLANNEL_OPTIONS="-etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem -etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem"
+```
+
+启动flanneld
+
+```ini
+# systemctl daemon-reload
+# systemctl start flanneld
+# systemctl enable flanneld
+```
+
+* 启动flanneld会生成/run/flannel/docker文件,此文件会被作为docker启动参数,看下这个文件的内容,docker启动时如不引用此文件,可能造成docker0网卡的ip段和flannel0网卡段不一致,很多人都栽在这里
+  ```
+  DOCKER_OPT_BIP="--bip=10.1.34.1/24"
+  DOCKER_OPT_IPMASQ="--ip-masq=true"
+  DOCKER_OPT_MTU="--mtu=1472"
+  DOCKER_NETWORK_OPTIONS=" --bip=10.1.34.1/24 --ip-masq=true --mtu=1472"
+  ```
+
+## 安装配置docker
+
+本例使用的是docker1.12.5
+
+安装依赖如下:
+
+```
+checkpolicy-2.5-4.el7.x86_64.rpm
+container-selinux-1.12.5-14.el7.centos.x86_64.rpm
+device-mapper-1.02.135-1.el7_3.2.x86_64.rpm
+device-mapper-event-1.02.135-1.el7_3.2.x86_64.rpm
+device-mapper-event-libs-1.02.135-1.el7_3.2.x86_64.rpm
+device-mapper-libs-1.02.135-1.el7_3.2.x86_64.rpm
+device-mapper-persistent-data-0.6.3-1.el7.x86_64.rpm
+docker-1.12.5-14.el7.centos.x86_64.rpm
+docker-client-1.12.5-14.el7.centos.x86_64.rpm
+docker-common-1.12.5-14.el7.centos.x86_64.rpm
+libaio-0.3.109-13.el7.x86_64.rpm
+libcgroup-0.41-11.el7.x86_64.rpm
+libseccomp-2.3.1-2.el7.x86_64.rpm
+libsemanage-2.5-5.1.el7_3.x86_64.rpm
+libsemanage-python-2.5-5.1.el7_3.x86_64.rpm
+lvm2-2.02.166-1.el7_3.2.x86_64.rpm
+lvm2-libs-2.02.166-1.el7_3.2.x86_64.rpm
+oci-register-machine-0-1.11.gitdd0daef.el7.x86_64.rpm
+oci-systemd-hook-0.1.4-9.git671c428.el7.x86_64.rpm
+policycoreutils-2.5-11.el7_3.x86_64.rpm
+policycoreutils-python-2.5-11.el7_3.x86_64.rpm
+python-IPy-0.75-6.el7.noarch.rpm
+setools-libs-3.3.8-1.1.el7.x86_64.rpm
+skopeo-containers-0.1.17-1.el7.x86_64.rpm
+yajl-2.0.4-4.el7.x86_64.rpm
+```
+
+使用yum安装
+
+```
+yum localinstall -y *rpm
+```
+
+修改docker启动文件`/usr/lib/systemd/system/docker.service`
+
+```
+[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.com
+After=network.target
+Wants=docker-storage-setup.service
+Wants=flanneld.service
+[Service]
+Type=notify
+NotifyAccess=all
+EnvironmentFile=-/etc/sysconfig/docker
+EnvironmentFile=-/etc/sysconfig/docker-storage
+EnvironmentFile=-/etc/sysconfig/docker-network
+EnvironmentFile=/run/flannel/docker
+Environment=GOTRACEBACK=crash
+Environment=DOCKER_HTTP_HOST_COMPAT=1
+Environment=PATH=/usr/libexec/docker:/usr/bin:/usr/sbin
+ExecStart=/usr/bin/dockerd-current \
+          --add-runtime docker-runc=/usr/libexec/docker/docker-runc-current \
+          --default-runtime=docker-runc \
+          --exec-opt native.cgroupdriver=systemd \
+          --userland-proxy-path=/usr/libexec/docker/docker-proxy-current \
+          $OPTIONS \
+          $DOCKER_STORAGE_OPTIONS \
+          $DOCKER_NETWORK_OPTIONS \
+          $ADD_REGISTRY \
+          $BLOCK_REGISTRY \
+          $INSECURE_REGISTRY\
+          $DOCKER_OPT_BIP\
+          $DOCKER_OPT_IPMASQ\
+          $DOCKER_OPT_MTU\
+          $DOCKER_NETWORK_OPTIONS
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=1048576
+LimitNPROC=1048576
+LimitCORE=infinity
+TimeoutStartSec=0
+Restart=on-abnormal
+MountFlags=slave
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+* `EnvironmentFile=/run/flannel/docker`引用`flanneld`自动生成的docker
+
+*  添加`/run/flannel/docker`内读取到的变量到`docker`启动参数\(`$DOCKER_OPT_BIP  $DOCKER_OPT_IPMASQ    $DOCKER_OPT_MTU   $DOCKER_NETWORK_OPTIONS`\)
+
+启动docker
+
+```
+# systemctl daemon-reload
+# systemctl start docker
+# systemctl enable docker
+```
+
+查看虚拟网卡docker0和flannel0在同一网段内
+
+```
+# ip a
+...
+4: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1472 qdisc noqueue state UP
+    link/ether 02:42:72:16:c6:9a brd ff:ff:ff:ff:ff:ff
+    inet 10.1.34.1/24 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:72ff:fe16:c69a/64 scope link
+       valid_lft forever preferred_lft forever
+31: flannel0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1472 qdisc pfifo_fast state UNKNOWN qlen 500
+    link/none
+    inet 10.1.34.0/16 scope global flannel0
+       valid_lft forever preferred_lft forever
+...
+```
+
+## 安装和配置 kubelet
+
+kubelet 启动时向 kube-apiserver 发送 TLS bootstrapping 请求，需要先将 bootstrap token 文件中的 kubelet-bootstrap 用户赋予 system:node-bootstrapper cluster 角色\(role\)，  
+然后 kubelet 才能有权限创建认证请求\(certificate signing requests\)：
+
+```bash
+$ cd /etc/kubernetes
+$ kubectl create clusterrolebinding kubelet-bootstrap \
+  --clusterrole=system:node-bootstrapper \
+  --user=kubelet-bootstrap
+```
+
+* `--user=kubelet-bootstrap` 是在 `/etc/kubernetes/token.csv` 文件中指定的用户名，同时也写入了 `/etc/kubernetes/bootstrap.kubeconfig` 文件；
+
+### 创建 kubelet 的service配置文件
+
+* ##### kubelet 依赖docker服务,需要先启动docker
+* ##### kubelet 启动之前工作目录必须创建,否则会报错,如下:
+
+          `/usr/local/kubernetes/server/bin/kubele :No such file or ...`
+
+`kubelet`启动文件`/usr/lib/systemd/system/kubelet.service`
+
+```
+[Unit]
+Description=Kubernetes Kubelet Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=docker.service
+Requires=docker.service
+[Service]
+WorkingDirectory=/var/lib/kubelet
+EnvironmentFile=-/etc/kubernetes/config
+EnvironmentFile=-/etc/kubernetes/kubelet
+ExecStart=/usr/local/kubernetes/server/bin/kubelet \
+$KUBE_LOGTOSTDERR \
+$KUBE_LOG_LEVEL \
+$KUBELET_API_SERVER \
+$KUBELET_ADDRESS \
+$KUBELET_PORT \
+$KUBELET_HOSTNAME \
+$KUBE_ALLOW_PRIV \
+$KUBELET_POD_INFRA_CONTAINER \
+$KUBELET_ARGS
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+```
+
+创建kubelet和kube-proxy公配置文件:`/etc/kubernetes/config`
+
+```ini
+KUBE_MASTER="--master=https://k8s-1"
+KUBE_LOGTOSTDERR="--logtostderr=false"
+KUBE_LOG_LEVEL="--v=0"
+```
+
+创建kubelet配置文件`/etc/kubernetes/kubelet`
+
+```
+KUBELET_ADDRESS="--address=192.168.103.143"
+KUBELET_HOSTNAME="--hostname-override=k8s-1"
+KUBELET_API_SERVER="--api-servers=https://k8s-1"
+KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest"
+KUBELET_ARGS="--cluster-dns=10.254.0.2 --cgroup-driver=systemd --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig --kubeconfig=/etc/kubernetes/kubelet.kubeconfig --require-kubeconfig --cert-dir=/etc/kubernetes/ssl --cluster-domain=cluster.local. --hairpin-mode promiscuous-bridge --serialize-image-pulls=false --log-dir=/var/log/k8s  --register-node=true"
+
+```
+
+* `--address` 不能设置为 `127.0.0.1`，否则后续 Pods 访问 kubelet 的 API 接口时会失败，因为 Pods 访问的 `127.0.0.1` 指向自己而不是 kubelet；
+* 如果设置了 `--hostname-override` 选项，则 `kube-proxy` 也需要设置该选项，否则会出现找不到 Node 的情况；
+* `--experimental-bootstrap-kubeconfig` 指向 bootstrap kubeconfig 文件，kubelet 使用该文件中的用户名和 token 向 kube-apiserver 发送 TLS Bootstrapping 请求；
+* 管理员通过了 CSR 请求后，kubelet 自动在 `--cert-dir` 目录创建证书和私钥文件\(`kubelet-client.crt` 和 `kubelet-client.key`\)，然后写入 `--kubeconfig` 文件；
+* 建议在 `--kubeconfig` 配置文件中指定 `kube-apiserver` 地址，如果未指定 `--api-servers` 选项，则必须指定 `--require-kubeconfig` 选项后才从配置文件中读取 kube-apiserver 的地址，否则 kubelet 启动后将找不到 kube-apiserver \(日志中提示未找到 API Server），`kubectl get nodes` 不会返回对应的 Node 信息;
+* `--cluster-dns` 指定 kubedns 的 Service IP\(可以先分配，后续创建 kube-dns 服务时指定该 IP,这里暂时先不加,否则会启动失败\)，`--cluster-domain` 指定域名后缀，这两个参数同时指定后才会生效；
+* `--kubeconfig=/etc/kubernetes/kubelet.kubeconfig`中指定的`kubelet.kubeconfig`文件在第一次启动kubelet之前并不存在，请看下文，当通过CSR请求后会自动生成`kubelet.kubeconfig`文件，如果你的节点上已经生成了`~/.kube/config`文件，你可以将该文件拷贝到该路径下，并重命名为`kubelet.kubeconfig`，所有node节点可以共用同一个kubelet.kubeconfig文件，这样新添加的节点就不需要再创建CSR请求就能自动添加到kubernetes集群中。同样，在任意能够访问到kubernetes集群的主机上使用`kubectl —kubeconfig`命令操作集群时，只要使用`~/.kube/config`文件就可以通过权限认证，因为这里面已经有认证信息并认为你是admin用户，对集群拥有所有权限。
+
+
+
+
+
