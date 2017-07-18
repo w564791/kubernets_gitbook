@@ -115,6 +115,7 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 * `--runtime-config`配置为`rbac.authorization.k8s.io/v1beta1`，表示运行时的apiVersion；
 
 * `--service-cluster-ip-range` 指定 Service Cluster IP 地址段，该地址段不能路由可达;
+
 * `--apiserver-count=3`设置集群中master数量
 
 启动`kube-apiserver`
@@ -158,9 +159,9 @@ KUBE_MASTER="--master=http://127.0.0.1:8080"
 KUBE_CONTROLLER_MANAGER_ARGS="--address=127.0.0.1 --service-cluster-ip-range=10.254.0.0/16 --cluster-name=kubernetes --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem --root-ca-file=/etc/kubernetes/ssl/ca.pem --leader-elect=true"
 ```
 
-* `--service-cluster-ip-range` 参数指定 `Cluster `中 `Service `的CIDR范围，该网络在各 Node 间必须路由不可达，必须和 `kube-apiserver` 中的参数一致;
-* `--leader-elect=true ` leader选举
-* `--address` 值必须为 `127.0.0.1`，因为当前` kube-apiserver` 期望 `scheduler `和 `controller-manager `在同一台机器;否则会报错
+* `--service-cluster-ip-range` 参数指定 `Cluster`中 `Service`的CIDR范围，该网络在各 Node 间必须路由不可达，必须和 `kube-apiserver` 中的参数一致;
+* `--leader-elect=true` leader选举
+* `--address` 值必须为 `127.0.0.1`，因为当前`kube-apiserver` 期望 `scheduler`和 `controller-manager`在同一台机器;否则会报错
 
 * `--root-ca-file` 用来对 kube-apiserver 证书进行校验，**指定该参数后，才会在Pod 容器的 ServiceAccount 中放置该 CA 证书文件;**
 
@@ -201,7 +202,6 @@ WantedBy=multi-user.target
 ```bash
 KUBE_MASTER="--master=http://127.0.0.1:8080"
 KUBE_SCHEDULER_ARGS="--leader-elect=true --address=127.0.0.1"
-
 ```
 
 ### 启动 kube-scheduler
@@ -278,10 +278,67 @@ vhost/10050.cnf:}
 
 ```bash
 /usr/local/src/nginx/nginx/sbin/nginx -c /usr/local/src/ngin/nginx/conf/nginx.conf
-
 ```
 
-使用nginx的地址访问apiserver
+使用nginx的地址访问apiserver,因为是双向验证,所以需要导出证书为P12文件,安装在windows客户端上
+
+```
+openssl pkcs12 -export -in admin.pem -inkey admin-key.pem -out /etc/kubernetes/web-cret.p12
+```
+
+![](/assets/chrome-get-apiserver.png)
+
+返回信息:
+
+```
+{
+  "paths": [
+    "/api",
+    "/api/v1",
+    "/apis",
+    "/apis/apps",
+    "/apis/apps/v1beta1",
+    "/apis/authentication.k8s.io",
+    "/apis/authentication.k8s.io/v1",
+    "/apis/authentication.k8s.io/v1beta1",
+    "/apis/authorization.k8s.io",
+    "/apis/authorization.k8s.io/v1",
+    "/apis/authorization.k8s.io/v1beta1",
+    "/apis/autoscaling",
+    "/apis/autoscaling/v1",
+    "/apis/autoscaling/v2alpha1",
+    "/apis/batch",
+    "/apis/batch/v1",
+    "/apis/batch/v2alpha1",
+    "/apis/certificates.k8s.io",
+    "/apis/certificates.k8s.io/v1beta1",
+    "/apis/extensions",
+    "/apis/extensions/v1beta1",
+    "/apis/policy",
+    "/apis/policy/v1beta1",
+    "/apis/rbac.authorization.k8s.io",
+    "/apis/rbac.authorization.k8s.io/v1alpha1",
+    "/apis/rbac.authorization.k8s.io/v1beta1",
+    "/apis/settings.k8s.io",
+    "/apis/settings.k8s.io/v1alpha1",
+    "/apis/storage.k8s.io",
+    "/apis/storage.k8s.io/v1",
+    "/apis/storage.k8s.io/v1beta1",
+    "/healthz",
+    "/healthz/ping",
+    "/healthz/poststarthook/bootstrap-controller",
+    "/healthz/poststarthook/ca-registration",
+    "/healthz/poststarthook/extensions/third-party-resources",
+    "/healthz/poststarthook/rbac/bootstrap-roles",
+    "/logs",
+    "/metrics",
+    "/swagger-ui/",
+    "/swaggerapi/",
+    "/ui/",
+    "/version"
+  ]
+}
+```
 
 
 
