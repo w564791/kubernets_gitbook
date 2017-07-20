@@ -7,19 +7,15 @@
 
 本处使用到的镜像均已上传至docker官方仓库
 
-docker.io/w564791/heapster-amd64:v1.3.0-beta.1
-
-docker.io/w564791/heapster-grafana-amd64:v4.0.2
-
-docker.io/w564791/heapster-influxdb-amd64:v1.1.1
-
-docker.io/w564791/k8s-dns-dnsmasq-nanny-amd64:1.14.1
-
-docker.io/w564791/k8s-dns-kube-dns-amd64:1.14.1
-
-docker.io/w564791/k8s-dns-sidecar-amd64:1.14.1
-
+```
+docker.io/w564791/heapster-amd64:v1.3.0-beta.1
+docker.io/w564791/heapster-grafana-amd64:v4.0.2
+docker.io/w564791/heapster-influxdb-amd64:v1.1.1
+docker.io/w564791/k8s-dns-dnsmasq-nanny-amd64:1.14.1
+docker.io/w564791/k8s-dns-kube-dns-amd64:1.14.1
+docker.io/w564791/k8s-dns-sidecar-amd64:1.14.1
 docker.io/w564791/kubernetes-dashboard-amd64:v1.6.0
+```
 
 本处部署结构\(待上传\)
 
