@@ -349,8 +349,13 @@ svc/monitoring-influxdb   10.254.61.66   <nodes>       8086:31086/TCP,8083:31083
 heapster-290061577-5kj1r               1/1       Running   0          16h
 monitoring-grafana-1581303656-9w0nb    1/1       Running   0          16h
 monitoring-influxdb-2399066898-sld2p   1/1       Running   0          16h
-
 ```
 
+## 通过apiserver访问dashboard
 
+```
+https://192.168.103.143/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard/
+```
+
+![](/assets/dashboard-deploy.png)![](/assets/dashboard-pod.png)
 
