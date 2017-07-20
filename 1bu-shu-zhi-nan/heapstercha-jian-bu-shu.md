@@ -84,6 +84,58 @@ roleRef:
 #### 2.配置heapster-deployment
 
 ```
+# cat heapster-rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: heapster
+  namespace: kube-system
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: heapster
+subjects:
+  - kind: ServiceAccount
+    name: heapster
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+[root@k8s-1 influxdb]# cat heapster-deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: heapster
+  namespace: kube-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        task: monitoring
+        k8s-app: heapster
+    spec:
+      serviceAccountName: heapster
+      volumes:
+       - hostPath:
+          path: /etc/hosts
+         name: ssl-certs-hosts
+      containers:
+      - name: heapster
+        image: 111.9.116.131:5000/w564791/heapster-amd64:v1.3.0-beta.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+         - mountPath: /etc/hosts
+           name: ssl-certs-hosts
+           readOnly: true
+        command:
+        - /heapster
+        - --source=kubernetes:https://k8s-1
+        - --sink=influxdb:http://monitoring-influxdb:8086
 
 ```
 
