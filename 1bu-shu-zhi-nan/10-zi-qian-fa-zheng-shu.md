@@ -9,7 +9,7 @@
 | kube-proxy.pem |  |  | ✔️ |  |  |  |
 | kube-proxy-key.pem |  |  | ✔️ |  |  |  |
 | admin.pem |  |  |  |  | ✔️ |  |
-| admin-key.pem |  |  |  |  | ✔️ |  |
+| admin-key.pem |  |  |  |  | ✔️ |              |
 
 ## 安装CFSSL
 
@@ -315,5 +315,5 @@ $ cfssl-certinfo -cert kubernetes.pem
 
 参考文档:
 
-\[1\]: https://o-my-chenjian.com/2017/04/25/Security-Settings-Of-K8s/
+\[1\]: [https://o-my-chenjian.com/2017/04/25/Security-Settings-Of-K8s/](https://o-my-chenjian.com/2017/04/25/Security-Settings-Of-K8s/)
 
