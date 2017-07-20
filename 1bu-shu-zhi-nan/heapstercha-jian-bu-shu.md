@@ -140,7 +140,7 @@ spec:
 
 ## 配置 influxdb-deployment
 
-1,配置influxdb-configmap
+#### 1,配置influxdb-configmap
 
 ```
 # cat influxdb-cm.yaml
@@ -265,7 +265,7 @@ data:
       run-interval = "1s"
 ```
 
-2.配置influxdb-deployment
+#### 2.配置influxdb-deployment
 
 ```
 # cat influxdb-deployment.yaml
@@ -297,10 +297,6 @@ spec:
         configMap:
           name: influxdb-config
 ```
-
-
-
-
 
 
 
