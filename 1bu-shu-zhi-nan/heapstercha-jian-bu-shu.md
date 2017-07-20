@@ -302,5 +302,55 @@ spec:
           name: influxdb-config
 ```
 
+## 执行所有文件
+
+```
+# kubectl create -f .
+```
+
+```
+# kubectl get -f .
+```
+
+```
+NAME                        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/monitoring-grafana   1         1         1            1           16h
+
+NAME                     CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+svc/monitoring-grafana   10.254.147.116   <none>        80/TCP    16h
+
+NAME              DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/heapster   1         1         1            1           16h
+
+NAME          SECRETS   AGE
+sa/heapster   1         16h
+
+NAME                           AGE
+clusterrolebindings/heapster   16h
+
+NAME           CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+svc/heapster   10.254.121.179   <none>        80/TCP    16h
+
+NAME                 DATA      AGE
+cm/influxdb-config   1         16h
+
+NAME                         DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/monitoring-influxdb   1         1         1            1           16h
+
+NAME                      CLUSTER-IP     EXTERNAL-IP   PORT(S)                         AGE
+svc/monitoring-influxdb   10.254.61.66   <nodes>       8086:31086/TCP,8083:31083/TCP   16h
+```
+
+```
+# kubectl  get pods -n kube-system |grep -E "heapster|monitor"
+```
+
+```
+heapster-290061577-5kj1r               1/1       Running   0          16h
+monitoring-grafana-1581303656-9w0nb    1/1       Running   0          16h
+monitoring-influxdb-2399066898-sld2p   1/1       Running   0          16h
+
+```
+
 
 
