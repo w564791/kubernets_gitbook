@@ -37,5 +37,7 @@ kubectl drain <node>
 
 该命令会删除该节点上的所有Pod（DaemonSet除外），在其他node上重新启动它们，通常该该节点需要维护时使用该命令。直接使用该命令会自动调用`kubectl cordon <node>`命令。当该节点维护完成，启动了kubelet后，再使用`kubectl uncordon <node>`即可将该节点添加到kubernetes集群中。
 
+## Node资源管理
+
 
 
