@@ -295,7 +295,7 @@ REVISION    CHANGE-CAUSE
 3           kubectl set image deployment/nginx-deployment nginx=nginx:1.91
 ```
 
-因为我们创建Deployment的时候使用了**`—recored`**参数可以记录命令，我们可以很方便的查看每次revison的变化。
+因为我们创建Deployment的时候使用了`—recored`参数可以记录命令，我们可以很方便的查看每次revison的变化。
 
 ##### 查看单个revision的详细信息：
 
@@ -475,6 +475,10 @@ nginx-3926361531   3         3         3         28s
 
 **注意：** 在恢复Deployment之前你无法回退一个暂停了个Deployment。
 
+---
+
+_如下部分有点看不懂_
+
 ## Deployment状态
 
 Deployment在生命周期中有多种状态。在创建一个新的ReplicaSet的时候它可以是 [progressing](https://github.com/kubernetes/kubernetes.github.io/blob/master/docs/concepts/workloads/controllers/deployment.md#progressing-deployment) 状态， [complete](https://github.com/kubernetes/kubernetes.github.io/blob/master/docs/concepts/workloads/controllers/deployment.md#complete-deployment) 状态，或者[fail to progress](https://github.com/kubernetes/kubernetes.github.io/blob/master/docs/concepts/workloads/controllers/deployment.md#failed-deployment)状态。
@@ -510,7 +514,7 @@ $ echo $?
 
 ### Failed Deployment
 
-你的Deployment在尝试部署新的ReplicaSet的时候可能卡住，用于也不会完成。这可能是因为以下几个因素引起的：
+你的Deployment在尝试部署新的ReplicaSet的时候可能卡住，也不会完成。这可能是因为以下几个因素引起的：
 
 * 无效的引用
 * 不可读的probe failure
