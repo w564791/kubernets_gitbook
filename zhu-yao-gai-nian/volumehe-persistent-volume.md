@@ -138,11 +138,11 @@ spec:
     name: test-container
     volumeMounts:
     - mountPath: /test-pd
-      name: test-volume
-
+      name: data
+  volumes:
   - hostPath:
       path: /tmp/data
-      name: data
+    name: data
 ```
 
 ### NFS
@@ -160,7 +160,7 @@ spec:
     name: test-container
     volumeMounts:
     - mountPath: /test-pd
-      name: test-volume
+      name: nfs
   volumes:
   - name: nfs
     nfs:
