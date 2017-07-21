@@ -118,7 +118,8 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 
 * `--apiserver-count=3`设置集群中master数量
 
-* `--service-node-  port-rang`指定`svc`打开的端口范围
+* `--service-node-  
+  port-rang`指定`svc`打开的端口范围
 
 启动`kube-apiserver`
 
@@ -228,11 +229,13 @@ etcd-2               Healthy   {"health": "true"}
 
 其他2台master节点配置和本处一致
 
-## 配置和启动 Nginx\(作为3台master的load balancer \)
+## 配置master高可用
+
+### 配置和启动 Nginx\(作为3台master的load balancer \)
 
 * ##### Nginx启动在k8s-1上,k8s-1作为复用为node,IP地址为192.168.103.143
 
-编译需要添加nginx的TCP转发模块,我这儿是以前编译好的,直接拿来用,编译参数如下\(Nginx现在已经原生支持TCP转发,我这里用得三方模块\)
+编译需要添加nginx的TCP转发模块,我这儿是以前编译好的,直接拿来用,编译参数如下\(Nginx现在已经原生支持TCP转发,我这里用的三方模块\),如果是云服务器,可以采用云厂商提供的LB,避免单点故障
 
 ```bash
 # ./nginx -V
