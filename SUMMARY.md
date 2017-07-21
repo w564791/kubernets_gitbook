@@ -11,4 +11,5 @@
   * [kube-dns部署](1bu-shu-zhi-nan/14-kube-dnsbu-shu.md)
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
+  * treafix部署
 
