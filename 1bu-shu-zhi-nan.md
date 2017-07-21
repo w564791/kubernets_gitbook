@@ -18,6 +18,7 @@ docker.io/w564791/k8s-dns-kube-dns-amd64:1.14.1
 docker.io/w564791/k8s-dns-sidecar-amd64:1.14.1
 docker.io/w564791/kubernetes-dashboard-amd64:v1.6.0
 docker.io/w564791/pod-infrastructure:latest
+docker.io/w564791/traefik:latest
 ```
 
 本处部署结构\(待上传\)
