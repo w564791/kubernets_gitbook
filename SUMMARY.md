@@ -17,6 +17,7 @@
     * [Ingress](zhu-yao-gai-nian/ingress.md)
     * [ConfigMap](zhu-yao-gai-nian/configma.md)
     * [Autoscaling](zhu-yao-gai-nian/autoscaling.md)
+    * [Label](zhu-yao-gai-nian/label.md)
 * [在CentOS7上部署kubernetes1.6集群](1bu-shu-zhi-nan.md)
   * [自签发证书](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)
     * [创建kubeconfig文件](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu/chuang-jian-kubeconfig-wen-jian.md)
