@@ -641,9 +641,7 @@ $ echo $?
 
 ## 用例
 
-### 金丝雀Deployment
 
-如果你想要使用Deployment对部分用户或服务器发布release，你可以创建多个Deployment，每个Deployment对应一个release，参照[managing resources](https://github.com/kubernetes/kubernetes.github.io/blob/master/docs/concepts/cluster-administration/manage-deployment/#canary-deployments) 中对金丝雀模式的描述。
 
 ## 编写Deployment Spec
 
