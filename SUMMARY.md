@@ -12,6 +12,7 @@
     * [StatefulSet](zhu-yao-gai-nian/statefulset.md)
     * [DaemonSet](zhu-yao-gai-nian/daemonset.md)
     * [Service Account](zhu-yao-gai-nian/service-account.md)
+    * [ReplicationController和ReplicaSet](zhu-yao-gai-nian/replicationcontrollerhe-replicaset.md)
 * [在CentOS7上部署kubernetes1.6集群](1bu-shu-zhi-nan.md)
   * [自签发证书](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)
     * [创建kubeconfig文件](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu/chuang-jian-kubeconfig-wen-jian.md)
