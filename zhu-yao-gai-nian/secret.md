@@ -101,5 +101,61 @@ spec:
               key: password
 ```
 
+## kubernetes.io/dockerconfigjson
+
+可以直接用`kubectl`命令来创建用于docker registry认证的secret：
+
+```sh
+$ kubectl create secret docker-registry myregistrykey --docker-server=DOCKER_REGISTRY_SERVER --docker-username=DOCKER_USER --docker-password=DOCKER_PASSWORD --docker-email=DOCKER_EMAIL
+secret "myregistrykey" created.
+```
+
+也可以直接读取`~/.docker/config.json`的内容来创建：
+
+```sh
+$ cat ~/.docker/config.json | base64
+$ cat > myregistrykey.yaml <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myregistrykey
+data:
+  .dockerconfigjson: UmVhbGx5IHJlYWxseSByZWVlZWVlZWVlZWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGx5eXl5eXl5eXl5eXl5eXl5eXl5eSBsbGxsbGxsbGxsbGxsbG9vb29vb29vb29vb29vb29vb29vb29vb29vb25ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cgYXV0aCBrZXlzCg==
+type: kubernetes.io/dockerconfigjson
+EOF
+$ kubectl create -f myregistrykey.yaml
+```
+
+在创建Pod的时候，通过`imagePullSecrets`来引用刚创建的`myregistrykey`:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: foo
+spec:
+  containers:
+    - name: foo
+      image: janedoe/awesomeapp:v1
+  imagePullSecrets:
+    - name: myregistrykey
+```
+
+### Service Account
+
+Service Account用来访问Kubernetes API，由Kubernetes自动创建，并且会自动挂载到Pod的`/run/secrets/kubernetes.io/serviceaccount`目录中。
+
+```sh
+$ kubectl run nginx --image nginx
+deployment "nginx" created
+$ kubectl get pods
+NAME                     READY     STATUS    RESTARTS   AGE
+nginx-3137573019-md1u2   1/1       Running   0          13s
+$ kubectl exec nginx-3137573019-md1u2 ls /run/secrets/kubernetes.io/serviceaccount
+ca.crt
+namespace
+token
+```
+
 
 

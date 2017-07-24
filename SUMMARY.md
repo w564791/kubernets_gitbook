@@ -9,6 +9,7 @@
     * [Volume和Persistent Volume](zhu-yao-gai-nian/volumehe-persistent-volume.md)
     * [\*Deployment](zhu-yao-gai-nian/deployment.md)
     * [Secret](zhu-yao-gai-nian/secret.md)
+    * [StatefulSet](zhu-yao-gai-nian/statefulset.md)
 * [在CentOS7上部署kubernetes1.6集群](1bu-shu-zhi-nan.md)
   * [自签发证书](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)
     * [创建kubeconfig文件](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu/chuang-jian-kubeconfig-wen-jian.md)
