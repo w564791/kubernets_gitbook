@@ -77,7 +77,7 @@ selector:
 
 如Service通过label selector将同一类型的pod作为一个服务expose出来。
 
-![label示意图](../images/labels.png)
+![](/assets/labels.png)
 
 另外在node affinity和pod affinity中的label selector的语法又有些许不同，示例如下：
 
