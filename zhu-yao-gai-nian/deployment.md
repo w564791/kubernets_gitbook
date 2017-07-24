@@ -70,6 +70,12 @@ Deployment为Pod和Replica Set（下一代Replication Controller）提供声明�
 * 根据Deployment 的状态判断上线是否hang住了。
 * 清除旧的不必要的ReplicaSet。
 
+## Deployment结构示意图
+
+参考：[https://kubernetes.io/docs/api-reference/v1.6/\#deploymentspec-v1beta1-apps](https://kubernetes.io/docs/api-reference/v1.6/#deploymentspec-v1beta1-apps)
+
+![](/assets/deployment-cheatsheet.png)
+
 ## 创建Deployment
 
 下面是一个Deployment示例，它创建了一个Replica Set来启动3个nginx pod。
