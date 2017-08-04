@@ -27,7 +27,13 @@
 | **4001 \(L\)** | TCP | Used for embedded etcd \(non-clustered\) to accept changes in state. |
 | **4789 \(L\)** | UDP | Required for SDN communication between pods on separate hosts. |
 
+
+
+firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="10.1.0.0/16"   accept"
+
+firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="10.254.0.0/16"   accept"
+
 参考资料
 
-\[1\] _https://docs.openshift.org/1.5/install\_config/install/prerequisites.html_
+\[1\] [https://docs.openshift.org/1.5/install\_config/install/prerequisites.html](https://docs.openshift.org/1.5/install_config/install/prerequisites.html)
 
