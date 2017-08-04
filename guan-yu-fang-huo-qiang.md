@@ -27,7 +27,7 @@
 | **4001 \(L\)** | TCP | Used for embedded etcd \(non-clustered\) to accept changes in state. |
 | **4789 \(L\)** | UDP | Required for SDN communication between pods on separate hosts. |
 
-
+放行POD和SVC地址
 
 firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="10.1.0.0/16"   accept"
 
