@@ -57,6 +57,12 @@ spec:
     disktype: ssd
 ```
 
+设置nodeLabel
+
+```
+kubectl label no k8s-1 zookeeper=true
+```
+
 nodeAffinity示例：
 
 ```yaml
