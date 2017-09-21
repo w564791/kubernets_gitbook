@@ -29,6 +29,10 @@ Label能够将组织架构映射到系统架构上（就像是康威定律），
 * name in \(redis,msql\)
 * name not in \(redis,mysql\)
 
+多个表达式之间可以用","进行分隔,几个条件之间是'AND'的关系,
+
+name=redis,env!=oriduction
+
 ## 语法和字符集
 
 Label key的组成：
