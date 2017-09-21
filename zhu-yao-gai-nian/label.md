@@ -22,6 +22,13 @@ Label能够将组织架构映射到系统架构上（就像是康威定律），
 * `"track" : "daily"`, `"track" : "weekly"`
 * `"team" : "teamA"`,`"team:" : "teamB"`
 
+## 表达式
+
+* name=redis-slave
+* env != production
+* name in \(redis,msql\)
+* name not in \(redis,mysql\)
+
 ## 语法和字符集
 
 Label key的组成：
