@@ -169,5 +169,14 @@ spec:
       path: "/"
 ```
 
+## PV的状态:
+
+* Available: 空闲状态
+* Bound:已经绑定到某个PVC上
+* Released: 对应的PVC已经删除,但是资源还没有被集群收回
+* Failed:PV自动回收失败
+
+
+
 
 
