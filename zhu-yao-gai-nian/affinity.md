@@ -41,6 +41,8 @@ spec:
 
 ## PodAffinity:
 
+### 亲和性
+
 如果在具有标签X的Node上运行了一个或者多个符合条件Y的pod,那么pod应该\(如果互斥,则为拒绝运行\)运行在这个Node上,此处的X表示范围,X为一个内置标签,这个key的名字为topologyKey,值如下
 
 * kubernetes.io/hostname
@@ -69,4 +71,44 @@ spec:
 ```
 
 表示当该Node上有运行标签为app=nginx的时候,php镜像运行在该node上
+
+### 互斥性:
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+ name: with-node-affinity
+spec:
+ affinity:
+  podAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+   - labelSelector:
+      matchExpressions:
+      - key: app
+        operator: In
+        values:
+        - true
+     topologyKey: failure-domain.beta.kubernetes.io/zone
+  podAntiAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+   - labelSelector:
+     matchExpressions:
+     - key: app
+       operator: In
+       values:
+       - nginx
+     topologyKey: kubernetes.io/hostname
+ containers:
+ - name: php-affinity
+   image: php
+```
+
+* 此要求是这个新的pod必须要调度在app=true这个zone里,但是不能与app=nginx调度到同一台里
+* pod的亲和性操作符也包含In NotIn,Exists,DoesNoExist,Gt,Lt
+* 在pod亲和性和RequiredDuringScheduling互斥性的定义中,不允许使用空的topologyKey
+* 如果在Admission control里定义了包含LimitPodHardAntiAffinityTopology,那么针对RequiredDuringScheduling的Pod互斥性定义就被限制为kubernetes.io/hostname
+* 在PreferredDuringScheduling类型的Pod互斥性中,空的topologyKey会被解释为kubernetes.io/hostname,failure-domain.beta.kubernetes.io/zono,failure-domain.beta.kubernetes.io/region的组合
+* 
+
 
