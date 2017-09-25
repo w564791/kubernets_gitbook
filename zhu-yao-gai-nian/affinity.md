@@ -41,6 +41,9 @@ spec:
 
 ## PodAffinity:
 
+* ##### podAffinity:pod亲和性申明
+* ##### podAntiAffinity:pod互斥性申明
+
 ### 亲和性
 
 如果在具有标签X的Node上运行了一个或者多个符合条件Y的pod,那么pod应该\(如果互斥,则为拒绝运行\)运行在这个Node上,此处的X表示范围,X为一个内置标签,这个key的名字为topologyKey,值如下
