@@ -1,4 +1,4 @@
-## NodeAffinity:Node亲和性调度
+## NodeAffinity:Node亲和性
 
 需要在1.6.x以上的版本才能使用
 
@@ -39,7 +39,7 @@ spec:
 * 如果nodeAffinity指定了多个nodeSelectorTerms,那么只需要其中一个能匹配即可
 * 如果nodeSelectorTerms中有多个matchExpressions,则一个节点必须满足所有matchExpressions才能运行该pod
 
-## PodAffinity:
+## PodAffinity: Pod亲和性
 
 * ##### podAffinity:pod亲和性申明
 * ##### podAntiAffinity:pod互斥性申明
@@ -120,8 +120,6 @@ spec:
 * 在PreferredDuringScheduling类型的Pod互斥性中,空的topologyKey会被解释为kubernetes.io/hostname,failure-domain.beta.kubernetes.io/zono,failure-domain.beta.kubernetes.io/region的组合
 
 ## Taints和Tolerations
-
-
 
 NodeAffinity是在Pod上定义的一种属性,使得Pod能调度到某些Node上运行,Taints恰好相反,它拒绝Pod运行
 
