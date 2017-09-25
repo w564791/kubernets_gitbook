@@ -41,9 +41,34 @@ spec:
 
 ## PodAffinity:
 
+如果在具有标签X的Node上运行了一个或者多个符合条件Y的pod,那么pod应该\(如果互斥,则为拒绝运行\)运行在这个Node上,此处的X表示范围,X为一个内置标签,这个key的名字为topologyKey,值如下
 
+* kubernetes.io/hostname
+* failure-domain.beta.kubernetes.io/zone
+* failure-domain.beta.kubernetes.io/region
 
+```
+apiVersion: v1
+kind: Pod
+metadata:
+ name: with-node-affinity
+spec:
+ affinity:
+  podAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+   - labelSelector:
+      matchExpressions:
+      - key: app
+        operator: In
+        values:
+        - nginx
+     topologyKey: kubernetes.io/hostname 
+ containers:
+ - name: php-affinity
+   image: php
+```
 
+表示当该Node上有运行标签为app=nginx的时候,php镜像运行在改node上
 
 
 
