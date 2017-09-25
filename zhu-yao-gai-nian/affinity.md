@@ -50,27 +50,33 @@ spec:
 * failure-domain.beta.kubernetes.io/region
 
 ```
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
 metadata:
- name: with-node-affinity
+  name: web-server
 spec:
- affinity:
-  podAffinity:
-   requiredDuringSchedulingIgnoredDuringExecution:
-   - labelSelector:
-      matchExpressions:
-      - key: app
-        operator: In
-        values:
-        - nginx
-     topologyKey: kubernetes.io/hostname 
- containers:
- - name: php-affinity
-   image: php
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: web-store
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - store
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: web-app
+        images: php
 ```
 
-表示当该Node上有运行标签为app=nginx的时候,php镜像运行在该node上
+表示当该Node上有运行标签为app=store的时候,php镜像运行在该node上
 
 ### 互斥性:
 
