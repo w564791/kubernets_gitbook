@@ -68,7 +68,5 @@ spec:
    image: php
 ```
 
-表示当该Node上有运行标签为app=nginx的时候,php镜像运行在改node上
-
-
+表示当该Node上有运行标签为app=nginx的时候,php镜像运行在该node上
 
