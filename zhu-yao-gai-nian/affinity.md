@@ -113,6 +113,35 @@ spec:
    image: php
 ```
 
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: with-node-affinity
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/e2e-az-name
+            operator: In
+            values:
+            - e2e-az1
+            - e2e-az2
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: another-node-label-key
+            operator: In
+            values:
+            - another-node-label-value
+  containers:
+  - name: with-node-affinity
+    image: gcr.io/google_containers/pause:2.0
+```
+
 * 此要求是这个新的pod必须要调度在app=true这个zone里,但是不能与app=nginx调度到同一台里
 * pod的亲和性操作符也包含In NotIn,Exists,DoesNoExist,Gt,Lt
 * 在pod亲和性和RequiredDuringScheduling互斥性的定义中,不允许使用空的topologyKey
