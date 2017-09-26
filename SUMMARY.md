@@ -19,6 +19,7 @@
     * [Autoscaling](zhu-yao-gai-nian/autoscaling.md)
     * [Label](zhu-yao-gai-nian/label.md)
     * [Affinity](zhu-yao-gai-nian/affinity.md)
+    * [Job](zhu-yao-gai-nian/job.md)
   * [关于防火墙](guan-yu-fang-huo-qiang.md)
 * [在CentOS7上部署kubernetes1.6集群](1bu-shu-zhi-nan.md)
   * [自签发证书](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)

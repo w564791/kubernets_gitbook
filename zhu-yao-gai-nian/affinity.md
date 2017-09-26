@@ -76,7 +76,7 @@ spec:
             topologyKey: "kubernetes.io/hostname"
       containers:
       - name: web-app
-        images: php
+        image: php
 ```
 
 表示当该Node上有运行标签为app=store的时候,php镜像运行在该node上
