@@ -272,6 +272,7 @@ KUBELET_ARGS="--cluster-dns=10.254.0.2 --cgroup-driver=systemd --experimental-bo
 * `--cluster-dns` 指定 kubedns 的 Service IP\(可以先分配，后续创建 kube-dns 服务时指定该 IP,这里暂时先不加,否则会启动失败\)，`--cluster-domain` 指定域名后缀，这两个参数同时指定后才会生效；
 * `--kubeconfig=/etc/kubernetes/kubelet.kubeconfig`中指定的`kubelet.kubeconfig`文件在第一次启动kubelet之前并不存在，请看下文，当通过CSR请求后会自动生成`kubelet.kubeconfig`文件，如果你的节点上已经生成了`~/.kube/config`文件，你可以将该文件拷贝到该路径下，并重命名为`kubelet.kubeconfig`，所有node节点可以共用同一个kubelet.kubeconfig文件，这样新添加的节点就不需要再创建CSR请求就能自动添加到kubernetes集群中。同样，在任意能够访问到kubernetes集群的主机上使用`kubectl —kubeconfig`命令操作集群时，只要使用`~/.kube/config`文件就可以通过权限认证，因为这里面已经有认证信息并认为你是admin用户，对集群拥有所有权限。
 * --pod-infra-container-image 指定POD运行时的基础镜像,建议先下载下来
+* --node-status-update-frequency 设置kublet每隔多久向apiserver报告状态,默认是10s
 
 ### 启动kublet
 
