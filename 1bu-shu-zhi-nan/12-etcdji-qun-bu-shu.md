@@ -135,12 +135,23 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 最后在etcd集群上创建`flanneld`使用的网段:
 
 ```
+#cat flanneld.json
+{
+  "Network":"172.16.0.0/16",
+  "SubnetLen":24,
+  "Backend":{
+    "Type":"vxlan",
+    "VNI":1
+  }
+}
+
 # etcdctl \
    --endpoints https://k8s-4:2379
    --ca-file=/etc/kubernetes/ssl/ca.pem \
    --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
    --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
-    set /k8s/network/config '{ "Network": "10.1.0.0/16" }'
+    set /k8s/network/config < flanneld.json
+
 ```
 
 查看信息
