@@ -29,8 +29,7 @@
 
 ```bash
 # cd /usr/loca/src && mkdir ssl && cd $_
-# cfssl print-defaults config > config.json
-# cfssl print-defaults csr > csr.json
+
 ```
 
 手动创建CA配置文件
