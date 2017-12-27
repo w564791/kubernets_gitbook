@@ -101,7 +101,9 @@ options ndots:5
 
 1.需要将`kubeconfig`文件挂载至容器内部,本文的此文件路径为`/etc/kubeconfig/config2`
 
-2.需要将`k8s-1`主机上的`/etc/hosts`挂载到容器内部.因为apiserver认证时不能用IP\(证书里面没写IP\)
+```
+#kubectl create cm kubeconfig --from-file=/root/.kube/config
+```
 
 3.`k8s-dns-kube-dns-amd64`容器启动时必须加`--kubecfg-file=/etc/kubernetes/config2`参数
 

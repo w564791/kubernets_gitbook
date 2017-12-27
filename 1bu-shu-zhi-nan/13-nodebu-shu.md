@@ -340,7 +340,7 @@ KUBE_PROXY_ARGS="--kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig  --cluster-c
 ## 生成kube-proxy.kubeconfig文件
 
 ```
-export KUBE_APISERVER="https://172.20.0.113:6443"
+export KUBE_APISERVER="https://internal-kubernetes-cluster-LB.cn-north-1.elb.amazonaws.com.cn"
 # 设置集群参数
 
 kubectl config set-cluster kubernetes \
@@ -368,8 +368,6 @@ kubectl config set-context default \
 
 kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
 ```
-
-
 
 ### 启动 kube-proxy
 
