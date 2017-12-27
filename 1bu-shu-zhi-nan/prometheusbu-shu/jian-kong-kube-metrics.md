@@ -1,5 +1,5 @@
 ```
-[root@ip-10-10-6-201 prometheus-kubernetes]# cat kube-state-metrics-svc.yaml kube-state-metrics-rbac.yaml kube-state-metrics-deploy.yaml
+[root@ip-10-10-6-201 prometheus-kubernetes]# cat kube-state-metrics.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -104,7 +104,6 @@ spec:
       schedulerName: default-scheduler
       serviceAccount: kube-state-metrics
       serviceAccountName: kube-state-metrics
-
 ```
 
 
