@@ -1,5 +1,3 @@
-
-
 #### 一把梭
 
 ```
@@ -168,7 +166,6 @@ spec:
       nodePort: 8443
   selector:
     k8s-app: kubernetes-dashboard
-
 ```
 
 ##### 
@@ -204,7 +201,7 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
 ```
 
-##### 使用token登录
+##### 使用${token}登录
 
 ```
 [root@ip-10-10-6-201 k8s]# kubectl get secrets
@@ -218,19 +215,19 @@ kubernetes-dashboard-certs         Opaque                                2      
 kubernetes-dashboard-key-holder    Opaque                                2         38d
 kubernetes-dashboard-token-0t5t0   kubernetes.io/service-account-token   3         38d
 [root@ip-10-10-6-201 k8s]# kubectl  describe secrets admin-token-fv9lm
-Name:		admin-token-fv9lm
-Namespace:	kube-system
-Labels:		<none>
-Annotations:	kubernetes.io/service-account.name=admin
-		kubernetes.io/service-account.uid=6e350d69-cc54-11e7-9ced-0604ac83b36a
+Name:        admin-token-fv9lm
+Namespace:    kube-system
+Labels:        <none>
+Annotations:    kubernetes.io/service-account.name=admin
+        kubernetes.io/service-account.uid=6e350d69-cc54-11e7-9ced-0604ac83b36a
 
-Type:	kubernetes.io/service-account-token
+Type:    kubernetes.io/service-account-token
 
 Data
 ====
-ca.crt:		1359 bytes
-namespace:	11 bytes
-token:		${token}
+ca.crt:        1359 bytes
+namespace:    11 bytes
+token:        ${token}
 ```
 
 
