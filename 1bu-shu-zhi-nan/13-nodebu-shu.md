@@ -199,6 +199,8 @@ $ kubectl create clusterrolebinding kubelet-bootstrap \
 `kubelet`启动文件`/usr/lib/systemd/system/kubelet.service`
 
 ```
+[root@ip-10-10-6-201 ssl]# systemctl cat kubelet
+# /usr/lib/systemd/system/kubelet.service
 [Unit]
 Description=Kubernetes Kubelet Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
@@ -208,7 +210,7 @@ Requires=docker.service
 WorkingDirectory=/var/lib/kubelet
 EnvironmentFile=-/etc/kubernetes/config
 EnvironmentFile=-/etc/kubernetes/kubelet
-ExecStart=/usr/local/kubernetes/server/bin/kubelet \
+ExecStart=/opt/kubernetes/server/bin/kubelet \
 $KUBE_LOGTOSTDERR \
 $KUBE_LOG_LEVEL \
 $KUBELET_API_SERVER \
@@ -226,19 +228,20 @@ WantedBy=multi-user.target
 创建kubelet和kube-proxy公配置文件:`/etc/kubernetes/config`
 
 ```ini
-KUBE_MASTER="--master=https://k8s-1"
-KUBE_LOGTOSTDERR="--logtostderr=false"
-KUBE_LOG_LEVEL="--v=0"
+[root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/config 
+KUBE_LOGTOSTDERR="--logtostderr=false --log-dir=/var/lib/k8s "
+KUBE_LOG_LEVEL="--v=2"
+KUBE_ALLOW_PRIV="--allow-privileged=true "
 ```
 
 创建kubelet配置文件`/etc/kubernetes/kubelet`
 
 ```
-KUBELET_ADDRESS="--address=192.168.103.143"
-KUBELET_HOSTNAME="--hostname-override=k8s-1"
-KUBELET_API_SERVER="--api-servers=https://k8s-1"
-KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest"
-KUBELET_ARGS="--cluster-dns=10.254.0.2 --cgroup-driver=systemd --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig --kubeconfig=/etc/kubernetes/kubelet.kubeconfig --require-kubeconfig --cert-dir=/etc/kubernetes/ssl --cluster-domain=cluster.local. --hairpin-mode promiscuous-bridge --serialize-image-pulls=false --log-dir=/var/log/k8s  --register-node=true"
+[root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/kubelet
+KUBELET_ADDRESS="--address=10.10.6.201"
+KUBELET_PORT="--port=10250"
+KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=docker.io/w564791/pod-infrastructure:latest"
+KUBELET_ARGS="--cluster-dns=10.254.0.2 --cluster-domain=cluster.local.  --cgroup-driver=cgroupfs --hostname-override=10.10.6.201 --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig --kubeconfig=/etc/kubernetes/kubelet.kubeconfig --require-kubeconfig --cert-dir=/etc/kubernetes/ssl --hairpin-mode promiscuous-bridge --serialize-image-pulls=false --docker-disable-shared-pid"
 ```
 
 * `--address` 不能设置为 `127.0.0.1`，否则后续 Pods 访问 kubelet 的 API 接口时会失败，因为 Pods 访问的 `127.0.0.1` 指向自己而不是 kubelet；
@@ -250,6 +253,7 @@ KUBELET_ARGS="--cluster-dns=10.254.0.2 --cgroup-driver=systemd --experimental-bo
 * `--kubeconfig=/etc/kubernetes/kubelet.kubeconfig`中指定的`kubelet.kubeconfig`文件在第一次启动kubelet之前并不存在，请看下文，当通过CSR请求后会自动生成`kubelet.kubeconfig`文件，如果你的节点上已经生成了`~/.kube/config`文件，你可以将该文件拷贝到该路径下，并重命名为`kubelet.kubeconfig`，所有node节点可以共用同一个kubelet.kubeconfig文件，这样新添加的节点就不需要再创建CSR请求就能自动添加到kubernetes集群中。同样，在任意能够访问到kubernetes集群的主机上使用`kubectl —kubeconfig`命令操作集群时，只要使用`~/.kube/config`文件就可以通过权限认证，因为这里面已经有认证信息并认为你是admin用户，对集群拥有所有权限。
 * --pod-infra-container-image 指定POD运行时的基础镜像,建议先下载下来
 * --node-status-update-frequency 设置kublet每隔多久向apiserver报告状态,默认是10s
+* --docker-disable-shared-pid 在1.7版本中，部署glusterfs需要添加此项
 
 ### 启动kublet
 
