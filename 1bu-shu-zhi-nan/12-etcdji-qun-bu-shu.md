@@ -170,6 +170,7 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 "VNI":1
 }
 }
+
 ```
 
 # 使用etcdctl访问kuberentes数据 {#使用etcdctl访问kuberentes数据}
@@ -178,7 +179,6 @@ Kubenretes1.6中使用etcd V3版本的API，使用`etcdctl`直接`ls`的话只�
 
 ```
 ETCDCTL_API=3 etcdctl get /registryamespaces/default -w=json|python -m json.tool
-
 ```
 
 * `-w`指定输出格式
