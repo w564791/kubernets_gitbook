@@ -2,20 +2,35 @@
 
 kubernetes node 节点包含如下组件：
 
-* Flanneld :版本 v0.7.0 [点击下载](https://github.com/coreos/flannel/releases/download/v0.7.0/flannel-v0.7.0-linux-amd64.tar.gz)
-* Docker1.12.5 
+* Flanneld :  v0.9.1
+* Docker 17.06.2-ce
 * kubelet
 * kube-proxy
 
 ## 配置Flanneld
 
 ```
-# mkdir /usr/local/flannel && wget https://github.com/coreos/flannel/releases/download/v0.7.0/flannel-v0.7.0-linux-amd64.tar.gz -o /usr/local/flannel/
-# cd $_ && ls .
--rw-r--r--. 1 root root 13M Jul 11 14:14 flannel-v0.7.0-linux-amd64.tar.gz
-# tar -xf  flannel-v0.7.0-linux-amd64.tar.gz &&ls -lh flanneld mk-docker-opts.sh
--rwxr-xr-x 1 nginx nginx  65M Jan 11  2017 flanneld
--rwxr-xr-x 1 nginx nginx 2.1K Dec 13  2016 mk-docker-opts.sh
+[root@ip-10-10-6-201 ssl]# systemctl cat flanneld
+# /usr/lib/systemd/system/flanneld.service
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network.target
+After=network-online.target
+Wants=network-online.target
+After=etcd.service
+Before=docker.service
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/flanneld
+EnvironmentFile=-/etc/sysconfig/docker-network
+ExecStart=/usr/bin/flanneld-start $FLANNEL_OPTIONS
+ExecStartPost=/usr/libexec/flannel/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/docker
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=docker.service
 ```
 
 创建启动脚本并赋予执行权限
