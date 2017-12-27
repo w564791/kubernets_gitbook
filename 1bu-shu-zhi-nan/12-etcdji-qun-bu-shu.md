@@ -170,7 +170,6 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 "VNI":1
 }
 }
-
 ```
 
 # 使用etcdctl访问kuberentes数据 {#使用etcdctl访问kuberentes数据}
@@ -182,6 +181,17 @@ ETCDCTL_API=3 etcdctl get /registryamespaces/default -w=json|python -m json.tool
 ```
 
 * `-w`指定输出格式
+
+key的值是经过base64编码，需要解码后才能看到实际值，如：
+
+```
+$ 
+echo
+ L3JlZ2lzdHJ5L25hbWVzcGFjZXMvYXV0b21vZGVs|base64 
+-d
+
+/registry/namespaces/automodel
+```
 
 
 
