@@ -33,19 +33,22 @@ WantedBy=multi-user.target
 RequiredBy=docker.service
 ```
 
+/usr/bin/flanneld-start文件在flanneld下载压缩包里
+
 创建启动脚本并赋予执行权限
 
 ```
-cat flanneld-start
-```
+[root@ip-10-10-6-201 ssl]# cat /usr/bin/flanneld-start
+#!/bin/sh
+
+exec /usr/bin/flanneld \
+	-etcd-endpoints=${FLANNEL_ETCD_ENDPOINTS:-${FLANNEL_ETCD}} \
+	-etcd-prefix=${FLANNEL_ETCD_PREFIX:-${FLANNEL_ETCD_KEY}} \
+	"$@"
 
 ```
-#!/bin/sh
-exec /usr/local/flannel/flanneld \
--etcd-endpoints=${FLANNEL_ETCD_ENDPOINTS:-${FLANNEL_ETCD}} \
--etcd-prefix=${FLANNEL_ETCD_PREFIX:-${FLANNEL_ETCD_KEY}} \
-"$@"
-```
+
+
 
 ```
 # chmoe +x flanneld-start
