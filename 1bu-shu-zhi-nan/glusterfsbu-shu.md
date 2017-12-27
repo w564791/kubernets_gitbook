@@ -164,5 +164,9 @@ parameters:
     resturl: "http://10.254.112.16:8080"
 ```
 
+## 8.在Prometheus测试
+
+
+
 
 
