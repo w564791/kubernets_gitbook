@@ -6,11 +6,10 @@
 
 #### 1.配置heapster-rbac
 
-```
-# cat heapster-rbac.yaml
-```
+
 
 ```
+[root@ip-10-10-6-201 heapster]# cat heapster-rbac.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -31,33 +30,13 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
+
 ```
 
 #### 2.配置heapster-deployment
 
 ```
-# cat heapster-rbac.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: heapster
-  namespace: kube-system
-
----
-
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: heapster
-subjects:
-  - kind: ServiceAccount
-    name: heapster
-    namespace: kube-system
-roleRef:
-  kind: ClusterRole
-  name: cluster-admin
-  apiGroup: rbac.authorization.k8s.io
-[root@k8s-1 influxdb]# cat heapster-deployment.yaml
+[root@ip-10-10-6-201 heapster]# cat heapster-deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -73,21 +52,36 @@ spec:
     spec:
       serviceAccountName: heapster
       volumes:
-       - hostPath:
+       - hostPath: 
           path: /etc/hosts
          name: ssl-certs-hosts
       containers:
       - name: heapster
-        image: 111.9.116.131:5000/w564791/heapster-amd64:v1.3.0-beta.1
+        image: w564791/heapster-amd64:v1.4.3
         imagePullPolicy: IfNotPresent
-        volumeMounts:
-         - mountPath: /etc/hosts
-           name: ssl-certs-hosts
-           readOnly: true
         command:
         - /heapster
-        - --source=kubernetes:https://k8s-1
+        - --source=kubernetes:https://internal-kubernetes-cluster-LB-272185912.cn-north-1.elb.amazonaws.com.cn
         - --sink=influxdb:http://monitoring-influxdb:8086
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    task: monitoring
+    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
+    # If you are NOT using this as an addon, you should comment out this line.
+    kubernetes.io/cluster-service: 'true'
+    kubernetes.io/name: Heapster
+  name: heapster
+  namespace: kube-system
+spec:
+  ports:
+  - port: 80
+    targetPort: 8082
+  selector:
+    k8s-app: heapster
+
 ```
 
 ## 配置 influxdb-deployment
