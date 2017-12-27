@@ -291,6 +291,12 @@ etcd-2               Healthy   {"health": "true"}
 
 其他2台master节点配置和本处一致
 
+## 使用curl请求apiserver
+
+```
+$ curl -k --cert /etc/kubernetes/ssl/ca.pem  --key /etc/kubernetes/ssl/ca-key.pem https://10.10.6.201:6443/apis
+```
+
 ## 配置master高可用
 
 ### 配置和启动 Nginx\(作为3台master的load balancer \)
