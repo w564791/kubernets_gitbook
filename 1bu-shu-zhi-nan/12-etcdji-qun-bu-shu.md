@@ -14,18 +14,13 @@
 # yum install -y etcd
 ```
 
-
-
 `systemd`启动文件: 三台`etcd`服务的配置都差不多,仅有`--name`部分有所改变,这里只列出一个配置文件\)
 
-```
-# hostname
-k8s-4
-#mkdir /var/lib/etcd/
-# cat /usr/lib/systemd/system/etcd.service
-```
+
 
 ```
+[centos@ip-10-10-6-201 ssl]$ systemctl cat etcd
+# /usr/lib/systemd/system/etcd.service
 [Unit]
 Description=Etcd Server
 After=network.target
@@ -36,25 +31,27 @@ Documentation=https://github.com/coreos
 Type=notify
 WorkingDirectory=/var/lib/etcd/
 EnvironmentFile=-/etc/etcd/etcd.conf
-ExecStart=/usr/local/etcd-v3.1.5-linux-amd64/etcd\
---name k8s-4\
+ExecStart=/bin/etcd \
+--name etcd-0 \
 --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
 --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
 --peer-cert-file=/etc/kubernetes/ssl/kubernetes.pem \
 --peer-key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
 --trusted-ca-file=/etc/kubernetes/ssl/ca.pem \
 --peer-trusted-ca-file=/etc/kubernetes/ssl/ca.pem \
---initial-advertise-peer-urls https://k8s-4:2380 \
---listen-peer-urls https://k8s-4:2380 \
---listen-client-urls https://k8s-4:2379,https://127.0.0.1:2379 \
---advertise-client-urls https://k8s-4:2379 \
+--initial-advertise-peer-urls https://10.10.6.201:2380 \
+--listen-peer-urls https://10.10.6.201:2380 \
+--listen-client-urls https://10.10.6.201:2379,https://127.0.0.1:2379 \
+--advertise-client-urls https://10.10.6.201:2379 \
 --initial-cluster-token etcd-cluster-0 \
---initial-cluster k8s-2=https://k8s-2:2380,k8s-3=https://k8s-3:2380,k8s-4=https://k8s-4:2380 \
+--initial-cluster etcd-0=https://10.10.6.201:2380,etcd-1=https://10.10.4.12:2380,etcd-2=https://10.10.5.105:2380 \
 --initial-cluster-state new \
 --data-dir=/var/lib/etcd
 Restart=on-failure
 RestartSec=5
 LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
 ```
 
 * 指定 `etcd`的工作目录为 `/var/lib/etcd`，数据目录为 `/var/lib/etcd`，需在启动服务前创建这两个目录；
