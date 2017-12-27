@@ -6,8 +6,6 @@
 
 #### 1.配置heapster-rbac
 
-
-
 ```
 [root@ip-10-10-6-201 heapster]# cat heapster-rbac.yaml
 apiVersion: v1
@@ -30,7 +28,6 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
-
 ```
 
 #### 2.配置heapster-deployment
@@ -81,7 +78,6 @@ spec:
     targetPort: 8082
   selector:
     k8s-app: heapster
-
 ```
 
 ## 配置 influxdb-deployment
@@ -91,7 +87,7 @@ spec:
 #### 1,配置influxdb-configmap
 
 ```
-# cat influxdb-cm.yaml
+[root@ip-10-10-6-201 heapster]# cat influxdb-cm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -211,12 +207,13 @@ data:
       log-enabled = true
       enabled = true
       run-interval = "1s"
+
 ```
 
 #### 2.配置influxdb-deployment
 
 ```
-# cat influxdb-deployment.yaml
+[root@ip-10-10-6-201 heapster]# cat influxdb-deployment.yaml influxdb-service.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -232,7 +229,7 @@ spec:
     spec:
       containers:
       - name: influxdb
-        image: 111.9.116.131:5000/w564791/heapster-influxdb-amd64:v1.1.1
+        image: w564791/heapster-influxdb-amd64:v1.1.1
         volumeMounts:
         - mountPath: /data
           name: influxdb-storage
@@ -244,6 +241,30 @@ spec:
       - name: influxdb-config
         configMap:
           name: influxdb-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    task: monitoring
+    # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
+    # If you are NOT using this as an addon, you should comment out this line.
+    kubernetes.io/cluster-service: 'true'
+    kubernetes.io/name: monitoring-influxdb
+  name: monitoring-influxdb
+  namespace: kube-system
+spec:
+  type: NodePort
+  ports:
+  - port: 8086
+    targetPort: 8086
+    name: http
+  - port: 8083
+    targetPort: 8083
+    name: admin
+  selector:
+    k8s-app: influxdb
+
 ```
 
 ## 执行所有文件
