@@ -297,13 +297,13 @@ etcd-2               Healthy   {"health": "true"}
 $ curl -k --cert /etc/kubernetes/ssl/ca.pem  --key /etc/kubernetes/ssl/ca-key.pem https://10.10.6.201:6443/apis
 ```
 
-## 配置master高可用
+## ~~配置master高可用~~
 
-### 配置和启动 Nginx\(作为3台master的load balancer \)
+### ~~配置和启动 Nginx\(作为3台master的load balancer \)~~
 
-* ##### Nginx启动在k8s-1上,k8s-1作为复用为node,IP地址为192.168.103.143
+* ##### ~~Nginx启动在k8s-1上,k8s-1作为复用为node,IP地址为192.168.103.143~~
 
-编译需要添加nginx的TCP转发模块,我这儿是以前编译好的,直接拿来用,编译参数如下\(Nginx现在已经原生支持TCP转发,我这里用的三方模块\),如果是云服务器,可以采用云厂商提供的LB,避免单点故障
+~~编译需要添加nginx的TCP转发模块,我这儿是以前编译好的,直接拿来用,编译参数如下\(Nginx现在已经原生支持TCP转发,我这里用的三方模块\),如果是云服务器,可以采用云厂商提供的LB,避免单点故障~~
 
 ```bash
 # ./nginx -V
@@ -314,7 +314,7 @@ TLS SNI support enabled
 configure arguments: --prefix=/usr/local/nginx --with-pcre=/usr/local/src/pcre-8.36 --with-zlib=/usr/local/src/zlib-1.2.8 --add-module=/usr/local/src/nginx_tcp_proxy_module-master/
 ```
 
-看下配置文件
+~~看下配置文件~~
 
 ```
 # grep -Ev "#|^$" nginx.conf vhost/10050.cnf
@@ -352,13 +352,13 @@ vhost/10050.cnf:        }
 vhost/10050.cnf:}
 ```
 
-启动nginx
+~~启动nginx~~
 
 ```bash
 /usr/local/src/nginx/nginx/sbin/nginx -c /usr/local/src/ngin/nginx/conf/nginx.conf
 ```
 
-使用nginx的地址访问apiserver,因为是双向验证,所以需要导出证书为P12文件,安装在windows客户端上
+~~使用nginx的地址访问apiserver,因为是双向验证,所以需要导出证书为P12文件,安装在windows客户端上~~
 
 ```
 openssl pkcs12 -export -in admin.pem -inkey admin-key.pem -out /etc/kubernetes/web-cret.p12
@@ -366,7 +366,7 @@ openssl pkcs12 -export -in admin.pem -inkey admin-key.pem -out /etc/kubernetes/w
 
 ![](/assets/chrome-get-apiserver.png)
 
-返回信息:
+~~返回信息:~~
 
 ```
 {
@@ -418,7 +418,7 @@ openssl pkcs12 -export -in admin.pem -inkey admin-key.pem -out /etc/kubernetes/w
 }
 ```
 
-查看当前scheduler和controller-manager的leader\(apiserver无状态\)
+~~查看当前scheduler和controller-manager的leader\(apiserver无状态\)~~
 
 ```
 # kubectl get ep -n kube-system kube-controller-manager kube-scheduler -o yaml
@@ -454,9 +454,9 @@ resourceVersion: ""
 selfLink: ""
 ```
 
-* 此时controller-manager的leader为k8s-4
+* ~~此时controller-manager的leader为k8s-4~~
 
-* 此时scheduler 的leader为k8s-3
+* ~~此时scheduler 的leader为k8s-3~~
 
 
 
