@@ -1309,13 +1309,7 @@ data:
         annotations:
           description: 'MySQL Server of {{$labels.instance}} is Down'
           summary: MySQL_is_Down
-
-
 ```
 
-Prometheus-discover
 
-Prometheus-etcd监控
-
-Prometheus-kubelet监控
 

@@ -32,5 +32,6 @@
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
   * [Prometheus部署](1bu-shu-zhi-nan/prometheusbu-shu.md)
+    * [监控kubernetes组件](1bu-shu-zhi-nan/prometheusbu-shu/prometheuszi-dong-fa-xian.md)
   * [traefix部署](1bu-shu-zhi-nan/treafixbu-shu.md)
 
