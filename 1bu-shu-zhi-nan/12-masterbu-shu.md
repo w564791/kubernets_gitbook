@@ -74,6 +74,34 @@ admin-key.pem  bootstrap.kubeconfig  ca.pem              kube-proxy.pem      kub
 admin.pem      ca-key.pem            kube-proxy-key.pem  kubernetes-key.pem
 ```
 
+## 准备kubeconfig文件
+
+* --mster在kubernetes1.8X以后弃用，此处使用kubeconfig文件代替
+
+```
+[root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/kubeconfig 
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /etc/kubernetes/ssl/ca.pem
+    server: https://internal-kubernetes-cluster-LB.cn-north-1.elb.amazonaws.com.cn
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: admin
+  name: kubernetes
+current-context: kubernetes
+kind: Config
+preferences: {}
+users:
+- name: admin
+  user:
+    client-certificate: /etc/kubernetes/ssl/admin.pem
+    client-key: /etc/kubernetes/ssl/admin-key.pem
+
+```
+
 ## 配置和启动 kube-apiserver
 
 **创建 kube-apiserver的service配置文件**
@@ -81,6 +109,8 @@ admin.pem      ca-key.pem            kube-proxy-key.pem  kubernetes-key.pem
 api-server `serivce`配置文件`/usr/lib/systemd/system/kube-apiserver.service`内容：
 
 ```
+[root@ip-10-10-6-201 ssl]# systemctl cat kube-apiserver
+# /usr/lib/systemd/system/kube-apiserver.service
 [Unit]
 Description=Kubernetes API Service
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
@@ -89,7 +119,7 @@ After=etcd.service
 [Service]
 EnvironmentFile=-/etc/kubernetes/config
 EnvironmentFile=-/etc/kubernetes/apiserver
-ExecStart=/usr/local/kubernetes/server/bin/kube-apiserver \
+ExecStart=/opt/kubernetes/server/bin/kube-apiserver \
 $KUBE_LOGTOSTDERR \
 $KUBE_LOG_LEVEL \
 $KUBE_ETCD_SERVERS \
@@ -127,11 +157,11 @@ KUBE_ALLOW_PRIV="--allow-privileged=true"
 ```
 
 ```ini
-KUBE_API_ADDRESS="--advertise-address=192.168.103.146"
-KUBE_ETCD_SERVERS="--etcd-servers=https://k8s-2:2379,https://k8s-3:2379,https://k8s-4:2379"
-KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=10.254.0.0/16"
-KUBE_ADMISSION_CONTROL="--admission-control=ServiceAccount,NamespaceLifecycle,NamespaceExists,LimitRanger,ResourceQuota"
-KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s.io/v1beta1 --kubelet-https=true --experimental-bootstrap-token-auth --token-auth-file=/etc/kubernetes/token.csv  --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem --client-ca-file=/etc/kubernetes/ssl/ca.pem --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem --etcd-cafile=/etc/kubernetes/ssl/ca.pem --etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem --etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem --enable-swagger-ui=true --apiserver-count=3 --audit-log-maxage=30 --audit-log-maxbackup=3 --audit-log-maxsize=100 --audit-log-path=/var/lib/k8s/apiserver.log --event-ttl=1h"
+[root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/apiserver
+KUBE_API_ADDRESS="--bind-address=10.10.6.201 --secure-port=6443 --insecure-bind-address=127.0.0.1 --insecure-port=9090"
+KUBE_ETCD_SERVERS="--etcd-servers=https://10.10.6.201:2379,https://10.10.4.12:2379,https://10.10.5.105:2379"
+KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=10.254.0.0/16 --kubelet-https=true --service-node-port-range=10-60000 --enable-swagger-ui=true "
+KUBE_ADMISSION_CONTROL="--admission-control=ServiceAccount,NamespaceLifecycle,NamespaceExists,LimitRanger,ResourceQuota --authorization-mode=RBAC --runtime-config=rbac.authorization.k8s.io/v1beta1 --experimental-bootstrap-token-auth --token-auth-file=/etc/kubernetes/token.csv --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem --client-ca-file=/etc/kubernetes/ssl/ca.pem --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem  --etcd-cafile=/etc/kubernetes/ssl/ca.pem --etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem --etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem --apiserver-count=3
 ```
 
 * `--advertise-address` :该地址为`apiserver`集群广播地址,此地址必须能为集群其他部分访问到,如果为空,则使用`--bind-address`，如果`--bind-address`未被制定,那么将使用主机的默认地址；
@@ -149,8 +179,7 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 
 * `--apiserver-count=3`设置集群中master数量
 
-* `--service-node-          
-  port-rang`指定`svc`打开的端口范围
+* `--service-node-port-rang`指定`svc`打开的端口范围
 
 启动`kube-apiserver`
 
@@ -170,12 +199,15 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 文件路径`/usr/lib/systemd/system/kube-controller-manager.service`
 
 ```
+[root@ip-10-10-6-201 ssl]# systemctl cat kube-controller-manager
+# /usr/lib/systemd/system/kube-controller-manager.service
+[Unit]
 Description=Kubernetes Controller Manager
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 [Service]
 EnvironmentFile=-/etc/kubernetes/config
 EnvironmentFile=-/etc/kubernetes/controller-manager
-ExecStart=/usr/local/kubernetes/server/bin/kube-controller-manager \
+ExecStart=/opt/kubernetes/server/bin/kube-controller-manager \
 $KUBE_LOGTOSTDERR \
 $KUBE_LOG_LEVEL \
 $KUBE_MASTER \
@@ -189,8 +221,8 @@ WantedBy=multi-user.target
 配置文件`/etc/kubernetes/controller-manager`
 
 ```
-KUBE_MASTER="--master=http://127.0.0.1:8080"
-KUBE_CONTROLLER_MANAGER_ARGS="--address=127.0.0.1 --service-cluster-ip-range=10.254.0.0/16 --cluster-name=kubernetes --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem --root-ca-file=/etc/kubernetes/ssl/ca.pem --leader-elect=true"
+[root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/controller-manager
+KUBE_CONTROLLER_MANAGER_ARGS="--address=127.0.0.1 --cluster-name=kubernetes --service-cluster-ip-range=10.254.0.0/16 --kubeconfig=/etc/kubernetes/kubeconfig --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem --root-ca-file=/etc/kubernetes/ssl/ca.pem --leader-elect=true"
 ```
 
 * `--service-cluster-ip-range` 参数指定 `Cluster`中 `Service`的CIDR范围，该网络在各 Node 间必须路由不可达，必须和 `kube-apiserver` 中的参数一致;
