@@ -6,6 +6,14 @@
 * 192.168.70.170 /dev/sdc
 * 192.168.70.171 /dev/sdc
 
+所有node上需要安装glusterfs-client包，否则会报`unkown glusterfs filesystem`
+
+需要安装相应的modules
+
+* dm\_snap
+* shot  dm\_mirror
+* dm\_thin\_pool
+
 ## 1.在GitHub上clono项目
 
 ```
@@ -86,6 +94,12 @@ root@node1:~/gluster-kubernetes3/deploy# cat topology.json
 
 ```
 root@node1:~/gluster-kubernetes3/deploy# kubectl create ns storage
+```
+
+## 5.开始部署
+
+```
+root@node1:~/gluster-kubernetes3/deploy# ./gk-deploy -g -n storage
 ```
 
 
