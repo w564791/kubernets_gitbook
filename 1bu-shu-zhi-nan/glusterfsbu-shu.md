@@ -1,4 +1,6 @@
-## PRE：每台机器上需要准备一个块存储设备
+```
+PRE：每台机器上需要准备一个块存储设备
+```
 
 本例有3个节点
 
@@ -141,7 +143,11 @@ Deployment complete!
 
 ## 7.创建storage class
 
+查看heketi的ClusterIP地址，storage class里似乎无法用域名通信，抛错
 
+```
+kubectl get svc/heketi --template 'http://{{.spec.clusterIP}}:{{(index .spec.ports 0).port}}'
+```
 
 
 
