@@ -1,5 +1,14 @@
 ## PRE：每台机器上需要准备一个块存储设备
 
+本例有3个节点
+
+
+
+* 192.168.70.175 /dev/sdc
+* 192.168.70.170 /dev/sdc
+
+* 192.168.70.171 /dev/sdc
+
 ## 1.在GitHub上clono项目
 
 ```
@@ -74,7 +83,6 @@ root@node1:~/gluster-kubernetes3/deploy# cat topology.json
     }
   ]
 }
-
 ```
 
 ## 4.创建namespace（方便失败后重试）
