@@ -99,7 +99,6 @@ users:
   user:
     client-certificate: /etc/kubernetes/ssl/admin.pem
     client-key: /etc/kubernetes/ssl/admin-key.pem
-
 ```
 
 ## 配置和启动 kube-apiserver
@@ -263,11 +262,11 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 ```
 
-配置文件`/etc/kubernetes/schedule`
+配置文件`/etc/kubernetes/scheduler`
 
 ```bash
-KUBE_MASTER="--master=http://127.0.0.1:8080"
-KUBE_SCHEDULER_ARGS="--leader-elect=true --address=127.0.0.1"
+[root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/scheduler 
+KUBE_SCHEDULER_ARGS="--leader-elect=true --address=127.0.0.1 --kubeconfig=/etc/kubernetes/kubeconfig"
 ```
 
 ### 启动 kube-scheduler
