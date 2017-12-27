@@ -11,7 +11,8 @@
 需要安装相应的modules
 
 * dm\_snap
-* shot  dm\_mirror
+* shot
+  dm\_mirror
 * dm\_thin\_pool
 
 ## 1.在GitHub上clono项目
@@ -101,6 +102,37 @@ root@node1:~/gluster-kubernetes3/deploy# kubectl create ns storage
 ```
 root@node1:~/gluster-kubernetes3/deploy# ./gk-deploy -g -n storage
 ```
+
+成功后提示
+
+```
+heketi is now running and accessible via http://172.16.43.4:8080 . To run
+administrative commands you can install 'heketi-cli' and use it as follows:
+
+  # heketi-cli -s http://172.16.43.4:8080 --user admin --secret '<ADMIN_KEY>' cluster list
+
+You can find it at https://github.com/heketi/heketi/releases . Alternatively,
+use it from within the heketi pod:
+
+  # /bin/kubectl -n default exec -i <HEKETI_POD> -- heketi-cli -s http://localhost:8080 --user admin --secret '<ADMIN_KEY>' cluster list
+
+For dynamic provisioning, create a StorageClass similar to this:
+
+---
+apiVersion: storage.k8s.io/v1beta1
+kind: StorageClass
+metadata:
+  name: glusterfs-storage
+provisioner: kubernetes.io/glusterfs
+parameters:
+  resturl: "http://172.16.43.4:8080"
+
+
+Deployment complete!
+
+```
+
+## 6.失败后重试
 
 
 
