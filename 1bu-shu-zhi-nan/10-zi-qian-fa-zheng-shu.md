@@ -116,7 +116,7 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
       "10.10.6.201",
       "10.10.4.12",
       "10.10.5.105",
-      "internal-kubernetes-cluster-LB-272185912.cn-north-1.elb.amazonaws.com.cn",
+      "internal-kubernetes-cluster-LB.cn-north-1.elb.amazonaws.com.cn",
       "10.254.0.1",
       "kubernetes",
       "kubernetes.default",
