@@ -13,21 +13,52 @@ kubernetes master 节点包含的组件：
 
 此处记录部署一个三个节点的高可用 kubernetes master 集群步骤,后续创建一个`load balancer`\(`nginx,`部署在`k8s-1`上\)来代理访问`kube-apiserver` 的请求
 
-下载响应版本的二进制包
+下载相应版本的二进制包
 
-此处使用的是[v1.6.6](https://github.com/w564791/kubernetes/archive/v1.6.6.tar.gz)版本
+此处使用的是v1.7.6版本
 
 ```
-# wget https://github.com/kubernetes/kubernetes/archive/v1.6.6.tar.gz
-# tar -xf v1.6.6.tar.gz && cd kubernetes-1.6.6/cluster/ &&echo "v1.6.6" > ../version
-# ./get-kube-binaries.sh
-...
-# ls ../server/ ../client/
-../client/:
-bin  kubernetes-client-linux-amd64.tar.gz
-
-../server/:
-kubernetes-server-linux-amd64.tar.gz
+root@node1:~# tree /opt/kubernetes/
+/opt/kubernetes/
+├── addons
+├── client
+│   └── bin
+│       ├── kubectl
+│       └── kubefed
+├── kubernetes-src.tar.gz
+├── LICENSES
+├── node
+│   └── bin
+│       ├── kubectl
+│       ├── kubefed
+│       ├── kubelet
+│       └── kube-proxy
+└── server
+    └── bin
+        ├── apiextensions-apiserver
+        ├── cloud-controller-manager
+        ├── cloud-controller-manager.docker_tag
+        ├── cloud-controller-manager.tar
+        ├── hyperkube
+        ├── kubeadm
+        ├── kube-aggregator
+        ├── kube-aggregator.docker_tag
+        ├── kube-aggregator.tar
+        ├── kube-apiserver
+        ├── kube-apiserver.docker_tag
+        ├── kube-apiserver.tar
+        ├── kube-controller-manager
+        ├── kube-controller-manager.docker_tag
+        ├── kube-controller-manager.tar
+        ├── kubectl
+        ├── kubefed
+        ├── kubelet
+        ├── kube-proxy
+        ├── kube-proxy.docker_tag
+        ├── kube-proxy.tar
+        ├── kube-scheduler
+        ├── kube-scheduler.docker_tag
+        └── kube-scheduler.tar
 ```
 
 设置环境变量\(略\);
@@ -118,7 +149,7 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 
 * `--apiserver-count=3`设置集群中master数量
 
-* `--service-node-    
+* `--service-node-      
   port-rang`指定`svc`打开的端口范围
 
 启动`kube-apiserver`
