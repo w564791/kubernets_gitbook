@@ -29,7 +29,6 @@
 
 ```bash
 # cd /usr/loca/src && mkdir ssl && cd $_
-
 ```
 
 手动创建CA配置文件
@@ -113,12 +112,17 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
 {
     "CN": "kubernetes",
     "hosts": [
-        "127.0.0.1",
-        "10.254.0.1",
-        "k8s-1",
-        "k8s-2",
-        "k8s-3",
-        "k8s-4",
+      "127.0.0.1",
+      "10.10.6.201",
+      "10.10.4.12",
+      "10.10.5.105",
+      "internal-kubernetes-cluster-LB-272185912.cn-north-1.elb.amazonaws.com.cn",
+      "10.254.0.1",
+      "kubernetes",
+      "kubernetes.default",
+      "kubernetes.default.svc",
+      "kubernetes.default.svc.cluster",
+      "kubernetes.default.svc.cluster.local"
     ],
     "key": {
         "algo": "rsa",
@@ -136,7 +140,9 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
 }
 ```
 
-* 如果`hosts`字段不为空,则需要制定授权证书的IP或域名列表,由于该证书后续江北etcd集群和`kubernetes  master`集群所使用,所以上面指定了`etcd`集群,master集群的主机域名,`kubernetes`**服务的服务 IP **一般是`kue-apiserver`指定的`service-cluster-ip-range`网段的第一个IP，如 `10.254.0.1`,一定要加,不然后面会像我一样遇到很多坑,我的例子里面是没有加的
+* 如果`hosts`字段不为空,则需要制定授权证书的IP或域名列表,由于该证书后续江北etcd集群和`kubernetes  master`集群所使用,所以上面指定了`etcd`集群,master集群的主机域名,`kubernetes`**服务的服务 IP **一般是`kue-apiserver`指定的`service-cluster-ip-range`网段的第一个IP，如 `10.254.0.1`,`kubernetes`一定要加,不然后面会遇到很多坑,
+* 另外本例的LB并没有使用公网的DNS，建议使用公网的DNS
+* 此处的IP仅为master节点的IP，复用etcd数据库地址，添加node时无需额外生成证书
 
 **生成 kubernetes 证书和私钥**
 
