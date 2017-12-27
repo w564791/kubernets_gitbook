@@ -116,6 +116,26 @@ options ndots:5
 `[root@k8s-1 kubedns]# cat kubedns-controller.yaml`
 
 ```
+[root@ip-10-10-6-201 DNS]# cat kubedns-controller.yaml 
+# Copyright 2016 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Should keep target in cluster/addons/dns-horizontal-autoscaler/dns-horizontal-autoscaler.yaml
+# in sync with this file.
+
+# __MACHINE_GENERATED_WARNING__
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -148,15 +168,13 @@ spec:
       - key: "CriticalAddonsOnly"
         operator: "Exists"
       volumes:
-      - hostPath:
-         path: /etc/kubernetes  #提供挂载卷
-        name: ssl-certs-kubernetess
-      - hostPath:   #提供挂载文件
-         path: /etc/hosts
-        name: ssl-certs-hosts
       - name: kube-dns-config
         configMap:
           name: kube-dns
+          optional: true
+      - name: kubeconfig
+        configMap:
+          name: kubeconfig
           optional: true
       containers:
       - name: kubedns
@@ -181,21 +199,21 @@ spec:
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 5
-        readinessProbe:
-          httpGet:
-            path: /readiness
-            port: 8081
-            scheme: HTTP
+#        readinessProbe:
+#          httpGet:
+#            path: /readiness
+#            port: 8081
+#            scheme: HTTP
           # we poll on pod startup for the Kubernetes master service and
           # only setup the /readiness HTTP server once that's available.
-          initialDelaySeconds: 3
-          timeoutSeconds: 5
+#          initialDelaySeconds: 3
+#          timeoutSeconds: 5
         args:
         - --domain=cluster.local.
         - --dns-port=10053
         - --config-dir=/kube-dns-config
         - --v=2
-        - --kubecfg-file=/etc/kubernetes/config2  ##配置启动参数,必须
+        - --kubecfg-file=/opt/kubernetes/config
         #__PILLAR__FEDERATIONS__DOMAIN__MAP__
         env:
         - name: PROMETHEUS_PORT
@@ -213,13 +231,9 @@ spec:
         volumeMounts:
         - name: kube-dns-config
           mountPath: /kube-dns-config
-        - name: ssl-certs-kubernetess
-          mountPath: /etc/kubernetes
+        - name: kubeconfig
+          mountPath: /opt/kubernetes
           readOnly: true
-        - name: ssl-certs-hosts
-          mountPath: /etc/hosts
-          readOnly: true
-
 
       - name: dnsmasq
         image: index.tenxcloud.com/jimmy/k8s-dns-dnsmasq-nanny-amd64:1.14.1
@@ -286,33 +300,8 @@ spec:
             memory: 20Mi
             cpu: 10m
       dnsPolicy: Default  # Don't use cluster DNS.
-      serviceAccountName: kube-dns  #这里是连接apiserver使用的账户
-```
+      serviceAccountName: kube-dns
 
-提供挂载卷
-
-```
-volumes:
-- hostPath:
-path: /etc/kubernetes #提供挂载卷
-name: ssl-certs-kubernetess
-- hostPath: #提供挂载文件
-path: /etc/hosts
-name: ssl-certs-hosts
-```
-
-* 挂载卷
-
-```
-volumeMounts:
-- name: kube-dns-config
-mountPath: /kube-dns-config
-- name: ssl-certs-kubernetess
-mountPath: /etc/kubernetes
-readOnly: true
-- name: ssl-certs-hosts
-mountPath: /etc/hosts
-readOnly: true
 ```
 
 * 参数,必须要加上.否则会无法找到apiserver
@@ -320,7 +309,7 @@ readOnly: true
 ```
 image: index.tenxcloud.com/jimmy/k8s-dns-kube-dns-amd64:1.14.1
 args:
-- --kubecfg-file=/etc/kubernetes/config2
+- --kubecfg-file=/etc/kubernetes/config
 ```
 
 * `serviceAccountName: kube-dns` \#这里是连接`apiserver`使用的账户
