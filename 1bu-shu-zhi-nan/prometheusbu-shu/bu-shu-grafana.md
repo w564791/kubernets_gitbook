@@ -30,6 +30,7 @@ type: Opaque
 data:
   password: cHhzajIwMTc=
   user: cHhzag==
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -179,7 +180,6 @@ spec:
     app: grafana
   sessionAffinity: None
   type: NodePort
-
 ```
 
 
