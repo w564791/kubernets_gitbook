@@ -299,14 +299,19 @@ $ cfssl-certinfo -cert kubernetes.pem
       "kubernetes"
     ]
   },
-  "serial_number": "40324221304470453898143986608059802229221031688",
+  "serial_number": "269526912326208453271098241073698873122169445039",
   "sans": [
-    "k8s-1",
-    "k8s-2",
-    "k8s-3",
-    "k8s-4",
-    "127.0.0.1"
-  ],
+    "internal-kubernetes-cluster-LB.cn-north-1.elb.amazonaws.com.cn",
+    "kubernetes",
+    "kubernetes.default",
+    "kubernetes.default.svc",
+    "kubernetes.default.svc.cluster",
+    "kubernetes.default.svc.cluster.local",
+    "127.0.0.1",
+    "10.10.6.201",
+    "10.10.4.12",
+    "10.10.5.105",
+
 ...
 ```
 
