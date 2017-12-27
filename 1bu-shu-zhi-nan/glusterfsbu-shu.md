@@ -129,10 +129,19 @@ parameters:
 
 
 Deployment complete!
-
 ```
 
 ## 6.失败后重试
+
+1. 删除vg
+2. 删除pv
+3. 删除nnamespace
+4. rm -rf /var/lib/heket  /var/lib/glusterd
+5. 删除clusterrolebindings
+
+## 7.创建storage class
+
+
 
 
 
