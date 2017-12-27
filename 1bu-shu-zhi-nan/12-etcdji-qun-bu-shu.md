@@ -16,8 +16,6 @@
 
 `systemd`启动文件: 三台`etcd`服务的配置都差不多,仅有`--name`部分有所改变,这里只列出一个配置文件\)
 
-
-
 ```
 [centos@ip-10-10-6-201 ssl]$ systemctl cat etcd
 # /usr/lib/systemd/system/etcd.service
@@ -69,40 +67,26 @@ WantedBy=multi-user.target
 查看集群状态
 
 ```
-# etcdctl \
-   --endpoints https://k8s-4:2379
-   --ca-file=/etc/kubernetes/ssl/ca.pem \
-   --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
-   --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
-   cluster-health
-```
+# $ sudo etcdctl --endpoints https://127.0.0.1:2379 --ca-file=/etc/kubernetes/ssl/ca.pem --cert-file=/etc/kubernetes/ssl/kubernetes.pem --key-file=/etc/kubernetes/ssl/kubernetes-key.pem cluster-health
+member 3e021ee005d1d0d4 is healthy: got healthy result from https://10.10.5.105:2379
+member b10839f801cb056d is healthy: got healthy result from https://10.10.6.201:2379
+member ec88b43e6657597d is healthy: got healthy result from https://10.10.4.12:2379
+cluster is healthy
 
 ```
-2017-07-17 17:35:54.028063 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
-2017-07-17 17:35:54.029048 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
-member a8b8c9e010602e4 is healthy: got healthy result from https://k8s-4:2379
-member 3e665d94ed27eb68 is healthy: got healthy result from https://k8s-3:2379
-member cd3bd399b989674c is healthy: got healthy result from https://k8s-2:2379
-cluster is healthy
-```
+
+
 
 查看成员列表
 
 ```
-#etcdctl \
-   --endpoints https://k8s-4:2379
-   --ca-file=/etc/kubernetes/ssl/ca.pem \
-   --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
-   --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
-   member list
+$ sudo etcdctl --endpoints https://127.0.0.1:2379 --ca-file=/etc/kubernetes/ssl/ca.pem --cert-file=/etc/kubernetes/ssl/kubernetes.pem --key-file=/etc/kubernetes/ssl/kubernetes-key.pem member list
+3e021ee005d1d0d4: name=etcd-2 peerURLs=https://10.10.5.105:2380 clientURLs=https://10.10.5.105:2379 isLeader=false
+b10839f801cb056d: name=etcd-0 peerURLs=https://10.10.6.201:2380 clientURLs=https://10.10.6.201:2379 isLeader=false
+ec88b43e6657597d: name=etcd-1 peerURLs=https://10.10.4.12:2380 clientURLs=https://10.10.4.12:2379 isLeader=true
 ```
 
-```
-2017-07-17 17:36:18.841086 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
-a8b8c9e010602e4: name=k8s-4 peerURLs=https://k8s-4:2380 clientURLs=https://k8s-4:2379 isLeader=true
-3e665d94ed27eb68: name=k8s-3 peerURLs=https://k8s-3:2380 clientURLs=https://k8s-3:2379 isLeader=false
-cd3bd399b989674c: name=k8s-2 peerURLs=https://k8s-2:2380 clientURLs=https://k8s-2:2379 isLeader=false
-```
+
 
 遇到的坑
 
@@ -120,7 +104,7 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 ; error #1: dial tcp 127.0.0.1:4001: getsockopt: connection refused
 ```
 
-只需要加上`--endpoints https://k8s-4:2379`即可IP或域名必须是`kubernetes-csr.json`配置文件生成的证书里面已经签名的证书
+1. 只需要加上`--endpoints https://127.0.0.1:2379`即可,IP或域名必须是`kubernetes-csr.json`配置文件生成的证书里面已经签名的地址
 
 最后在etcd集群上创建`flanneld`使用的网段:
 
