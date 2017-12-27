@@ -42,46 +42,32 @@ RequiredBy=docker.service
 #!/bin/sh
 
 exec /usr/bin/flanneld \
-	-etcd-endpoints=${FLANNEL_ETCD_ENDPOINTS:-${FLANNEL_ETCD}} \
-	-etcd-prefix=${FLANNEL_ETCD_PREFIX:-${FLANNEL_ETCD_KEY}} \
-	"$@"
-
+    -etcd-endpoints=${FLANNEL_ETCD_ENDPOINTS:-${FLANNEL_ETCD}} \
+    -etcd-prefix=${FLANNEL_ETCD_PREFIX:-${FLANNEL_ETCD_KEY}} \
+    "$@"
 ```
-
-
 
 ```
 # chmoe +x flanneld-start
 ```
 
-service配置文件`/usr/lib/systemd/system/flanneld.service`
+
+
+配置文件/etc/sysconfig/flanneld,此文件是强制需求，当然此配置是可以直接配置在systemd的service文件里的，更加方便，推荐那样做。
 
 ```
-[Unit]
-Description=Flanneld overlay address etcd agent
-After=network.target
-After=network-online.target
-Wants=network-online.target
-After=etcd.service
-Before=docker.service
-[Service]
-Type=notify
-EnvironmentFile=/etc/sysconfig/flanneld
-EnvironmentFile=-/etc/sysconfig/docker-network
-ExecStart=/usr/local/flannel/flanneld-start $FLANNEL_OPTIONS
-ExecStartPost=/usr/local/flannel/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/docker
-Restart=on-failure
-[Install]
-WantedBy=multi-user.target
-RequiredBy=docker.service
-```
+[root@ip-10-10-6-201 ssl]# cat /etc/sysconfig/flanneld
+# Flanneld configuration options  
 
-配置文件/etc/sysconfig/flanneld,此文件是强制需求
+# etcd url location.  Point this to the server where etcd runs
+FLANNEL_ETCD_ENDPOINTS="https://10.10.6.201:2379,https://10.10.4.12:2379,https://10.10.5.105:2379"
 
-```
-FLANNEL_ETCD_ENDPOINTS="https://k8s-2:2379,https://k8s-3:2379,https://k8s-4:2379"
-FLANNEL_ETCD_PREFIX="/k8s/network"
-FLANNEL_OPTIONS="-etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem -etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem"
+# etcd config key.  This is the configuration key that flannel queries
+# For address range assignment
+FLANNEL_ETCD_PREFIX="/kubernetes/network"
+
+# Any additional options that you want to pass
+FLANNEL_OPTIONS="-etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem -etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem -healthz-port=10752"
 ```
 
 启动flanneld
