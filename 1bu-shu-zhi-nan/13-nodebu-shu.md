@@ -100,50 +100,49 @@ FLANNEL_OPTIONS="-etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-certfile=/etc/kub
 yum localinstall -y *rpm
 ```
 
-修改docker启动文件`/usr/lib/systemd/system/docker.service`
+修改docker启动文件
 
 ```
+[root@ip-10-10-6-201 ssl]# systemctl cat docker
+# /usr/lib/systemd/system/docker.service
 [Unit]
 Description=Docker Application Container Engine
-Documentation=http://docs.docker.com
-After=network.target
-Wants=docker-storage-setup.service
-Wants=flanneld.service
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+
 [Service]
 Type=notify
-NotifyAccess=all
-EnvironmentFile=-/etc/sysconfig/docker
-EnvironmentFile=-/etc/sysconfig/docker-storage
-EnvironmentFile=-/etc/sysconfig/docker-network
-EnvironmentFile=/run/flannel/docker
-Environment=GOTRACEBACK=crash
-Environment=DOCKER_HTTP_HOST_COMPAT=1
-Environment=PATH=/usr/libexec/docker:/usr/bin:/usr/sbin
-ExecStart=/usr/bin/dockerd-current \
-          --add-runtime docker-runc=/usr/libexec/docker/docker-runc-current \
-          --default-runtime=docker-runc \
-          --exec-opt native.cgroupdriver=systemd \
-          --userland-proxy-path=/usr/libexec/docker/docker-proxy-current \
-          $OPTIONS \
-          $DOCKER_STORAGE_OPTIONS \
-          $DOCKER_NETWORK_OPTIONS \
-          $ADD_REGISTRY \
-          $BLOCK_REGISTRY \
-          $INSECURE_REGISTRY\
-          $DOCKER_OPT_BIP\
-          $DOCKER_OPT_IPMASQ\
-          $DOCKER_OPT_MTU\
-          $DOCKER_NETWORK_OPTIONS
+EnvironmentFile=-/run/flannel/docker
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd $DOCKER_NETWORK_OPTIONS --registry-mirror=https://registry.docker-cn.com --insecure-registry 54.223.110.70
 ExecReload=/bin/kill -s HUP $MAINPID
-LimitNOFILE=1048576
-LimitNPROC=1048576
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNOFILE=10240
+LimitNPROC=1024
 LimitCORE=infinity
+# Uncomment TasksMax if your systemd version supports it.
+# Only systemd 226 and above support this version.
+#TasksMax=infinity
 TimeoutStartSec=0
-Restart=on-abnormal
-MountFlags=slave
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+# kill only the docker process, not all processes in the cgroup
+KillMode=process
+# restart the docker process if it exits prematurely
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
 
 [Install]
 WantedBy=multi-user.target
+
+# /usr/lib/systemd/system/docker.service.d/flannel.conf
+[Service]
+EnvironmentFile=-/run/flannel/docker
 ```
 
 * `EnvironmentFile=/run/flannel/docker`引用`flanneld`自动生成的docker
