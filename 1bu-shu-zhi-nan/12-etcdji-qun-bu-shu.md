@@ -72,10 +72,7 @@ member 3e021ee005d1d0d4 is healthy: got healthy result from https://10.10.5.105:
 member b10839f801cb056d is healthy: got healthy result from https://10.10.6.201:2379
 member ec88b43e6657597d is healthy: got healthy result from https://10.10.4.12:2379
 cluster is healthy
-
 ```
-
-
 
 查看成员列表
 
@@ -85,8 +82,6 @@ $ sudo etcdctl --endpoints https://127.0.0.1:2379 --ca-file=/etc/kubernetes/ssl/
 b10839f801cb056d: name=etcd-0 peerURLs=https://10.10.6.201:2380 clientURLs=https://10.10.6.201:2379 isLeader=false
 ec88b43e6657597d: name=etcd-1 peerURLs=https://10.10.4.12:2380 clientURLs=https://10.10.4.12:2379 isLeader=true
 ```
-
-
 
 遇到的坑
 
@@ -108,6 +103,8 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 
 最后在etcd集群上创建`flanneld`使用的网段:
 
+后文可能使用的配置不一样，只需要稍作修改就好
+
 ```
 #cat flanneld.json
 {
@@ -120,7 +117,7 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 }
 
 # etcdctl \
-   --endpoints https://k8s-4:2379 \
+   --endpoints https://127.0.0.1:2379 \
    --ca-file=/etc/kubernetes/ssl/ca.pem \
    --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
    --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
@@ -131,7 +128,7 @@ client: etcd cluster is unavailable or misconfigured; error #0: malformed HTTP r
 
 ```
 # etcdctl \
-   --endpoints https://k8s-4:2379 \
+   --endpoints https://127.0.0.1:2379 \
    --ca-file=/etc/kubernetes/ssl/ca.pem \
    --cert-file=/etc/kubernetes/ssl/kubernetes.pem \
    --key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
