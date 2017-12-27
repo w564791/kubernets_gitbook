@@ -1,6 +1,6 @@
 本处使用到的yaml文件,[跳转下载](https://github.com/w564791/Kubernetes-Cluster/tree/master/yaml/heapster)
 
-## 配置 grafana-deployment
+## 配置 grafana-deployment\(heapster的grafana不需要了，后面部署Prometheus也会用Prometheus\)
 
 ```
 # cat grafana-deployment.yaml

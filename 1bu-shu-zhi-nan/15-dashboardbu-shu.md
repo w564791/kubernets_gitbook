@@ -230,5 +230,5 @@ namespace:    11 bytes
 token:        ${token}
 ```
 
-
+![](/assets/dashboards.png)
 
