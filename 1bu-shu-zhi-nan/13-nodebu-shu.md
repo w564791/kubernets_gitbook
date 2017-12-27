@@ -178,7 +178,7 @@ EnvironmentFile=-/run/flannel/docker
 ## 安装和配置 kubelet
 
 kubelet 启动时向 kube-apiserver 发送 TLS bootstrapping 请求，需要先将 bootstrap token 文件中的 kubelet-bootstrap 用户赋予 system:node-bootstrapper cluster 角色\(role\)，  
-然后 kubelet 才能有权限创建认证请求\(certificate signing requests\)：
+然后 kubelet 才能有权限创建认证请求\(certificate signing requests\)，只需要执行一次，多次执行无效，并且抛错，但是没有影响。
 
 ```bash
 $ cd /etc/kubernetes
