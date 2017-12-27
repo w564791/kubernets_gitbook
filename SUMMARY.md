@@ -41,4 +41,5 @@
     * [监控glusterfs](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-glusterfs.md)
     * [部署alertmanager](1bu-shu-zhi-nan/prometheusbu-shu/bu-shu-alertmanager.md)
       * [使用钉钉报警](1bu-shu-zhi-nan/prometheusbu-shu/shi-yong-ding-ding-bao-jing.md)
+    * [部署grafana](1bu-shu-zhi-nan/prometheusbu-shu/bu-shu-grafana.md)
 
