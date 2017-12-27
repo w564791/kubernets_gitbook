@@ -1,0 +1,30 @@
+```
+[root@ip-10-10-6-201 prometheus-kubernetes]# cat prometheus-discovery-ep.yaml
+kind: Endpoints
+apiVersion: v1
+metadata: 
+  name: kubelet
+  labels:
+    k8s-app: kubelet
+  name: kubelet
+  namespace: kube-system
+subsets:
+- addresses:
+  - ip: 10.10.6.90
+  - ip: 10.10.4.151
+  - ip: 10.10.5.105
+  - ip: 10.10.4.12
+  - ip: 10.10.6.201
+  - ip: 10.10.7.38
+  - ip: 10.10.4.50
+  - ip: 10.10.7.229
+  - ip: 10.10.5.85
+  - ip: 10.10.4.159
+  ports:
+  - port: 10255
+    name: cadvisor
+
+```
+
+
+
