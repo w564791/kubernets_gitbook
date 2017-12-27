@@ -5,10 +5,6 @@ data:
   alertmanager.yaml: |
     global:
       resolve_timeout: 1m
-      smtp_smarthost: 'smtp-mail.outlook.com:587'
-      smtp_from: 'how_bjl@live.cn'
-      smtp_auth_username: 'how_bjl@live.cn'
-      smtp_auth_password: '79635075aAa'
     route:
       group_by: ['alertname', 'cluster', 'service']
       group_wait: 10s
@@ -134,7 +130,6 @@ spec:
         name: alertmanager-main-db
   updateStrategy:
     type: OnDelete
-
 ```
 
 
