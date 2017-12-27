@@ -301,7 +301,6 @@ spec:
             cpu: 10m
       dnsPolicy: Default  # Don't use cluster DNS.
       serviceAccountName: kube-dns
-
 ```
 
 * 参数,必须要加上.否则会无法找到apiserver
@@ -331,7 +330,7 @@ last:效果图
 * 默认生成路径为~/.kube/config,_也可以用于dashboard,DNS的https认证,直接拷贝使用,我是直接拷贝到/etc/kubernetes/config2,然后挂载到容器里面作为dashboard的启动参数使用的. 如本文--kubecfg-file=/etc/kubernetes/config2_
 
 ```
-export KUBE_APISERVER="https://k8s-1" 
+export KUBE_APISERVER="https://xxxx" 
 # 设置集群参数 
 # kubectl config set-cluster kubernetes \
 --certificate-authority=/etc/kubernetes/ssl/ca.pem \
