@@ -2,56 +2,6 @@
 
 ## 配置 grafana-deployment\(heapster的grafana不需要了，后面部署Prometheus也会用Prometheus\)
 
-```
-# cat grafana-deployment.yaml
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: monitoring-grafana
-  namespace: kube-system
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        task: monitoring
-        k8s-app: grafana
-    spec:
-      containers:
-      - name: grafana
-        image: 111.9.116.131:5000/w564791/heapster-grafana-amd64:v4.0.2
-        ports:
-          - containerPort: 3000
-            protocol: TCP
-        volumeMounts:
-        - mountPath: /var
-          name: grafana-storage
-        env:
-        - name: INFLUXDB_HOST
-          value: monitoring-influxdb
-        - name: GRAFANA_PORT
-          value: "3000"
-          # The following env variables are required to make Grafana accessible via
-          # the kubernetes api-server proxy. On production clusters, we recommend
-          # removing these env variables, setup auth for grafana, and expose the grafana
-          # service using a LoadBalancer or a public IP.
-        - name: GF_AUTH_BASIC_ENABLED
-          value: "false"
-        - name: GF_AUTH_ANONYMOUS_ENABLED
-          value: "true"
-        - name: GF_AUTH_ANONYMOUS_ORG_ROLE
-          value: Admin
-        - name: GF_SERVER_ROOT_URL
-          # If you're only using the API Server proxy, set this value instead:
-          value: /api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/
-          #value: /
-      volumes:
-      - name: grafana-storage
-        emptyDir: {}
-```
-
-* 如果后续使用 kube-apiserver 或者 kubectl proxy 访问 grafana dashboard，则必须将 `GF_SERVER_ROOT_URL` 设置为 `/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/`，否则后续访问grafana时访问时提示找不到`http://172.20.0.113:8086/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/api/dashboards/home` 页面；
-
 ## 配置 heapster-deployment
 
 #### 1.配置heapster-rbac
