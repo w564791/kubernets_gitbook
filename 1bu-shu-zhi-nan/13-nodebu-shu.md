@@ -51,8 +51,6 @@ exec /usr/bin/flanneld \
 # chmoe +x flanneld-start
 ```
 
-
-
 配置文件/etc/sysconfig/flanneld,此文件是强制需求，当然此配置是可以直接配置在systemd的service文件里的，更加方便，推荐那样做。
 
 ```
@@ -88,36 +86,12 @@ FLANNEL_OPTIONS="-etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-certfile=/etc/kub
 
 ## 安装配置docker
 
-本例使用的是docker1.12.5
+本例使用的是docker  17.06.2-ce
 
 安装依赖如下:
 
 ```
-checkpolicy-2.5-4.el7.x86_64.rpm
-container-selinux-1.12.5-14.el7.centos.x86_64.rpm
-device-mapper-1.02.135-1.el7_3.2.x86_64.rpm
-device-mapper-event-1.02.135-1.el7_3.2.x86_64.rpm
-device-mapper-event-libs-1.02.135-1.el7_3.2.x86_64.rpm
-device-mapper-libs-1.02.135-1.el7_3.2.x86_64.rpm
-device-mapper-persistent-data-0.6.3-1.el7.x86_64.rpm
-docker-1.12.5-14.el7.centos.x86_64.rpm
-docker-client-1.12.5-14.el7.centos.x86_64.rpm
-docker-common-1.12.5-14.el7.centos.x86_64.rpm
-libaio-0.3.109-13.el7.x86_64.rpm
-libcgroup-0.41-11.el7.x86_64.rpm
-libseccomp-2.3.1-2.el7.x86_64.rpm
-libsemanage-2.5-5.1.el7_3.x86_64.rpm
-libsemanage-python-2.5-5.1.el7_3.x86_64.rpm
-lvm2-2.02.166-1.el7_3.2.x86_64.rpm
-lvm2-libs-2.02.166-1.el7_3.2.x86_64.rpm
-oci-register-machine-0-1.11.gitdd0daef.el7.x86_64.rpm
-oci-systemd-hook-0.1.4-9.git671c428.el7.x86_64.rpm
-policycoreutils-2.5-11.el7_3.x86_64.rpm
-policycoreutils-python-2.5-11.el7_3.x86_64.rpm
-python-IPy-0.75-6.el7.noarch.rpm
-setools-libs-3.3.8-1.1.el7.x86_64.rpm
-skopeo-containers-0.1.17-1.el7.x86_64.rpm
-yajl-2.0.4-4.el7.x86_64.rpm
+略...
 ```
 
 使用yum安装
