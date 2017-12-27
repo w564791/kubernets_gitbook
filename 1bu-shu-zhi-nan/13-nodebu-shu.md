@@ -305,6 +305,8 @@ k8s-1     Ready      1d        v1.6.6
 文件路径`/usr/lib/systemd/system/kube-proxy.service`
 
 ```bash
+[root@ip-10-10-6-201 ssl]# systemctl cat kube-proxy
+# /usr/lib/systemd/system/kube-proxy.service
 [Unit]
 Description=Kubernetes Kube-Proxy Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
@@ -312,7 +314,7 @@ After=network.target
 [Service]
 EnvironmentFile=-/etc/kubernetes/config
 EnvironmentFile=-/etc/kubernetes/proxy
-ExecStart=/usr/local/kubernetes/server/bin/kube-proxy \
+ExecStart=/opt/kubernetes/server/bin/kube-proxy \
 $KUBE_LOGTOSTDERR \
 $KUBE_LOG_LEVEL \
 $KUBE_MASTER \
