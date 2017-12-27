@@ -241,20 +241,17 @@ Certificate:
     Data:
         Version: 3 (0x2)
         Serial Number:
-            07:10:33:5b:dc:9d:bc:bc:29:ab:f2:45:84:90:3e:5a:86:3e:ff:08
+            2f:36:01:37:15:c7:cd:d2:a9:61:87:7d:c6:ee:0f:5c:a8:1e:5a:af
     Signature Algorithm: sha256WithRSAEncryption
         Issuer: C=CN, ST=BeiJing, L=BeiJing, O=k8s, OU=System, CN=kubernetes
         Validity
-            Not Before: Jul 11 01:26:00 2017 GMT
-            Not After : Jul  9 01:26:00 2027 GMT
+            Not Before: Nov 18 06:50:00 2017 GMT
+            Not After : Nov 16 06:50:00 2027 GMT
         Subject: C=CN, ST=BeiJing, L=BeiJing, O=k8s, OU=System, CN=kubernetes
         Subject Public Key Info:
             Public Key Algorithm: rsaEncryption
                 Public-Key: (2048 bit)
-....
-            X509v3 Subject Alternative Name:
-                DNS:k8s-1, DNS:k8s-2, DNS:k8s-3, DNS:k8s-4, IP Address:127.0.0.1
-....
+...
 ```
 
 * 确认`Issuer`字段的内容和 `ca-csr.json`一致；
