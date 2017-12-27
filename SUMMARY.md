@@ -31,6 +31,7 @@
   * [kube-dns部署](1bu-shu-zhi-nan/14-kube-dnsbu-shu.md)
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
+  * [GlusterFS部署](1bu-shu-zhi-nan/glusterfsbu-shu.md)
   * [Prometheus部署](1bu-shu-zhi-nan/prometheusbu-shu.md)
     * [监控kubernetes组件](1bu-shu-zhi-nan/prometheusbu-shu/prometheuszi-dong-fa-xian.md)
     * [监控kubelet](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-kubelet.md)
