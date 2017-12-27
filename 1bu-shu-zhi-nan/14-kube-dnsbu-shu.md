@@ -99,13 +99,13 @@ options ndots:5
 
 注意事项:
 
-1.需要将`kubeconfig`文件挂载至容器内部,本文的此文件路径为`/etc/kubeconfig/config2`
+1.需要将`kubeconfig`文件挂载至容器内部,本文的此文件路径为`/etc/kubeconfig/config`
 
 ```
 #kubectl create cm kubeconfig --from-file=/root/.kube/config
 ```
 
-3.`k8s-dns-kube-dns-amd64`容器启动时必须加`--kubecfg-file=/etc/kubernetes/config2`参数
+3.`k8s-dns-kube-dns-amd64`容器启动时必须加`--kubecfg-file=/etc/kubernetes/config`参数
 
 --kubecfg-file 参数说明:
 
