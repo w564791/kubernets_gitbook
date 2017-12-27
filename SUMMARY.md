@@ -34,5 +34,6 @@
   * [Prometheus部署](1bu-shu-zhi-nan/prometheusbu-shu.md)
     * [监控kubernetes组件](1bu-shu-zhi-nan/prometheusbu-shu/prometheuszi-dong-fa-xian.md)
     * [监控kubelet](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-kubelet.md)
-  * [traefix部署](1bu-shu-zhi-nan/treafixbu-shu.md)
+    * [监控etcd](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-etcd.md)
+  * 监控etcd
 
