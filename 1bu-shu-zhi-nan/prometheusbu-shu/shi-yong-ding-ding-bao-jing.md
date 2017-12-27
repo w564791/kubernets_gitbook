@@ -26,7 +26,7 @@ spec:
         imagePullPolicy: Always
         name: dingtalk
         args:
-        - --ding.profile=webhook1=https://oapi.dingtalk.com/robot/send?access_token=72137ebcd7bb9d2ca65fac963b4e1cda56166f0a5575f13aed06ad919d280463
+        - --ding.profile=webhook1=https://oapi.dingtalk.com/robot/send?access_token=xxxx
         ports:
         - containerPort: 8060
           name: dingtalk
@@ -55,7 +55,6 @@ spec:
     targetPort: 8060
   selector:
     app: dingtalk
-
 ```
 
 
