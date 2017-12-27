@@ -11,7 +11,7 @@ kubernetes master 节点包含的组件：
 * `kube-scheduler`、`kube-controller-manager`和`kube-apiserver`三者的功能紧密相关；同时只能有一个`kube-scheduler，kube-controller-manager`
 * `kube-scheduler`、`kube-controller-manager`进程处于工作状态，如果运行多个，则需要通过选举产生一个 leader；
 
-此处记录部署一个三个节点的高可用 kubernetes master 集群步骤,后续创建一个`load balancer`\(`nginx,`部署在`k8s-1`上\)来代理访问`kube-apiserver` 的请求
+此处记录部署一个三个节点的高可用 kubernetes master 集群步骤,后续创建一个`load balancer`\(以前我用的nginx4层代理，此处我使用的是aws的classic LB，但是nginx的配置保留\)来代理访问`kube-apiserver` 的请求
 
 下载相应版本的二进制包
 
@@ -149,7 +149,7 @@ KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s
 
 * `--apiserver-count=3`设置集群中master数量
 
-* `--service-node-        
+* `--service-node-          
   port-rang`指定`svc`打开的端口范围
 
 启动`kube-apiserver`
