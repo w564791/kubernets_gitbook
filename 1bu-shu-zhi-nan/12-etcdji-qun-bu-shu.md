@@ -8,9 +8,13 @@
 * kubernetes-key.pem
 * kubernetes.pem
 
-下载二进制文件:
+使用yum安装etcd
 
-* [etcd-v3.1.0](https://github.com/coreos/etcd/releases/download/v3.1.0/etcd-v3.1.0-linux-amd64.tar.gz)
+```
+# yum install -y etcd
+```
+
+
 
 `systemd`启动文件: 三台`etcd`服务的配置都差不多,仅有`--name`部分有所改变,这里只列出一个配置文件\)
 
