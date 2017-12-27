@@ -1,17 +1,6 @@
 # 创建高可用 etcd 集群
 
-`kuberntes`系统使用 `etcd`存储所有数据，此处介绍部署一个三节点高可用 `etcd`集群的步骤，这三个节点复用 `kubernetes master`机器，分别命名`为k8s-2、k8s-3、k8s-4：`
-
-```
-# cat /etc/hosts
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.103.143 k8s-1
-192.168.103.147 k8s-2
-192.168.103.144 k8s-3
-192.168.103.146 k8s-4
-192.168.103.128 k8s-5
-```
+`kuberntes`系统使用 `etcd`存储所有数据，此处介绍部署一个三节点高可用 `etcd`集群的步骤
 
 使用到的证书:
 
