@@ -166,7 +166,5 @@ parameters:
 
 ## 8.在Prometheus测试
 
-
-
-
+[Prometheus部署](/1bu-shu-zhi-nan/prometheusbu-shu.md)
 
