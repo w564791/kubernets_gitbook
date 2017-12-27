@@ -328,7 +328,8 @@ WantedBy=multi-user.target
 创建kube-proxy配置文件`/etc/kubernetes/proxy`
 
 ```
-KUBE_PROXY_ARGS="--bind-address=192.168.103.143 --hostname-override=k8s-1 --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig --log-dir=/var/log/k8s --logtostderr=false --v=0 --cluster-cidr=10.254.0.0/16"
+[root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/proxy 
+KUBE_PROXY_ARGS="--kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig  --cluster-cidr=10.254.0.0/16"
 ```
 
 * `--hostname-override` 参数值必须与 kubelet 的值一致，否则 kube-proxy 启动后会找不到该 Node，从而不会创建任何 iptables 规则；
