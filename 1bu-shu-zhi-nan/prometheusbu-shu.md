@@ -63,7 +63,7 @@
    kubectl create -f dashboard.yaml
    ```
 
-8. 创建导入dashboard的job
+8. 创建导入grafana模板的job
 
    ```
    kubectl create -f grafana-import-dashboards-job.yaml
