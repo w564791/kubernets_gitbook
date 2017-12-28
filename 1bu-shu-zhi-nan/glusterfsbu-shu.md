@@ -11,7 +11,7 @@
 需要安装相应的modules
 
 * dm\_snap
-* shotdm\_mirror
+* dm\_mirror
 * dm\_thin\_pool
 
 ## 1.在GitHub上clono项目
