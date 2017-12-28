@@ -20,7 +20,7 @@
    kubectl create -f prometheus-svc.yaml
    ```
 
-2. 部署alertmanager（alertmanager主要用来做prometheus的监控告警）：
+2. 部署alertmanager（alertmanager主要用来做prometheus的监控告警,本例使用钉钉报警）：
 
    ```
    kubectl create -f alertmanager-cm.yaml
