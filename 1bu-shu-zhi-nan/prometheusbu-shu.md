@@ -43,7 +43,7 @@
    kubectl create -f node-exporter-svc.yaml
    ```
 
-5. 部署grafana（grafana用来做监控的绘图展示）,PS:需要替换grafana里的账户密码
+5. 部署grafana（grafana用来做监控的绘图展示）
 
    ```
    kubectl create -f grafana-credentails.secret.yaml
