@@ -51,7 +51,7 @@
    kubectl create -f grafana-svc.yaml
    ```
 
-6. 建相关enpoints用于kubelet、kube-conrtroller-manger、kube-scheduler、etcd等的监控：
+6. 部署相关enpoints用于kubelet、kube-conrtroller-manger、kube-scheduler、etcd等的监控：
 
    ```
    kubectl create -f prometheus-discovery-service.yaml
