@@ -30,5 +30,5 @@ w564791/heapster-influxdb-amd64:v1.1.1
 w564791/configmap-reload:v0.0.1
 ```
 
-本处部署结构\(待上传\)
+
 
