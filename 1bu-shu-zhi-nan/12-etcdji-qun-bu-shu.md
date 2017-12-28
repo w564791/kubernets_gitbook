@@ -60,9 +60,9 @@ WantedBy=multi-user.target
 * `--initial-cluster-state`值为 `new`时，`--name` 的参数值必须位于 `--initial-cluster` 列表中；
 * EnvironmentFile=-/etc/etcd/etcd.conf  可以把参数写在这个配置文件里,更方便管理
 
-启动etcd集群,注意:etcd集群启动时,只有当2个或2个以上启动成功时启动状态返回0,否则启动失败;报错如下图
+启动etcd集群,注意:etcd集群启动时,只有当2个或2个以上启动成功时启动状态返回0,否则启动失败;
 
-## ![](https://github.com/w564791/Kubernetes-Cluster/raw/master/pic/err1.png "err1")
+## 
 
 ## 验证服务
 
