@@ -161,6 +161,12 @@ parameters:
     resturl: "http://10.254.112.16:8080"
 ```
 
+创建storage class
+
+```
+kubectl create -f gluster-s3-storageclass.yaml
+```
+
 ## 8.在Prometheus测试
 
 [Prometheus部署](/1bu-shu-zhi-nan/prometheusbu-shu.md)
