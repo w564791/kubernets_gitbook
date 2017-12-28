@@ -90,7 +90,7 @@ root@node1:~/gluster-kubernetes3/deploy# cat topology.json
 }
 ```
 
-## 4.创建namespace（方便失败后重试）
+## 4.创建namespace（方便失败后重试，直接删除ns即可）
 
 ```
 root@node1:~/gluster-kubernetes3/deploy# kubectl create ns storage
