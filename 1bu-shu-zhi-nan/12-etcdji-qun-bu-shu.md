@@ -2,6 +2,8 @@
 
 `kuberntes`系统使用 `etcd`存储所有数据，此处介绍部署一个三节点高可用 `etcd`集群的步骤
 
+etcd version: 3.2.7
+
 使用到的证书:
 
 * ca.pem
