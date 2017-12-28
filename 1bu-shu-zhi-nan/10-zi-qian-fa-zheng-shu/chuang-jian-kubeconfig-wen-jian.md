@@ -106,7 +106,7 @@ apiVersion: v1
 clusters:
 - cluster:
     certificate-authority-data: ...
-    server: https://k8s-1
+    server: https://xxxx
   name: kubernetes
 contexts:
 - context:
