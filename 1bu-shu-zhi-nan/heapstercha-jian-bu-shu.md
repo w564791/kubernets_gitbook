@@ -15,7 +15,6 @@
 ```
 
 ```
-
 NAME              DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 deploy/heapster   1         1         1            1           16h
 
@@ -39,12 +38,11 @@ svc/monitoring-influxdb   10.254.61.66   <nodes>       8086:31086/TCP,8083:31083
 ```
 
 ```
-# kubectl  get pods -n kube-system |grep -E "heapster|monitor"
+# kubectl  get pods -n kube-system 
 ```
 
 ```
 heapster-290061577-5kj1r               1/1       Running   0          16h
-monitoring-grafana-1581303656-9w0nb    1/1       Running   0          16h
 monitoring-influxdb-2399066898-sld2p   1/1       Running   0          16h
 ```
 
