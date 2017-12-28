@@ -39,7 +39,7 @@ namespace:    11 bytes
 token:        .......
 ```
 
-复制上文上省略号部分的内容到登录页上，即可登录，本文开启了nodePort 8443端口，使用集群中任意https://IP:8443即可登录
+复制上文上省略号部分的内容到登录页上，即可登录，本文开启了nodePort 8443端口，使用集群中任意[https://IP:8443 ](https://IP:8443即可登录)即可登录
 
 ![](/assets/dashboards.png)
 
