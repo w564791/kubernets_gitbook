@@ -1,6 +1,4 @@
-```
-PRE：每台机器上需要准备一个块存储设备
-```
+#### PRE：每台机器上需要准备一个块存储设备
 
 本例有3个节点
 
@@ -13,8 +11,7 @@ PRE：每台机器上需要准备一个块存储设备
 需要安装相应的modules
 
 * dm\_snap
-* shot
-  dm\_mirror
+* shotdm\_mirror
 * dm\_thin\_pool
 
 ## 1.在GitHub上clono项目
