@@ -36,7 +36,7 @@ Data
 ====
 ca.crt:        1359 bytes
 namespace:    11 bytes
-token:        ${token}
+token:        .......
 ```
 
 ![](/assets/dashboards.png)
