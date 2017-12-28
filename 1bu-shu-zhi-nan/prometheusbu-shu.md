@@ -57,7 +57,7 @@
    kubectl create -f prometheus-discovery-service.yaml
    ```
 
-7. 创建dashboard的configmap
+7. 创建configmap（将导入grafana作为模板）
 
    ```
    kubectl create -f dashboard.yaml
