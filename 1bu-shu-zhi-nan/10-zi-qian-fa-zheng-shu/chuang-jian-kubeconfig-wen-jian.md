@@ -24,7 +24,7 @@ EOF
 ```
 # cd/etc/kubernetes
 # 我这里的KUBE_APISERVER设置的ng(负载均衡器)的地址
-# export KUBE_APISERVER="https://k8s-1"
+# export KUBE_APISERVER="https://xxxx"
 # 设置集群参数
 # kubectl config set-cluster kubernetes \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem \
