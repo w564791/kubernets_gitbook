@@ -36,6 +36,5 @@
     * [监控kubelet](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-kubelet.md)
     * [监控etcd](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-etcd.md)
     * [监控mysql](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-mysql.md)
-    * [监控kube-metrics](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-kube-metrics.md)
     * [监控glusterfs](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-glusterfs.md)
 
