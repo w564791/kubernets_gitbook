@@ -15,11 +15,6 @@
 ```
 
 ```
-NAME                        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-deploy/monitoring-grafana   1         1         1            1           16h
-
-NAME                     CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-svc/monitoring-grafana   10.254.147.116   <none>        80/TCP    16h
 
 NAME              DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 deploy/heapster   1         1         1            1           16h
