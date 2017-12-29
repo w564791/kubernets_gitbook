@@ -167,6 +167,16 @@ parameters:
 kubectl create -f gluster-s3-storageclass.yaml
 ```
 
+设置为默认的storageclass
+
+法1.直接edit修改
+
+法2：
+
+```
+kubectl patch storageclass gluster-heketi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+```
+
 ## 8.在Prometheus测试
 
 [Prometheus部署](/1bu-shu-zhi-nan/prometheusbu-shu.md)
