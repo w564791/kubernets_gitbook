@@ -10,7 +10,7 @@
 
 需要安装相应的modules
 
-* dm\_snap
+* dm\_snapshot
 * dm\_mirror
 * dm\_thin\_pool
 
