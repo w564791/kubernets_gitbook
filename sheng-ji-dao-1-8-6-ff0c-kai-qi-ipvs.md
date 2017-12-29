@@ -1,4 +1,4 @@
-##  升级注意事项
+## 升级注意事项
 
 #### 1.调整内核参数
 
@@ -51,7 +51,7 @@ error: failed to run Kubelet: Running with swap on is not supported, please disa
 
 #### 4.修改kube-proxy参数
 
-因为ipvs还是alpha版本，所以需要开启`--feature-gates`，并且需要打开**`--masquerade-all`**选项，确保反向流量通过。
+因为ipvs还是alpha版本，所以需要开启`--feature-gates`，并且需要打开`--masquerade-all`选项，确保反向流量通过。
 
 ```
 --feature-gates SupportIPVSProxyMode=true --masquerade-all
@@ -62,6 +62,17 @@ error: failed to run Kubelet: Running with swap on is not supported, please disa
 ```
 #apt install ipvsadm
 ```
+
+# 升级步骤
+
+### master升级
+
+1. 替换kube-apiserver二进制文件，并重启
+2. 替换kube-controller-manager，kube-scheduler二进制文件，并重启
+
+### node升级
+
+1. 替换kubelet ,kube-proxy二进制文件，并重启
 
 
 
