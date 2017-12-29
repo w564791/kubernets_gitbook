@@ -80,7 +80,11 @@ iptables -P FORWARD ACCEPT
 
 1. 替换kubelet ,kube-proxy二进制文件，并重启
 
+#### 查看ipvs规则
 
+```
+#ipvsadm -ln
+```
 
 
 
