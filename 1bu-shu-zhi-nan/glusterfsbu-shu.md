@@ -177,6 +177,12 @@ kubectl create -f gluster-s3-storageclass.yaml
 kubectl patch storageclass gluster-heketi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
 
+```
+root@node3:/var/lib/k8s# kubectl get sc
+NAME                       TYPE
+gluster-heketi (default)   kubernetes.io/glusterfs 
+```
+
 ## 8.在Prometheus测试
 
 [Prometheus部署](/1bu-shu-zhi-nan/prometheusbu-shu.md)
