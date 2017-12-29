@@ -63,6 +63,12 @@ error: failed to run Kubelet: Running with swap on is not supported, please disa
 #apt install ipvsadm
 ```
 
+#### 6.修改iptables FORWARD链默认规则
+
+```
+iptables -P FORWARD ACCEPT
+```
+
 # 升级步骤
 
 ### master升级
@@ -73,6 +79,8 @@ error: failed to run Kubelet: Running with swap on is not supported, please disa
 ### node升级
 
 1. 替换kubelet ,kube-proxy二进制文件，并重启
+
+
 
 
 
