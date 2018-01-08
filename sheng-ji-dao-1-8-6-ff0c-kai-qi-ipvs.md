@@ -1,4 +1,4 @@
-## 升级注意事项
+## 升级注意事项（测试中发现nodePort不能用）
 
 #### 1.调整内核参数
 
@@ -124,7 +124,7 @@ TCP  10.254.206.231:9090 rr
 TCP  10.254.221.230:443 rr
   -> 172.16.30.4:8443             Masq    1      0          0         
 UDP  10.254.0.2:53 rr
-  -> 172.16.30.5:53               Masq    1      0          0         
+  -> 172.16.30.5:53               Masq    1      0          0
 ```
 
 #### 查看网卡信息
@@ -160,7 +160,6 @@ UDP  10.254.0.2:53 rr
        valid_lft forever preferred_lft forever
     inet 10.254.61.226/32 brd 10.254.61.226 scope global kube-ipvs0
        valid_lft forever preferred_lft forever
-
 ```
 
 
