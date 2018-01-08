@@ -96,5 +96,26 @@ CURRENT   NAME         CLUSTER      AUTHINFO   NAMESPACE
 cp -f /etc/kubernetes/ssl/devuser.kubeconfig /root/.kube/config
 ```
 
+测试权限：
+
+```
+root@node1:~/.kube# kubectl get po
+NAME                                  READY     STATUS    RESTARTS   AGE
+alertmanager-main-0                   2/2       Running   28         10d
+glusterfs-exportor-3385031480-spp42   1/1       Running   23         12d
+grafana-3658865556-j7r6t              1/1       Running   13         10d
+kube-state-metrics-3978912283-zlwgk   1/1       Running   13         10d
+mysql-exportor-2366499531-sd8q5       1/1       Running   12         10d
+node-exporter-3f01q                   1/1       Running   29         17d
+node-exporter-hzv1v                   1/1       Running   29         17d
+node-exporter-kqk3z                   1/1       Running   27         17d
+prometheus-k8s-0                      2/2       Running   12         6d
+
+root@node1:~/.kube# kubectl get po -n default
+Error from server (Forbidden): pods is forbidden: User "testuser" cannot list pods in the namespace "default"
+root@node1:~/.kube# kubectl get ns
+Error from server (Forbidden): namespaces is forbidden: User "testuser" cannot list namespaces at the cluster scope
+```
+
 
 
