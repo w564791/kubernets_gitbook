@@ -18,7 +18,7 @@
 | namespaces | ns |
 | networkpolicies |  |
 | nodes | no |
-| statefulsets | srs |
+| statefulsets | sts |
 | persistentvolumeclaims | pvc |
 | persistentvolumes | pv |
 | pods | po |
