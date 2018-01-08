@@ -1,4 +1,4 @@
-**创建`devuser-csr.json`文件**
+**创建**`devuser-csr.json`**文件**
 
 ```
 {
@@ -41,7 +41,6 @@ cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kube
 websites. For more information see the Baseline Requirements for the Issuance and Management
 of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
 specifically, section 10.2.3 ("Information Requirements").
-
 ```
 
 这将生成如下文件：
@@ -49,6 +48,55 @@ specifically, section 10.2.3 ("Information Requirements").
 ```
 devuser.csr  devuser-key.pem  devuser.pem
 ```
+
+## 创建 kubeconfig 文件 {#创建-kubeconfig-文件}
+
+```
+# 设置集群参数
+export KUBE_APISERVER="https://192.168.70.175"
+kubectl config set-cluster kubernetes \
+--certificate-authority=/etc/kubernetes/ssl/ca.pem \
+--embed-certs=true \
+--server=${KUBE_APISERVER} \
+--kubeconfig=devuser.kubeconfig
+
+# 设置客户端认证参数
+kubectl config set-credentials devuser \
+--client-certificate=/etc/kubernetes/ssl/devuser.pem \
+--client-key=/etc/kubernetes/ssl/devuser-key.pem \
+--embed-certs=true \
+--kubeconfig=devuser.kubeconfig
+
+# 设置上下文参数
+kubectl config set-context kubernetes \
+--cluster=kubernetes \
+--user=devuser \
+--namespace=dev \
+--kubeconfig=devuser.kubeconfig
+
+# 设置默认上下文
+kubectl config use-context kubernetes --kubeconfig=devuser.kubeconfig
+```
+
+我们现在查看 kubectl 的 context：
+
+```
+# KUBECONFIG=~/.kube/config:/etc/kubernetes/ssl/devtuser.kubeconfig kubectl config get-contexts
+CURRENT   NAME         CLUSTER      AUTHINFO   NAMESPACE
+*         default      kubernetes   admin      default
+          kubernetes   kubernetes   devuser    dev
+          monitor      kubernetes   admin      monitoring
+          pxsj         kubernetes   admin      pxsj
+          system       kubernetes   admin      kube-system
+```
+
+将其用刚生成的`devuser.kubeconfig`替换`~/.kube/config`
+
+```
+cp -f devuser.kubeconfig /root/.kube/config
+```
+
+
 
 
 
