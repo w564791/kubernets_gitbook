@@ -27,6 +27,7 @@
   * [格式化输出](1bu-shu-zhi-nan/ge-shi-hua-shu-chu.md)
   * [自签发证书](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)
     * [创建kubeconfig文件](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu/chuang-jian-kubeconfig-wen-jian.md)
+    * [普通用户对单个ns的授权](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu/pu-tong-yong-hu-dui-dan-ge-ns-de-shou-quan.md)
   * [etcd集群部署](1bu-shu-zhi-nan/12-etcdji-qun-bu-shu.md)
   * [master部署](1bu-shu-zhi-nan/12-masterbu-shu.md)
   * [node部署](1bu-shu-zhi-nan/13-nodebu-shu.md)
