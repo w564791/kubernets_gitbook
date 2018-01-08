@@ -81,7 +81,7 @@ kubectl config use-context kubernetes --kubeconfig=devuser.kubeconfig
 我们现在查看 kubectl 的 context：
 
 ```
-# KUBECONFIG=~/.kube/config:/etc/kubernetes/ssl/devtuser.kubeconfig kubectl config get-contexts
+# KUBECONFIG=~/.kube/config:/etc/kubernetes/ssl/devuser.kubeconfig kubectl config get-contexts
 CURRENT   NAME         CLUSTER      AUTHINFO   NAMESPACE
 *         default      kubernetes   admin      default
           kubernetes   kubernetes   devuser    dev
