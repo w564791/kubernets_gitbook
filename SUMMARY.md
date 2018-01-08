@@ -23,6 +23,7 @@
     * [kubeconfig](zhu-yao-gai-nian/kubeconfig.md)
   * [关于防火墙](guan-yu-fang-huo-qiang.md)
 * [在CentOS7上部署kubernetes1.7.6集群](1bu-shu-zhi-nan.md)
+  * [资源类型](1bu-shu-zhi-nan/zi-yuan-lei-xing.md)
   * [自签发证书](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)
     * [创建kubeconfig文件](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu/chuang-jian-kubeconfig-wen-jian.md)
   * [etcd集群部署](1bu-shu-zhi-nan/12-etcdji-qun-bu-shu.md)
