@@ -39,4 +39,6 @@
     * [监控glusterfs](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-glusterfs.md)
 * [升级到1.8.6，开启ipvs（ubuntu）](sheng-ji-dao-1-8-6-ff0c-kai-qi-ipvs.md)
 * [升级到1.9.0，开机ipvs（ubuntu）](sheng-ji-dao-1-9-0.md)
+* 最佳配置（网上摘抄）
+  * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 
