@@ -93,10 +93,8 @@ CURRENT   NAME         CLUSTER      AUTHINFO   NAMESPACE
 将其用刚生成的`devuser.kubeconfig`替换`~/.kube/config`
 
 ```
-cp -f devuser.kubeconfig /root/.kube/config
+cp -f /etc/kubernetes/ssl/devuser.kubeconfig /root/.kube/config
 ```
-
-
 
 
 
