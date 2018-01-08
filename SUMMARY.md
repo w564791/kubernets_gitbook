@@ -24,6 +24,7 @@
   * [关于防火墙](guan-yu-fang-huo-qiang.md)
 * [在CentOS7上部署kubernetes1.7.6集群](1bu-shu-zhi-nan.md)
   * [资源类型](1bu-shu-zhi-nan/zi-yuan-lei-xing.md)
+  * [格式化输出](1bu-shu-zhi-nan/ge-shi-hua-shu-chu.md)
   * [自签发证书](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)
     * [创建kubeconfig文件](1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu/chuang-jian-kubeconfig-wen-jian.md)
   * [etcd集群部署](1bu-shu-zhi-nan/12-etcdji-qun-bu-shu.md)
@@ -33,11 +34,7 @@
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
   * [GlusterFS部署](1bu-shu-zhi-nan/glusterfsbu-shu.md)
-  * [Prometheus部署](1bu-shu-zhi-nan/prometheusbu-shu.md)
-    * [监控kubelet](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-kubelet.md)
-    * [监控etcd](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-etcd.md)
-    * [监控mysql](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-mysql.md)
-    * [监控glusterfs](1bu-shu-zhi-nan/prometheusbu-shu/jian-kong-glusterfs.md)
+  * 格式化输出
 * [升级到1.8.6，开启ipvs（ubuntu）](sheng-ji-dao-1-8-6-ff0c-kai-qi-ipvs.md)
 * [升级到1.9.0，开机ipvs（ubuntu）](sheng-ji-dao-1-9-0.md)
 * 最佳配置（网上摘抄）
