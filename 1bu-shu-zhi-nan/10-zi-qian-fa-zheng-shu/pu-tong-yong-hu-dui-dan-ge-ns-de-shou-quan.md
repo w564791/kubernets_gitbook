@@ -20,7 +20,7 @@
 }
 ```
 
-**生成 CA 证书和私钥**
+**生成证书**
 
 在[创建 TLS 证书和秘钥](/1bu-shu-zhi-nan/10-zi-qian-fa-zheng-shu.md)一节中我们将生成的证书和秘钥放在了所有节点的`/etc/kubernetes/ssl`目录下，下面我们再在 master 节点上为 devuser 创建证书和秘钥，在`/etc/kubernetes/ssl`目录下执行以下命令：
 
@@ -48,6 +48,14 @@ specifically, section 10.2.3 ("Information Requirements").
 ```
 devuser.csr  devuser-key.pem  devuser.pem
 ```
+
+## 权限绑定 {#创建-kubeconfig-文件}
+
+```
+# kubectl create rolebinding devuser-binding --clusterrole=admin --user=devuser --namespace=dev
+```
+
+* 绑定用户devuser到dev命名空间，给予admin权限
 
 ## 创建 kubeconfig 文件 {#创建-kubeconfig-文件}
 
