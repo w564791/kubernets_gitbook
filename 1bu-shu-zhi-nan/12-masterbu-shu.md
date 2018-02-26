@@ -230,6 +230,8 @@ KUBE_CONTROLLER_MANAGER_ARGS="--experimental-cluster-signing-duration 175200h0m0
 
 * `--root-ca-file` 用来对 kube-apiserver 证书进行校验，**指定该参数后，才会在Pod 容器的 ServiceAccount 中放置该 CA 证书文件;**
 
+* `--experimental-cluster-signing-duration` 设置签署的证书有效时间
+
 ### 启动 kube-controller-manager
 
 ```
