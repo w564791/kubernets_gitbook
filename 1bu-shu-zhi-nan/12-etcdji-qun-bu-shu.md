@@ -166,5 +166,31 @@ echo
 /registry/namespaces/automodel
 ```
 
+# etcdctl数据备份与恢复 {#使用etcdctl访问kuberentes数据}
+
+### 对于 API 3 备份与恢复方法
+
+在命令行设置：
+
+```
+# export ETCDCTL_API=3
+```
+
+备份数据：
+
+```
+# etcdctl --endpoints localhost:2379 snapshot save snapshot.db
+```
+
+恢复：
+
+```
+# etcdctl snapshot restore snapshot.db --name m3 --data-dir=/home/etcd_data
+```
+
+### 
+
+
+
 
 
