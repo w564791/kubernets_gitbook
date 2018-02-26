@@ -36,6 +36,7 @@
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
   * [GlusterFS部署](1bu-shu-zhi-nan/glusterfsbu-shu.md)
   * 格式化输出
+  * [Kubernetes TSL bootstrapping ](1bu-shu-zhi-nan/kubernetes-tsl-bootstrapping.md)
 * 最佳配置（网上摘抄）
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 
