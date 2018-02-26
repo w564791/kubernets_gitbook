@@ -76,7 +76,7 @@ admin.pem      ca-key.pem            kube-proxy-key.pem  kubernetes-key.pem
 
 ## 准备kubeconfig文件
 
-* --mster在kubernetes1.8X以后弃用，此处使用kubeconfig文件代替
+* --master在kubernetes1.8X以后弃用，此处使用kubeconfig文件代替
 
 ```
 [root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/kubeconfig 
@@ -221,7 +221,7 @@ WantedBy=multi-user.target
 
 ```
 [root@ip-10-10-6-201 ssl]# cat /etc/kubernetes/controller-manager
-KUBE_CONTROLLER_MANAGER_ARGS="--address=127.0.0.1 --cluster-name=kubernetes --service-cluster-ip-range=10.254.0.0/16 --kubeconfig=/etc/kubernetes/kubeconfig --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem --root-ca-file=/etc/kubernetes/ssl/ca.pem --leader-elect=true"
+KUBE_CONTROLLER_MANAGER_ARGS="--experimental-cluster-signing-duration 175200h0m0s --address=127.0.0.1 --cluster-name=kubernetes --service-cluster-ip-range=10.254.0.0/16 --kubeconfig=/etc/kubernetes/kubeconfig --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem --root-ca-file=/etc/kubernetes/ssl/ca.pem --leader-elect=true"
 ```
 
 * `--service-cluster-ip-range` 参数指定 `Cluster`中 `Service`的CIDR范围，该网络在各 Node 间必须路由不可达，必须和 `kube-apiserver` 中的参数一致;
