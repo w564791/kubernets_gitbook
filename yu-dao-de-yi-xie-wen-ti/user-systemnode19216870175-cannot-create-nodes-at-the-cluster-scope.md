@@ -18,5 +18,7 @@ Failed to list *v1.Pod: pods is forbidden: User "system:node:192.168.70.175" can
 kubectl create clusterrolebinding kubelet-nodegroup-clusterbinding --clusterrole=system:node --group=system:nodes
 ```
 
+重启node
+
 
 
