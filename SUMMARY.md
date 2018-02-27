@@ -40,4 +40,5 @@
 * 最佳配置（网上摘抄）
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
+  * [Unable to register node "192.168.70.175" with API server: Unauthorized](yu-dao-de-yi-xie-wen-ti/unable-to-register-node-19216870175-with-api-server-unauthorized.md)
 
