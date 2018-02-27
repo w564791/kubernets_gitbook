@@ -10,7 +10,7 @@ Kubernetes 在 1.4 版本\(我记着是\)推出了 TLS bootstrapping 功能；�
 
 #### 2.1、kubelet server {#21kubelet-server}
 
-在官方 TLS bootstrapping 文档中多次提到过`kubelet server`这个东西；在经过翻阅大量文档以及 TLS bootstrapping 设计文档后得出，**`kubelet server`指的应该是 kubelet 的 10250 端口；**
+在官方 TLS bootstrapping 文档中多次提到过`kubelet server`这个东西；在经过翻阅大量文档以及 TLS bootstrapping 设计文档后得出，`kubelet server`**指的应该是 kubelet 的 10250 端口；**
 
 **kubelet 组件在工作时，采用主动的查询机制，即定期请求 apiserver 获取自己所应当处理的任务，如哪些 pod 分配到了自己身上，从而去处理这些任务；同时 kubelet 自己还会暴露出两个本身 api 的端口，用于将自己本身的私有 api 暴露出去，这两个端口分别是 10250 与 10255；对于 10250 端口，kubelet 会在其上采用 TLS 加密以提供适当的鉴权功能；对于 10255 端口，kubelet 会以只读形式暴露组件本身的私有 api，并且不做鉴权处理**
 
@@ -20,11 +20,7 @@ Kubernetes 在 1.4 版本\(我记着是\)推出了 TLS bootstrapping 功能；�
 
 kubelet 发起的 CSR 请求都是由 controller manager 来做实际签署的，对于 controller manager 来说，TLS bootstrapping 下 kubelet 发起的 CSR 请求大致分为以下三种
 
-* nodeclient: kubelet 以
-  `O=system:nodes`
-  和
-  `CN=system:node:(node name)`
-  形式发起的 CSR 请求
+* nodeclient: kubelet 以`O=system:nodes`和`CN=system:node:(node name)`形式发起的 CSR 请求
 * selfnodeclient: kubelet client renew 自己的证书发起的 CSR 请求\(与上一个证书就有相同的 O 和 CN\)
 * selfnodeserver: kubelet server renew 自己的证书发起的 CSR 请求
 
@@ -50,9 +46,9 @@ kubelet 发起的 CSR 请求都是由 controller manager 来做实际签署的�
 
 看完上面的介绍，不知道有没有人想过，既然 TLS bootstrapping 功能是让 kubelet 组件去 apiserver 申请证书，然后用于连接 apiserver；**那么第一次启动时没有证书如何连接 apiserver ?**
 
-这个问题实际上可以去查看一下`bootstrap.kubeconfig`和`token.csv`得到答案:**在 apiserver 配置中指定了一个`token.csv`文件，该文件中是一个预设的用户配置；同时该用户的 Token 和 apiserver 的 CA 证书被写入了 kubelet 所使用的`bootstrap.kubeconfig`配置文件中；这样在首次请求时，kubelet 使用`bootstrap.kubeconfig`中的 apiserver CA 证书来与 apiserver 建立 TLS 通讯，使用`bootstrap.kubeconfig`中的用户 Token 来向 apiserver 声明自己的 RBAC 授权身份**，如下图所示
+这个问题实际上可以去查看一下`bootstrap.kubeconfig`和`token.csv`得到答案:**在 apiserver 配置中指定了一个**`token.csv`**文件，该文件中是一个预设的用户配置；同时该用户的 Token 和 apiserver 的 CA 证书被写入了 kubelet 所使用的**`bootstrap.kubeconfig`**配置文件中；这样在首次请求时，kubelet 使用**`bootstrap.kubeconfig`**中的 apiserver CA 证书来与 apiserver 建立 TLS 通讯，使用**`bootstrap.kubeconfig`**中的用户 Token 来向 apiserver 声明自己的 RBAC 授权身份**，如下图所示
 
-![](/assets/import12.png)在有些用户首次启动时，可能与遇到 kubelet 报 401 无权访问 apiserver 的错误；**这是因为在默认情况下，kubelet 通过`bootstrap.kubeconfig`中的预设用户 Token 声明了自己的身份，然后创建 CSR 请求；但是不要忘记这个用户在我们不处理的情况下他没任何权限的，包括创建 CSR 请求；所以需要如下命令创建一个 ClusterRoleBinding，将预设用户`kubelet-bootstrap`与内置的 ClusterRole`system:node-bootstrapper`绑定到一起，使其能够发起 CSR 请求**
+![](/assets/import12.png)在有些用户首次启动时，可能与遇到 kubelet 报 401 无权访问 apiserver 的错误；**这是因为在默认情况下，kubelet 通过**`bootstrap.kubeconfig`**中的预设用户 Token 声明了自己的身份，然后创建 CSR 请求；但是不要忘记这个用户在我们不处理的情况下他没任何权限的，包括创建 CSR 请求；所以需要如下命令创建一个 ClusterRoleBinding，将预设用户**`kubelet-bootstrap`**与内置的 ClusterRole**`system:node-bootstrapper`**绑定到一起，使其能够发起 CSR 请求**
 
 ```
 kubectl create clusterrolebinding kubelet-bootstrap \
@@ -66,9 +62,9 @@ kubectl create clusterrolebinding kubelet-bootstrap \
 
 ![](/assets/import11.png)出现 CSR 请求后，可以使用 kubectl 手动签发\(允许\) kubelet 的证书
 
-![](/assets/import13.png)**当成功签发证书后，目标节点的 kubelet 会将证书写入到`--cert-dir=`选项指定的目录中；注意此时如果不做其他设置应当生成四个文件**![](/assets/impor1t.png)
+![](/assets/import13.png)**当成功签发证书后，目标节点的 kubelet 会将证书写入到**`--cert-dir=`**选项指定的目录中；注意此时如果不做其他设置应当生成四个文件**![](/assets/impor1t.png)
 
-**而 kubelet 与 apiserver 通讯所使用的证书为`kubelet-client.crt`，剩下的`kubelet.crt`将会被用于`kubelet server`\(10250\) 做鉴权使用；注意，此时`kubelet.crt`这个证书是个独立于 apiserver CA 的自签 CA，并且删除后 kubelet 组件会重新生成它**
+**而 kubelet 与 apiserver 通讯所使用的证书为**`kubelet-client.crt`**，剩下的**`kubelet.crt`**将会被用于**`kubelet server`**\(10250\) 做鉴权使用；注意，此时**`kubelet.crt`**这个证书是个独立于 apiserver CA 的自签 CA，并且删除后 kubelet 组件会重新生成它**
 
 ### 四、TLS bootstrapping 证书自动续期 {#四tls-bootstrapping-证书自动续期}
 
@@ -157,7 +153,7 @@ kubectl create clusterrolebinding node-server-auto-renew-crt --clusterrole=appro
 
 在 1.7 后，kubelet 启动时增加`--feature-gates=RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true`选项，则 kubelet 在证书即将到期时会自动发起一个 renew 自己证书的 CSR 请求；同时 controller manager 需要在启动时增加`--feature-gates=RotateKubeletServerCertificate=true`参数，再配合上面创建好的 ClusterRoleBinding，kubelet client 和 kubelet server 证才书会被自动签署；
 
-**注意，1.7 版本设置自动续期参数后，新的 renew 请求不会立即开始，而是在证书总有效期的`70%~90%`的时间时发起；而且经测试 1.7 版本即使自动签发了证书，kubelet 在不重启的情况下不会重新应用新证书；在 1.8 后 kubelet 组件在增加一个`--rotate-certificates`参数后，kubelet 才会自动重载新证书**
+**注意，1.7 版本设置自动续期参数后，新的 renew 请求不会立即开始，而是在证书总有效期的**`70%~90%`**的时间时发起；而且经测试 1.7 版本即使自动签发了证书，kubelet 在不重启的情况下不会重新应用新证书；在 1.8 后 kubelet 组件在增加一个**`--rotate-certificates`**参数后，kubelet 才会自动重载新证书**
 
 #### 4.3、证书过期问题 {#43证书过期问题}
 
@@ -173,7 +169,7 @@ kubelet 首次启动通过加载`bootstrap.kubeconfig`中的用户 Token 和 api
 
 默认签署的的证书只有 1 年有效期，如果想要调整证书有效期可以通过设置 kube-controller-manager 的`--experimental-cluster-signing-duration`参数实现，该参数默认值为`8760h0m0s`
 
-对于证书自动续签，需要通过协调两个方面实现；第一，想要 kubelet 在证书到期后自动发起续期请求，则需要在 kubelet 启动时增加`--feature-gates=RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true`来实现；第二，想要让 controller manager 自动批准续签的 CSR 请求需要在 controller manager 启动时增加`--feature-gates=RotateKubeletServerCertificate=true`参数，并绑定对应的 RBAC 规则；**同时需要注意的是 1.7 版本的 kubelet 自动续签后需要手动重启 kubelet 以使其重新加载新证书，而 1.8 后只需要在 kublet 启动时附带`--rotate-certificates`选项就会自动重新加载新证书**
+对于证书自动续签，需要通过协调两个方面实现；第一，想要 kubelet 在证书到期后自动发起续期请求，则需要在 kubelet 启动时增加`--feature-gates=RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true`来实现；第二，想要让 controller manager 自动批准续签的 CSR 请求需要在 controller manager 启动时增加`--feature-gates=RotateKubeletServerCertificate=true`参数，并绑定对应的 RBAC 规则；**同时需要注意的是 1.7 版本的 kubelet 自动续签后需要手动重启 kubelet 以使其重新加载新证书，而 1.8 后只需要在 kublet 启动时附带**`--rotate-certificates`**选项就会自动重新加载新证书**
 
 #### 5.2、证书及配置文件作用 {#52证书及配置文件作用}
 
@@ -191,11 +187,11 @@ kubelet 首次启动通过加载`bootstrap.kubeconfig`中的用户 Token 和 api
 
 * kubelet.crt
 
-该文件在 kubelet 完成 TLS bootstrapping 后并且**没有配置`--feature-gates=RotateKubeletServerCertificate=true`时才会生成**；这种情况下该文件为一个独立于 apiserver CA 的自签 CA 证书，有效期为 1 年；被用作 kubelet 10250 api 端口
+该文件在 kubelet 完成 TLS bootstrapping 后并且**没有配置**`--feature-gates=RotateKubeletServerCertificate=true`**时才会生成**；这种情况下该文件为一个独立于 apiserver CA 的自签 CA 证书，有效期为 1 年；被用作 kubelet 10250 api 端口
 
 * kubelet-server.crt
 
-该文件在 kubelet 完成 TLS bootstrapping 后并且**配置了`--feature-gates=RotateKubeletServerCertificate=true`时才会生成**；这种情况下该证书由 apiserver CA 签署，默认有效期同样是 1 年，被用作 kubelet 10250 api 端口鉴权
+该文件在 kubelet 完成 TLS bootstrapping 后并且**配置了**`--feature-gates=RotateKubeletServerCertificate=true`**时才会生成**；这种情况下该证书由 apiserver CA 签署，默认有效期同样是 1 年，被用作 kubelet 10250 api 端口鉴权
 
 * kubelet-client-current.pem
 
@@ -240,7 +236,7 @@ KUBELET_ARGS="--cgroup-driver=cgroupfs \
               --pod-infra-container-image=gcr.io/google_containers/pause-amd64:3.0"
 ```
 
-配置 controller manager 自动批准相关 CSR 请求，**如果不配置`--feature-gates=RotateKubeletServerCertificate=true`**
+配置 controller manager 自动批准相关 CSR 请求，**如果不配置**`--feature-gates=RotateKubeletServerCertificate=true`
 
 **参数，则即使配置了相关的 RBAC 规则，也只会自动批准 kubelet client 的 renew 请求**
 
@@ -310,10 +306,9 @@ apiserver 预先放置 token.csv，内容样例如下
 kubectl create clusterrolebinding kubelet-bootstrap \
   --clusterrole=system:node-bootstrapper \
   --user=kubelet-bootstrap
-  
 ```
 
-配置 kubelet 自动续期，**RotateKubeletClientCertificate 用于自动续期 kubelet 连接 apiserver 所用的证书\(kubelet-client-xxxx.pem\)，RotateKubeletServerCertificate 用于自动续期 kubelet 10250 api 端口所使用的证书\(kubelet-server-xxxx.pem\)，`--rotate-certificates`选项使得 kubelet 能够自动重载新证书**
+配置 kubelet 自动续期，**RotateKubeletClientCertificate 用于自动续期 kubelet 连接 apiserver 所用的证书\(kubelet-client-xxxx.pem\)，RotateKubeletServerCertificate 用于自动续期 kubelet 10250 api 端口所使用的证书\(kubelet-server-xxxx.pem\)，**`--rotate-certificates`**选项使得 kubelet 能够自动重载新证书**
 
 ```
 KUBELET_ARGS="--cgroup-driver=cgroupfs \
@@ -331,7 +326,7 @@ KUBELET_ARGS="--cgroup-driver=cgroupfs \
               --pod-infra-container-image=gcr.io/google_containers/pause-amd64:3.0"
 ```
 
-配置 controller manager 自动批准相关 CSR 请求，**如果不配置`--feature-gates=RotateKubeletServerCertificate=true`参数，则即使配置了相关的 RBAC 规则，也只会自动批准 kubelet client 的 renew 请求**
+配置 controller manager 自动批准相关 CSR 请求，**如果不配置**`--feature-gates=RotateKubeletServerCertificate=true`**参数，则即使配置了相关的 RBAC 规则，也只会自动批准 kubelet client 的 renew 请求**
 
 ```
 KUBE_CONTROLLER_MANAGER_ARGS="--address=0.0.0.0 \
