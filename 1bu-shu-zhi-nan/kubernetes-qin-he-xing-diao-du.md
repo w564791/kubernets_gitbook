@@ -71,9 +71,7 @@
 * ##### podAffinity:pod亲和性申明
 * ##### podAntiAffinity:pod互斥性申明
 
-### 亲和性
-
-* **podAffinity**
+### 
 
 如果在具有标签X的Node上运行了一个或者多个符合条件Y的pod,那么pod应该\(如果互斥,则为拒绝运行\)运行在这个Node上,此处的X表示范围,X为一个内置标签,这个key的名字为topologyKey,值如下
 
@@ -110,76 +108,11 @@ spec:
           topologyKey: kubernetes.io/hostname
 ```
 
-pod 需要调度到某个 zone（通过 failure-domain.beta.kubernetes.io/zone指定），这个 zone 至少有一个节点上运行了这样的 pod：这个 pod 有 security:S1 label。互斥性保证节点最好不要调度到这样的节点，这个节点上运行了某个 pod，而且这个 pod 有 security:S2 label。
-
-### 互斥性:
-
-* **podAntiAffinity**
-
-```
-apiVersion: v1
-kind: Pod
-metadata:
- name: with-node-affinity
-spec:
- affinity:
-  podAffinity:
-   requiredDuringSchedulingIgnoredDuringExecution:
-   - labelSelector:
-      matchExpressions:
-      - key: app
-        operator: In
-        values:
-        - true
-     topologyKey: failure-domain.beta.kubernetes.io/zone
-  podAntiAffinity:
-   requiredDuringSchedulingIgnoredDuringExecution:
-   - labelSelector:
-     matchExpressions:
-     - key: app
-       operator: In
-       values:
-       - nginx
-     topologyKey: kubernetes.io/hostname
- containers:
- - name: php-affinity
-   image: php
-```
-
- 在这个例子里， podAffinity（亲和性） 使用了 requiredDuringSchedulingIgnoredDuringExecution， podAntiAffinity （互斥性）使用了 preferredDuringSchedulingIgnoredDuringExecution. 这个规则表示：该pod可以调度到某个具有security:S1标签的pod的区域内（亲和性）并且调度节点不能运行有app:nginx标签的pod。
+pod 需要调度到某个 zone（通过 failure-domain.beta.kubernetes.io/zone指定），这个 zone 必须有一个节点上运行了这样的 pod：这个 pod 有 security:S1 label。互斥性保证节点最好不要调度到这样的节点，这个节点上运行了某个 pod，而且这个 pod 有 security:S2 label。
 
 
 
-```
-apiVersion: v1
-kind: Pod
-metadata:
-  name: with-node-affinity
-spec:
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/e2e-az-name
-            operator: In
-            values:
-            - e2e-az1
-            - e2e-az2
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 1
-        preference:
-          matchExpressions:
-          - key: another-node-label-key
-            operator: In
-            values:
-            - another-node-label-value
-  containers:
-  - name: with-node-affinity
-    image: gcr.io/google_containers/pause:2.0
-```
-
-* * pod的亲和性操作符也包含In NotIn,Exists,DoesNoExist,Gt,Lt
+* pod的亲和性操作符也包含In NotIn,Exists,DoesNoExist,Gt,Lt
 * 在pod亲和性和RequiredDuringScheduling互斥性的定义中,不允许使用空的topologyKey
 * 如果在Admission control里定义了包含LimitPodHardAntiAffinityTopology,那么针对RequiredDuringScheduling的Pod互斥性定义就被限制为kubernetes.io/hostname
 * 在PreferredDuringScheduling类型的Pod互斥性中,空的topologyKey会被解释为kubernetes.io/hostname,failure-domain.beta.kubernetes.io/zono,failure-domain.beta.kubernetes.io/region的组合
@@ -188,7 +121,7 @@ spec:
 
 NodeAffinity是在Pod上定义的一种属性,使得Pod能调度到某些Node上运行,Taints恰好相反,它拒绝Pod运行
 
-Taints需要和Tolerations配合使用,让Pod避开那些不适合的Node,在Node上设置一个或多个Taints过后没出费Pod明确声明能容忍这些污点,否则无法在这些Node上运行
+Taints需要和Tolerations配合使用,让Pod避开那些不适合的Node,在Node上设置一个或多个Taints，如果Pod没有明确声明能容忍这些污点,否则无法在这些Node上运行
 
 Toleration是Pod的属性,让pod能够\(只是能够,不是必须\)运行在标注了Taint的Node上
 
