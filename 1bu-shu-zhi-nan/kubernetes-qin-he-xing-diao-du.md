@@ -2,20 +2,23 @@
 
 需要在1.6.x以上的版本才能使用
 
-* RequiredDuringSchedulingIgnoredDuringExecution:必须满足指定的规则才可以调度POD到Node 上;如果没有满足条件，就不断重试，属于硬限制
+* `requiredDuringSchedulingIgnoredDuringExecution`:必须满足指定的规则才可以调度POD到Node 上;如果没有满足条件，就不断重试，属于硬限制
 
-* PreferredDuringSchedulingIgnoredDuringExecution:强调优先满足指定规则,调度器会尝试调度Pod到Node上,如果没有满足的条件，就忽略这些条件，按照正常逻辑部署,多个优先级还能设置权重
+* `requiredDuringSchedulingRequiredDuringExecution`  : 表示pod必须部署到满足条件的节点上，如果没有满足条件的节点，就不停重试。其中RequiredDuringExecution表示pod部署之后运行的时候，如果节点标签发生了变化，不再满足pod指定的条件，则重新选择符合要求的节点。
+
+* preferredDuringSchedulingIgnoredDuringExecution:强调优先满足指定规则,调度器会尝试调度Pod到Node上,如果没有满足的条件，就忽略这些条件，按照正常逻辑部署,多个优先级还能设置权重
+
+* `preferredDuringSchedulingRequiredDuringExecution`   :表示优先部署到满足条件的节点上，如果没有满足条件的节点，就忽略这些条件，按照正常逻辑部署。其中RequiredDuringExecution表示如果后面节点标签发生了变化，满足了条件，则重新调度到满足条件的节点。
 
 * `IgnoredDuringExecution`正如名字所说，pod 部署之后运行的时候，如果节点标签发生了变化，不再满足 pod 指定的条件，pod 也会继续运行。
 
-* 
-```
-apiVersion: v1
-kind: Pod
-metadata:
- name: with-node-affinity
-spec:
- affinity:
+* ```
+  apiVersion: v1
+  kind: Pod
+  metadata:
+  name: with-node-affinity
+  spec:
+  affinity:
   nodeAffinity:
    requiredDuringSchedulingIgnoredDuringExecution:
     nodeSelectorTerms:
@@ -32,18 +35,16 @@ spec:
         operator: In
         values:
         - true
- containers:
- - name: nginx-affinity
+  containers:
+  - name: nginx-affinity
    image: nginx
-```
-
+  ```
 * operator:操作符:NodeAffinity语法支持的操作符包括In NotIn,Exists,DoesNoExist,Gt,Lt
+
 * 如果同时定了以nodeSelector和nodeAffinity,那么2个条件必须同时满足,Pod才会调度
 * 如果nodeAffinity指定了多个nodeSelectorTerms,那么只需要其中一个能匹配即可
 * 如果nodeSelectorTerms中有多个matchExpressions,则一个节点必须满足所有matchExpressions才能运行该pod
 * 如果同时定义了nodeSelector和nodeAffinity，那么必须两个条件都满足，Pod才能最终运行在制定的node上
-
-
 
 ## PodAffinity: Pod亲和性
 
