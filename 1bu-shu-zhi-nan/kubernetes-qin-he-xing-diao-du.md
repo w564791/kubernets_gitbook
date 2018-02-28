@@ -72,7 +72,7 @@
 
 ### 亲和性
 
-* podAffinity
+* **podAffinity**
 
 如果在具有标签X的Node上运行了一个或者多个符合条件Y的pod,那么pod应该\(如果互斥,则为拒绝运行\)运行在这个Node上,此处的X表示范围,X为一个内置标签,这个key的名字为topologyKey,值如下
 
@@ -86,32 +86,34 @@ kind: Deployment
 metadata:
   name: web-server
 spec:
-  replicas: 3
-  template:
-    metadata:
-      labels:
-        app: web-store
-    spec:
-      affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - store
-            topologyKey: "kubernetes.io/hostname"
-      containers:
-      - name: web-app
-        image: php
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: security
+            operator: In
+            values:
+            - S1
+        topologyKey: "failure-domain.beta.kubernetes.io/zone"
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: security
+              operator: In
+              values:
+              - S2
+          topologyKey: kubernetes.io/hostname
 ```
 
-表示当该Node上有运行标签为app=store的时候,php镜像运行在该node上
+pod 需要调度到某个 zone（通过 failure-domain.beta.kubernetes.io/zone指定），这个 zone 至少有一个节点上运行了这样的 pod：这个 pod 有 security:S1 label。互斥性保证节点最好不要调度到这样的节点，这个节点上运行了某个 pod，而且这个 pod 有 security:S2 label。
 
 ### 互斥性:
 
-* podAntiAffinity
+* **podAntiAffinity**
 
 ```
 apiVersion: v1
