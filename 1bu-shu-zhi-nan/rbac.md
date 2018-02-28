@@ -389,167 +389,51 @@ RBAC API会阻止用户通过编辑角色或者角色绑定来升级权限。 �
 
 用户只有在拥有了角色所包含的所有权限的条件下才能创建／更新一个角色，这些操作还必须在角色所处的相同范围内进行（对于`ClusterRole`来说是集群范围，对于`Role`来说是在与角色相同的命名空间或者集群范围）。 例如，如果用户”user-1”没有权限读取集群范围内的secret列表，那么他也不能创建包含这种权限的`ClusterRole`。为了能够让用户创建／更新角色，需要：
 
-1. 授予用户一个角色以允许他们根据需要创建／更新
-   `Role`
-   或者
-   `ClusterRole`
-   对象。
-2. 授予用户一个角色包含他们在
-   `Role`
-   或者
-   `ClusterRole`
-   中所能够设置的所有权限。如果用户尝试创建或者修改
-   `Role`
-   或者
-   `ClusterRole`
-   以设置那些他们未被授权的权限时，这些API请求将被禁止。
+1. 授予用户一个角色以允许他们根据需要创建／更新`Role`或者`ClusterRole`对象。
+2. 授予用户一个角色包含他们在`Role`或者`ClusterRole`中所能够设置的所有权限。如果用户尝试创建或者修改`Role`或者`ClusterRole`以设置那些他们未被授权的权限时，这些API请求将被禁止。
 
 用户只有在拥有所引用的角色中包含的所有权限时才可以创建／更新角色绑定（这些操作也必须在角色绑定所处的相同范围内进行）_或者_用户被明确授权可以在所引用的角色上执行绑定操作。 例如，如果用户”user-1”没有权限读取集群范围内的secret列表，那么他将不能创建`ClusterRole`来引用那些授予了此项权限的角色。为了能够让用户创建／更新角色绑定，需要：
 
-1. 授予用户一个角色以允许他们根据需要创建／更新
-   `RoleBinding`
-   或者
-   `ClusterRoleBinding`
-   对象。
+1. 授予用户一个角色以允许他们根据需要创建／更新`RoleBinding`或者`ClusterRoleBinding`对象。
 2. 授予用户绑定某一特定角色所需要的权限：
    * 隐式地，通过授予用户所有所引用的角色中所包含的权限
-   * 显式地，通过授予用户在特定Role（或者ClusterRole）对象上执行
-     `bind`
-     操作的权限
+   * 显式地，通过授予用户在特定Role（或者ClusterRole）对象上执行`bind`操作的权限
 
 例如，下面例子中的ClusterRole和RoleBinding将允许用户”user-1”授予其它用户”user-1-namespace”命名空间内的`admin`、`edit`和`view`等角色和角色绑定。
 
 ```
-apiVersion
-:
- rbac.authorization.k8s.io/v1beta1
-
-kind
-:
- ClusterRole
-
-metadata
-:
-name
-:
- role
--
-grantor
-
-rules
-:
--
-apiGroups
-:
-[
-"rbac.authorization.k8s.io"
-]
-resources
-:
-[
-"rolebindings"
-]
-verbs
-:
-[
-"create"
-]
--
-apiGroups
-:
-[
-"rbac.authorization.k8s.io"
-]
-resources
-:
-[
-"clusterroles"
-]
-verbs
-:
-[
-"bind"
-]
-resourceNames
-:
-[
-"admin"
-,
-"edit"
-,
-"view"
-]
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: role-grantor
+rules:
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["rolebindings"]
+  verbs: ["create"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles"]
+  verbs: ["bind"]
+  resourceNames: ["admin","edit","view"]
 ---
-apiVersion
-:
- rbac.authorization.k8s.io/v1beta1
-
-kind
-:
- RoleBinding
-
-metadata
-:
-name
-:
- role
--
-grantor
--
-binding
-
-namespace
-:
- user
--
-1
--
-namespace
-
-roleRef
-:
-apiGroup
-:
- rbac.authorization.k8s.io
-
-kind
-:
- ClusterRole
-
-name
-:
- role
--
-grantor
-
-subjects
-:
--
-apiGroup
-:
- rbac.authorization.k8s.io
-
-kind
-:
- User
-
-name
-:
- user
--
-1
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: role-grantor-binding
+  namespace: user-1-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: role-grantor
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: user-1
 ```
 
 当初始化第一个角色和角色绑定时，初始用户需要能够授予他们尚未拥有的权限。 初始化初始角色和角色绑定时需要：
 
-* 使用包含
-  `system：masters`
-  用户组的凭证，该用户组通过默认绑定绑定到
-  `cluster-admin`
-  超级用户角色。
-* 如果您的API Server在运行时启用了非安全端口（
-  `--insecure-port`
-  ），您也可以通过这个没有施行认证或者授权的端口发送角色或者角色绑定请求。
+* 使用包含`system：masters`用户组的凭证，该用户组通过默认绑定绑定到`cluster-admin`超级用户角色。
+* 如果您的API Server在运行时启用了非安全端口（`--insecure-port`），您也可以通过这个没有施行认证或者授权的端口发送角色或者角色绑定请求。
 
 ## 一些命令行工具 {#一些命令行工具}
 
