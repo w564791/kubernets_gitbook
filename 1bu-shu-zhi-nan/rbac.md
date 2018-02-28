@@ -1,3 +1,5 @@
+[转自宋静超博库（RBAC-基于校色的访问控制）](https://jimmysong.io/kubernetes-handbook/concepts/rbac.html)
+
 # RBAC——基于角色的访问控制 {#rbac——基于角色的访问控制}
 
 以下内容是[xingzhou](https://github.com/xingzhou)对 kubernetes 官方文档的翻译，原文地址[https://k8smeetup.github.io/docs/admin/authorization/rbac/](https://k8smeetup.github.io/docs/admin/authorization/rbac/)
