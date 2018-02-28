@@ -110,7 +110,6 @@ roleRef:
   kind: ClusterRole
   name: secret-reader
   apiGroup: rbac.authorization.k8s.io
-
 ```
 
 ### 对资源的引用 {#对资源的引用}
@@ -119,63 +118,35 @@ roleRef:
 
 ```
 GET /api/v1/namespaces/{namespace}/pods/{name}/log
-
 ```
 
 在这种情况下，”pods”是命名空间资源，而”log”是pods的子资源。为了在RBAC角色中表示出这一点，我们需要使用斜线来划分资源 与子资源。如果需要角色绑定主体读取pods以及pod log，您需要定义以下角色：
 
 ```
-
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: pod-and-pod-logs-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list"]
 ```
 
 通过`resourceNames`列表，角色可以针对不同种类的请求根据资源名引用资源实例。当指定了`resourceNames`列表时，不同动作 种类的请求的权限，如使用”get”、”delete”、”update”以及”patch”等动词的请求，将被限定到资源列表中所包含的资源实例上。 例如，如果需要限定一个角色绑定主体只能”get”或者”update”一个configmap时，您可以定义以下角色：
 
 ```
-kind
-:
- Role
-
-apiVersion
-:
- rbac.authorization.k8s.io/v1beta1
-
-metadata
-:
-namespace
-:
- default
-  
-name
-:
- configmap
--
-updater
-
-rules
-:
--
-apiGroups
-:
-[
-""
-]
-resources
-:
-[
-"configmap"
-]
-resourceNames
-:
-[
-"my-configmap"
-]
-verbs
-:
-[
-"update"
-,
-"get"
-]
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: configmap-updater
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["my-configmap"]
+  verbs: ["update", "get"]
 ```
 
 值得注意的是，如果设置了`resourceNames`，则请求所使用的动词不能是list、watch、create或者deletecollection。 由于资源名不会出现在create、list、watch和deletecollection等API请求的URL中，所以这些请求动词不会被设置了`resourceNames`的规则所允许，因为规则中的`resourceNames`部分不会匹配这些请求。
@@ -187,200 +158,58 @@ verbs
 允许读取core API Group中定义的资源”pods”：
 
 ```
-rules
-:
--
-apiGroups
-:
-[
-""
-]
-resources
-:
-[
-"pods"
-]
-verbs
-:
-[
-"get"
-,
-"list"
-,
-"watch"
-]
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
 ```
 
 允许读写在”extensions”和”apps” API Group中定义的”deployments”：
 
 ```
-rules
-:
--
-apiGroups
-:
-[
-"extensions"
-,
-"apps"
-]
-resources
-:
-[
-"deployments"
-]
-verbs
-:
-[
-"get"
-,
-"list"
-,
-"watch"
-,
-"create"
-,
-"update"
-,
-"patch"
-,
-"delete"
-]
+rules:
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ```
 
 允许读取”pods”以及读写”jobs”：
 
 ```
-rules
-:
--
-apiGroups
-:
-[
-""
-]
-resources
-:
-[
-"pods"
-]
-verbs
-:
-[
-"get"
-,
-"list"
-,
-"watch"
-]
--
-apiGroups
-:
-[
-"batch"
-,
-"extensions"
-]
-resources
-:
-[
-"jobs"
-]
-verbs
-:
-[
-"get"
-,
-"list"
-,
-"watch"
-,
-"create"
-,
-"update"
-,
-"patch"
-,
-"delete"
-]
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch", "extensions"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ```
 
 允许读取一个名为”my-config”的`ConfigMap`实例（需要将其通过`RoleBinding`绑定从而限制针对某一个命名空间中定义的一个`ConfigMap`实例的访问）：
 
 ```
-rules
-:
--
-apiGroups
-:
-[
-""
-]
-resources
-:
-[
-"configmaps"
-]
-resourceNames
-:
-[
-"my-config"
-]
-verbs
-:
-[
-"get"
-]
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["my-config"]
+  verbs: ["get"]
 ```
 
 允许读取core API Group中的”nodes”资源（由于`Node`是集群级别资源，所以此`ClusterRole`定义需要与一个`ClusterRoleBinding`绑定才能有效）：
 
 ```
-rules
-:
--
-apiGroups
-:
-[
-""
-]
-resources
-:
-[
-"nodes"
-]
-verbs
-:
-[
-"get"
-,
-"list"
-,
-"watch"
-]
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
 ```
 
 允许对非资源endpoint “/healthz”及其所有子路径的”GET”和”POST”请求（此`ClusterRole`定义需要与一个`ClusterRoleBinding`绑定才能有效）：
 
 ```
-rules
-:
--
-nonResourceURLs
-:
-[
-"/healthz"
-,
-"/healthz/*"
-]
-# 在非资源URL中，'*'代表后缀通配符
-verbs
-:
-[
-"get"
-,
-"post"
-]
+rules:
+- nonResourceURLs: ["/healthz", "/healthz/*"] # 在非资源URL中，'*'代表后缀通配符
+  verbs: ["get", "post"]
 ```
 
 ### 对角色绑定主体（Subject）的引用 {#对角色绑定主体（subject）的引用}
@@ -400,188 +229,76 @@ Kubernetes中的用户组信息由授权模块提供。用户组与用户一样�
 一个名为”alice@example.com”的用户：
 
 ```
-subjects
-:
--
-kind
-:
- User
-  
-name
-:
-"alice@example.com"
-apiGroup
-:
- rbac.authorization.k8s.io
-
+subjects:
+- kind: User
+  name: "alice@example.com"
+  apiGroup: rbac.authorization.k8s.io
 ```
 
 一个名为”frontend-admins”的用户组：
 
 ```
-subjects
-:
--
-kind
-:
- Group
-  
-name
-:
-"frontend-admins"
-apiGroup
-:
- rbac.authorization.k8s.io
-
+subjects:
+- kind: Group
+  name: "frontend-admins"
+  apiGroup: rbac.authorization.k8s.io
 ```
 
 kube-system命名空间中的默认服务账户：
 
 ```
-subjects
-:
--
-kind
-:
- ServiceAccount
-  
-name
-:
- default
-  
-namespace
-:
- kube
--
-system
-
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: kube-system
 ```
 
 名为”qa”命名空间中的所有服务账户：
 
 ```
-subjects
-:
--
-kind
-:
- Group
-  
-name
-:
- system
-:
-serviceaccounts
-:
-qa
-  
-apiGroup
-:
- rbac.authorization.k8s.io
-
+subjects:
+- kind: Group
+  name: system:serviceaccounts:qa
+  apiGroup: rbac.authorization.k8s.io
 ```
 
 在集群中的所有服务账户：
 
 ```
-subjects
-:
--
-kind
-:
- Group
-  
-name
-:
- system
-:
-serviceaccounts
-  
-apiGroup
-:
- rbac.authorization.k8s.io
-
+subjects:
+- kind: Group
+  name: system:serviceaccounts
+  apiGroup: rbac.authorization.k8s.io
 ```
 
 所有认证过的用户（version 1.5+）：
 
 ```
-subjects
-:
--
-kind
-:
- Group
-  
-name
-:
- system
-:
-authenticated
-  
-apiGroup
-:
- rbac.authorization.k8s.io
-
+subjects:
+- kind: Group
+  name: system:authenticated
+  apiGroup: rbac.authorization.k8s.io
 ```
 
 所有未认证的用户（version 1.5+）：
 
 ```
-subjects
-:
--
-kind
-:
- Group
-  
-name
-:
- system
-:
-unauthenticated
-  
-apiGroup
-:
- rbac.authorization.k8s.io
-
+subjects:
+- kind: Group
+  name: system:unauthenticated
+  apiGroup: rbac.authorization.k8s.io
 ```
 
 所有用户（version 1.5+）：
 
 ```
-subjects
-:
--
-kind
-:
- Group
-  
-name
-:
- system
-:
-authenticated
-  
-apiGroup
-:
- rbac.authorization.k8s.io
-
--
-kind
-:
- Group
-  
-name
-:
- system
-:
-unauthenticated
-  
-apiGroup
-:
- rbac.authorization.k8s.io
-
+subjects:
+- kind: Group
+  name: system:authenticated
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: system:unauthenticated
+  apiGroup: rbac.authorization.k8s.io
 ```
 
 ## 默认角色与默认角色绑定 {#默认角色与默认角色绑定}
@@ -780,7 +497,7 @@ name
 grantor
 -
 binding
-  
+
 namespace
 :
  user
@@ -794,11 +511,11 @@ roleRef
 apiGroup
 :
  rbac.authorization.k8s.io
-  
+
 kind
 :
  ClusterRole
-  
+
 name
 :
  role
@@ -811,11 +528,11 @@ subjects
 apiGroup
 :
  rbac.authorization.k8s.io
-  
+
 kind
 :
  User
-  
+
 name
 :
  user
@@ -893,7 +610,6 @@ name
      --namespace
    =
    my-namespace
-
    ```
 
 2. 在某一命名空间中授予”default”服务账号一个角色
@@ -915,7 +631,6 @@ name
      --namespace
    =
    my-namespace
-
    ```
 
    目前，许多[加载项（addon）](https://kubernetes.io/docs/concepts/cluster-administration/addons/)作为”kube-system”命名空间中的”default”服务帐户运行。 要允许这些加载项使用超级用户访问权限，请将cluster-admin权限授予”kube-system”命名空间中的”default”服务帐户。 注意：启用上述操作意味着”kube-system”命名空间将包含允许超级用户访问API的秘钥。
@@ -928,7 +643,6 @@ name
      --serviceaccount
    =
    kube-system:default
-
    ```
 
 3. 为命名空间中所有的服务账号授予角色
@@ -948,7 +662,6 @@ name
      --namespace
    =
    my-namespace
-
    ```
 
 4. 对集群范围内的所有服务账户授予一个受限角色（不鼓励）
@@ -965,7 +678,6 @@ name
      --group
    =
    system:serviceaccounts
-
    ```
 
 5. 授予超级用户访问权限给集群范围内的所有服务帐户（强烈不鼓励）
@@ -982,7 +694,6 @@ name
      --group
    =
    system:serviceaccounts
-
    ```
 
 ## 从版本1.5升级 {#从版本15升级}
@@ -999,10 +710,9 @@ name
 
 ```
 --authorization-mode=RBAC,ABAC --authorization-policy-file=mypolicy.jsonl
-
 ```
 
-RBAC授权器将尝试首先授权请求。如果RBAC授权器拒绝API请求，则ABAC授权器将被运行。这意味着RBAC策略_或者_ABAC策略所允许的任何请求都是可通过的。
+RBAC授权器将尝试首先授权请求。如果RBAC授权器拒绝API请求，则ABAC授权器将被运行。这意味着RBAC策略\_或者\_ABAC策略所允许的任何请求都是可通过的。
 
 当以日志级别为2或更高（`--v = 2`）运行时，您可以在API Server日志中看到RBAC拒绝请求信息（以`RBAC DENY:`为前缀）。 您可以使用该信息来确定哪些角色需要授予哪些用户，用户组或服务帐户。 一旦[授予服务帐户角色](https://k8smeetup.github.io/docs/admin/authorization/rbac/#service-account-permissions)，并且服务器日志中没有RBAC拒绝消息的工作负载正在运行，您可以删除ABAC授权器。
 
