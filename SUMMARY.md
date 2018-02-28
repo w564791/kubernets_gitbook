@@ -35,7 +35,7 @@
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
   * [GlusterFS部署](1bu-shu-zhi-nan/glusterfsbu-shu.md)
-  * 格式化输出
+  * [格式化输出](1bu-shu-zhi-nan/ge-shi-hua-shu-chu.md)
   * [Kubernetes TSL bootstrapping ](1bu-shu-zhi-nan/kubernetes-tsl-bootstrapping.md)
   * [kubernetes 亲和性调度](1bu-shu-zhi-nan/kubernetes-qin-he-xing-diao-du.md)
 * 最佳配置（网上摘抄）
