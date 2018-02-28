@@ -37,6 +37,7 @@
   * [GlusterFS部署](1bu-shu-zhi-nan/glusterfsbu-shu.md)
   * 格式化输出
   * [Kubernetes TSL bootstrapping ](1bu-shu-zhi-nan/kubernetes-tsl-bootstrapping.md)
+  * [kubernetes 亲和性调度](1bu-shu-zhi-nan/kubernetes-qin-he-xing-diao-du.md)
 * 最佳配置（网上摘抄）
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
