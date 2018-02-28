@@ -44,7 +44,7 @@
    image: nginx
   ```
 
-  这个 pod 同时定义了 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 两种 nodeAffinity。第一个要求 pod 运行在特定 AZ 的节点上，第二个希望节点最好有对应的 another-node-label-key:another-node-label-value 标签。
+  这个 pod 同时定义了 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 两种 nodeAffinity。第一个要求 pod 运行在 amd64 的节点上，第二个希望节点最好有对应的 gateway:true 标签。
 
 * operator:操作符:NodeAffinity语法支持的操作符包括In NotIn,Exists,DoesNoExist,Gt,Lt
 
