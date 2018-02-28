@@ -20,31 +20,32 @@
   apiVersion: v1
   kind: Pod
   metadata:
-  name: with-node-affinity
+    name: with-node-affinity
   spec:
-  affinity:
-  nodeAffinity:
-   requiredDuringSchedulingIgnoredDuringExecution:
-    nodeSelectorTerms:
-    - matchExpressions:
-      - key: beta.kubernetes.io/arch
-        operator: In
-        values:
-        - amd64
-   preferredDuringSchedulingIgnoredDuringExecution:
-   - weight: 1
-     preference:
-      matchExpressions:
-      - key: gateway
-        operator: In
-        values:
-        - true
-  containers:
-  - name: nginx-affinity
-   image: nginx
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/e2e-az-name
+              operator: In
+              values:
+              - e2e-az1
+              - e2e-az2
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: another-node-label-key
+              operator: In
+              values:
+              - another-node-label-value
+    containers:
+    - name: with-node-affinity
+      image: k8s.gcr.io/pause:2.0
   ```
 
-  这个 pod 同时定义了 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 两种 nodeAffinity。第一个要求 pod 运行在 amd64 的节点上，第二个希望节点最好有对应的 gateway:true 标签。
+  这个 pod 同时定义了 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 两种 nodeAffinity。改规则表示pod可以调度到key是kubernetes.io/e2e-az-name，值是e2e-az1 或者e2e-az2的节点上，另外，在符合调度的节点中优先调度具有标签another-node-label-key:another-node-label-value的节点。
 
 这里的匹配逻辑是label在某个列表中，可选的操作符有：
 
@@ -145,6 +146,10 @@ spec:
    image: php
 ```
 
+ 在这个例子里， podAffinity（亲和性） 使用了 requiredDuringSchedulingIgnoredDuringExecution， podAntiAffinity （互斥性）使用了 preferredDuringSchedulingIgnoredDuringExecution. 这个规则表示：该pod可以调度到某个具有security:S1标签的pod的区域内（亲和性）并且调度节点不能运行有app:nginx标签的pod。
+
+
+
 ```
 apiVersion: v1
 kind: Pod
@@ -174,8 +179,7 @@ spec:
     image: gcr.io/google_containers/pause:2.0
 ```
 
-* 此要求是这个新的pod必须要调度在app=true这个zone里,但是不能与app=nginx调度到同一台里
-* pod的亲和性操作符也包含In NotIn,Exists,DoesNoExist,Gt,Lt
+* * pod的亲和性操作符也包含In NotIn,Exists,DoesNoExist,Gt,Lt
 * 在pod亲和性和RequiredDuringScheduling互斥性的定义中,不允许使用空的topologyKey
 * 如果在Admission control里定义了包含LimitPodHardAntiAffinityTopology,那么针对RequiredDuringScheduling的Pod互斥性定义就被限制为kubernetes.io/hostname
 * 在PreferredDuringScheduling类型的Pod互斥性中,空的topologyKey会被解释为kubernetes.io/hostname,failure-domain.beta.kubernetes.io/zono,failure-domain.beta.kubernetes.io/region的组合
