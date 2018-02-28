@@ -38,6 +38,7 @@
   * [格式化输出](1bu-shu-zhi-nan/ge-shi-hua-shu-chu.md)
   * [Kubernetes TSL bootstrapping ](1bu-shu-zhi-nan/kubernetes-tsl-bootstrapping.md)
   * [kubernetes 亲和性调度](1bu-shu-zhi-nan/kubernetes-qin-he-xing-diao-du.md)
+  * [RBAC](1bu-shu-zhi-nan/rbac.md)
 * 最佳配置（网上摘抄）
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
