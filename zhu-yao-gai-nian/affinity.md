@@ -4,7 +4,7 @@
 
 * RequiredDuringSchedulingIgnoredDuringExecution:必须满足指定的规则才可以调度POD到Node 上;硬限制
 
-* PreferredDuringSchedulingIgnoredDuringExecution:强调优先满足指定规则,调度器会尝试调度Pod到Node上,蛋不强求,多个优先级还能设置权重
+* PreferredDuringSchedulingIgnoredDuringExecution:强调优先满足指定规则,调度器会尝试调度Pod到Node上,但不强求,多个优先级还能设置权重
 
 ```
 apiVersion: v1
