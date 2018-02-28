@@ -56,6 +56,7 @@ devuser.csr  devuser-key.pem  devuser.pem
 ```
 
 * 绑定用户devuser到dev命名空间，给予admin权限
+* 当需要赋予其他权限时，需要单独创建相应的权限
 
 ## 创建 kubeconfig 文件 {#创建-kubeconfig-文件}
 
