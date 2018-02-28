@@ -485,15 +485,9 @@ subjects:
 
    ```
    kubectl create rolebinding my-sa-view \
-     --clusterrole
-   =
-   view \
-     --serviceaccount
-   =
-   my-namespace:my-sa \
-     --namespace
-   =
-   my-namespace
+     --clusterrole=view \
+     --serviceaccount=my-namespace:my-sa \
+     --namespace=my-namespace
    ```
 
 2. 在某一命名空间中授予”default”服务账号一个角色
@@ -506,27 +500,17 @@ subjects:
 
    ```
    kubectl create rolebinding default-view \
-     --clusterrole
-   =
-   view \
-     --serviceaccount
-   =
-   my-namespace:default \
-     --namespace
-   =
-   my-namespace
+     --clusterrole=view \
+     --serviceaccount=my-namespace:default \
+     --namespace=my-namespace
    ```
 
    目前，许多[加载项（addon）](https://kubernetes.io/docs/concepts/cluster-administration/addons/)作为”kube-system”命名空间中的”default”服务帐户运行。 要允许这些加载项使用超级用户访问权限，请将cluster-admin权限授予”kube-system”命名空间中的”default”服务帐户。 注意：启用上述操作意味着”kube-system”命名空间将包含允许超级用户访问API的秘钥。
 
    ```
    kubectl create clusterrolebinding add-on-cluster-admin \
-     --clusterrole
-   =
-   cluster-admin \
-     --serviceaccount
-   =
-   kube-system:default
+     --clusterrole=cluster-admin \
+     --serviceaccount=kube-system:default
    ```
 
 3. 为命名空间中所有的服务账号授予角色
@@ -537,15 +521,9 @@ subjects:
 
    ```
    kubectl create rolebinding serviceaccounts-view \
-     --clusterrole
-   =
-   view \
-     --group
-   =
-   system:serviceaccounts:my-namespace \
-     --namespace
-   =
-   my-namespace
+     --clusterrole=view \
+     --group=system:serviceaccounts:my-namespace \
+     --namespace=my-namespace
    ```
 
 4. 对集群范围内的所有服务账户授予一个受限角色（不鼓励）
@@ -556,12 +534,8 @@ subjects:
 
    ```
    kubectl create clusterrolebinding serviceaccounts-view \
-     --clusterrole
-   =
-   view \
-     --group
-   =
-   system:serviceaccounts
+     --clusterrole=view \
+     --group=system:serviceaccounts
    ```
 
 5. 授予超级用户访问权限给集群范围内的所有服务帐户（强烈不鼓励）
@@ -572,55 +546,11 @@ subjects:
 
    ```
    kubectl create clusterrolebinding serviceaccounts-cluster-admin \
-     --clusterrole
-   =
-   cluster-admin \
-     --group
-   =
-   system:serviceaccounts
+     --clusterrole=cluster-admin \
+     --group=system:serviceaccounts
    ```
 
-## 从版本1.5升级 {#从版本15升级}
-
-在Kubernetes 1.6之前，许多部署使用非常宽泛的ABAC策略，包括授予对所有服务帐户的完整API访问权限。
-
-默认的RBAC策略将授予控制平面组件（control-plane components）、节点（nodes）和控制器（controller）一组范围受限的权限， 但对于”kube-system”命名空间以外的服务账户，则_不授予任何权限_（超出授予所有认证用户的发现权限）。
-
-虽然安全性更高，但这可能会影响到期望自动接收API权限的现有工作负载。 以下是管理此转换的两种方法：
-
-### 并行授权器（authorizer） {#并行授权器（authorizer）}
-
-同时运行RBAC和ABAC授权器，并包括旧版ABAC策略：
-
-```
---authorization-mode=RBAC,ABAC --authorization-policy-file=mypolicy.jsonl
-```
-
-RBAC授权器将尝试首先授权请求。如果RBAC授权器拒绝API请求，则ABAC授权器将被运行。这意味着RBAC策略\_或者\_ABAC策略所允许的任何请求都是可通过的。
-
-当以日志级别为2或更高（`--v = 2`）运行时，您可以在API Server日志中看到RBAC拒绝请求信息（以`RBAC DENY:`为前缀）。 您可以使用该信息来确定哪些角色需要授予哪些用户，用户组或服务帐户。 一旦[授予服务帐户角色](https://k8smeetup.github.io/docs/admin/authorization/rbac/#service-account-permissions)，并且服务器日志中没有RBAC拒绝消息的工作负载正在运行，您可以删除ABAC授权器。
-
-### 宽泛的RBAC权限 {#宽泛的rbac权限}
-
-您可以使用RBAC角色绑定来复制一个宽泛的策略。
-
-**警告：以下政策略允许所有服务帐户作为集群管理员。 运行在容器中的任何应用程序都会自动接收服务帐户凭据，并且可以对API执行任何操作，包括查看secret和修改权限。 因此，并不推荐使用这种策略。**
-
-```
-kubectl create clusterrolebinding permissive-binding \
-  --clusterrole
-=
-cluster-admin \
-  --user
-=
-admin \
-  --user
-=
-kubelet \
-  --group
-=
-system:serviceaccounts
-```
+##  {#从版本15升级}
 
 
 
