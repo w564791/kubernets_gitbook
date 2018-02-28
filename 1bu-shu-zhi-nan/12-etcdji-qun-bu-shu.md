@@ -158,10 +158,7 @@ ETCDCTL_API=3 etcdctl get /registryamespaces/default -w=json|python -m json.tool
 key的值是经过base64编码，需要解码后才能看到实际值，如：
 
 ```
-$ 
-echo
- L3JlZ2lzdHJ5L25hbWVzcGFjZXMvYXV0b21vZGVs|base64 
--d
+$ echo L3JlZ2lzdHJ5L25hbWVzcGFjZXMvYXV0b21vZGVs|base64 -d
 
 /registry/namespaces/automodel
 ```
