@@ -46,7 +46,16 @@
 
   这个 pod 同时定义了 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 两种 nodeAffinity。第一个要求 pod 运行在 amd64 的节点上，第二个希望节点最好有对应的 gateway:true 标签。
 
-* operator:操作符:NodeAffinity语法支持的操作符包括In NotIn,Exists,DoesNoExist,Gt,Lt
+这里的匹配逻辑是label在某个列表中，可选的操作符有：
+
+* In: label的值在某个列表中
+* NotIn：label的值不在某个列表中
+* Exists：某个label存在
+* DoesNotExist：某个label不存在
+* Gt：label的值大于某个值（字符串比较）
+* Lt：label的值小于某个值（字符串比较）
+
+另外
 
 * 如果同时定了以nodeSelector和nodeAffinity,那么2个条件必须同时满足,Pod才会调度
 
