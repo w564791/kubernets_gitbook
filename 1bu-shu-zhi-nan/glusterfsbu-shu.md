@@ -180,7 +180,16 @@ kubectl patch storageclass gluster-heketi -p '{"metadata": {"annotations":{"stor
 ```
 root@node3:/var/lib/k8s# kubectl get sc
 NAME                       TYPE
-gluster-heketi (default)   kubernetes.io/glusterfs 
+gluster-heketi (default)   kubernetes.io/glusterfs
+```
+
+在node上需要安装的rpm包
+
+```
+glusterfs-libs-3.8.4-18.4.el7.centos.x86_64
+glusterfs-3.8.4-18.4.el7.centos.x86_64
+glusterfs-client-xlators-3.8.4-18.4.el7.centos.x86_64
+glusterfs-fuse-3.8.4-18.4.el7.centos.x86_64
 ```
 
 ## 8.在Prometheus测试
