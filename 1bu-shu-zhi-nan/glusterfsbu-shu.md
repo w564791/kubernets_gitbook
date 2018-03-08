@@ -14,7 +14,7 @@
 * dm\_mirror
 * dm\_thin\_pool
 
-## 1.在GitHub上clono项目
+## 1.在GitHub上clone项目
 
 ```
 git clone https://github.com/gluster/gluster-kubernetes.git
