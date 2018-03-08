@@ -35,6 +35,7 @@
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
   * [GlusterFS部署](1bu-shu-zhi-nan/glusterfsbu-shu.md)
+  * [部署Prometheus2.0](1bu-shu-zhi-nan/bu-shu-prometheus2-0.md)
   * [Kubernetes TSL bootstrapping ](1bu-shu-zhi-nan/kubernetes-tsl-bootstrapping.md)
   * [kubernetes 亲和性调度](1bu-shu-zhi-nan/kubernetes-qin-he-xing-diao-du.md)
   * [RBAC](1bu-shu-zhi-nan/rbac.md)
