@@ -140,6 +140,12 @@ $ kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
 deployment "nginx-deployment" image updated
 ```
 
+使用curl更新（或其他方式）
+
+```
+curl -X PATCH --header 'Content-Type: application/strategic-merge-patch+json' --header 'Accept: application/json' --user-agent "chrome" -d '{"spec":{"template":{"spec":{"containers":[{"image":"nginx","name": "busybox-1"}]}}}}' 127.0.0.1:9090/apis/extensions/v1beta1/namespaces/default/deployments/busybox-1
+```
+
 我们可以使用`edit`命令来编辑Deployment，修改 `.spec.template.spec.containers[0].image` ，将`nginx:1.7.9` 改写成 `nginx:1.9.1`。
 
 ```shell
@@ -640,8 +646,6 @@ $ echo $?
 **注意：** 将该值设置为0，将导致所有的Deployment历史记录都会被清除，该Deploynent就无法再回退了。
 
 ## 用例
-
-
 
 ## 编写Deployment Spec
 
