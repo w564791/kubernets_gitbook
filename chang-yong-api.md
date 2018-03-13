@@ -16,5 +16,7 @@ Rollback
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Accept-Encoding: gzip' -d '{"kind":"DeploymentRollback","apiVersion":"extensions/v1beta1","name":"busybox-1","rollbackTo":{"revision":21}}' 127.0.0.1:9090/apis/extensions/v1beta1/namespaces/default/deployments/busybox-1/rollback
 ```
 
+官网
 
+https://kubernetes.io/docs/reference/generated/federation/extensions/v1beta1/operations/
 
