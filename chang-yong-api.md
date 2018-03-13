@@ -10,5 +10,11 @@ get命名空间为pxsj，lebelselector=pxsj-app的rs历史记录
 curl 127.0.0.1:9090/apis/extensions/v1beta1/namespaces/pxsj/replicasets?labelSelector=pxsj-app%3Daccount-service
 ```
 
+Rollback
+
+```
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Accept-Encoding: gzip' -d '{"kind":"DeploymentRollback","apiVersion":"extensions/v1beta1","name":"busybox-1","rollbackTo":{"revision":21}}' 127.0.0.1:9090/apis/extensions/v1beta1/namespaces/default/deployments/busybox-1/rollback
+```
+
 
 
