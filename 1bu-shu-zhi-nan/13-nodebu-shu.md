@@ -7,7 +7,7 @@ kubernetes node 节点包含如下组件：
 * kubelet
 * kube-proxy
 
-## 配置Flanneld
+## 配置Flanneld\(backend: vxlan & host-gw\)
 
 ```
 [root@ip-10-10-6-201 ssl]# systemctl cat flanneld
