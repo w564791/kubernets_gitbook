@@ -119,6 +119,7 @@ EnvironmentFile=-/run/flannel/docker
 # for containers run by docker
 ExecStart=/usr/bin/dockerd $DOCKER_NETWORK_OPTIONS --registry-mirror=https://registry.docker-cn.com --insecure-registry 54.223.110.70
 ExecReload=/bin/kill -s HUP $MAINPID
+ExecStartPost=/usr/bin/iptables -P FORWARD ACCEPT
 # Having non-zero Limit*s causes performance problems due to accounting overhead
 # in the kernel. We recommend using cgroups to do container-local accounting.
 LimitNOFILE=10240
