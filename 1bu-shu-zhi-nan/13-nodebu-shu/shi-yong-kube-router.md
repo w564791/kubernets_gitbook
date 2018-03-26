@@ -12,7 +12,7 @@ Kube-router由3个核心控制器和多个观察器组成，如下图所示：
 
 ![](/assets/kube-router.png)
 
- 在kubernetes集群中部署kube-router
+在kubernetes集群中部署kube-router
 
 ```
 # cat kube-router.yaml
@@ -108,17 +108,10 @@ spec:
       - name: cert
         hostPath:
           path: /etc/kubernetes/ssl
-
 ```
 
 ```
 kubectl create -f kube-router.yaml
-```
-
-修改默认网络策略为拒绝（例子里没有使用网络策略，可以忽略）
-
-```
-kubectl annotate ns production "net.beta.kubernetes.io/network-policy={\"ingress\": {\"isolation\": \"DefaultDeny\"}}"
 ```
 
 修改代理方式：默认为轮询rr
@@ -132,10 +125,17 @@ kubectl patch svc go-cloudmsg -p '{"metadata":{"annotations":{"kube-router.io/se
 kubectl patch svc go-cloudmsg -p '{"metadata":{"annotations":{"kube-router.io/service.scheduler":"sh"}}}'
 使用目标地址哈希
 kubectl patch svc go-cloudmsg -p '{"metadata":{"annotations":{"kube-router.io/service.scheduler":"dh"}}}'
-
 ```
 
-更改默认策略：
+修改默认网络策略为拒绝（例子里没有使用网络策略，可以忽略）
+
+```
+kubectl annotate ns production "net.beta.kubernetes.io/network-policy={\"ingress\": {\"isolation\": \"DefaultDeny\"}}"
+```
+
+
+
+更改策略（可以忽略）：
 
 ```
 apiVersion: extensions/v1beta1                                                                                                                                                                              
