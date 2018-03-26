@@ -1,3 +1,5 @@
+编辑中。。。
+
 ```
 Kube-router is built around concept of watchers and controllers. Watchers use Kubernetes watch API to get notification on events related to create, update, delete of Kubernetes objects. Each watcher gets notification related to a particular API object. On receiving an event from API server, watcher broadcasts events. Controller registers to get event updates from the watchers and act up on the events.
 ```
@@ -15,8 +17,6 @@ kubectl annotate ns production "net.beta.kubernetes.io/network-policy={\"ingress
 ```
 
 更改默认策略：
-
-
 
 ```
 apiVersion: extensions/v1beta1                                                                                                                                                                              
@@ -49,7 +49,7 @@ spec:
           app: guestbook                                                                                                                                                                                    
     ports:                                                                                                                                                                                                  
      - protocol: TCP                                                                                                                                                                                        
-       port: 6379  
+       port: 6379
 ```
 
 
