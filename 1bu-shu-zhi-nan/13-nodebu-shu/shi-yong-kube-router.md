@@ -4,7 +4,9 @@ Kube-router is built around concept of watchers and controllers. Watchers use Ku
 
 
 
-kube-router 的核心概念是其watchers和controllers，watchers通过监控K8S的api变化，create，update，delete K8S对象，每个watcher都会获取特定的api对象相关的通知，当从API接受到事件后，watchers广播事件，controller对事件进行更新并处理
+* kube-router 的核心概念是其watchers和controllers，watchers通过监控K8S的api变化，create，update，delete K8S对象，每个watcher都会获取特定的api对象相关的通知，当从API接受到事件后，watchers广播事件，controller对事件进行更新并处理
 
+Kube-router由3个核心控制器和多个观察器组成，如下图所示：
 
+![](/assets/kube-controller.png)
 
