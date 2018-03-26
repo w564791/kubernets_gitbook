@@ -12,7 +12,7 @@ Kube-router由3个核心控制器和多个观察器组成，如下图所示：
 
 ![](/assets/kube-router.png)
 
-在kubernetes集群中部署kube-router
+在kubernetes集群中部署kube-router（支持nodePort）
 
 ```
 # cat kube-router.yaml
@@ -132,8 +132,6 @@ kubectl patch svc go-cloudmsg -p '{"metadata":{"annotations":{"kube-router.io/se
 ```
 kubectl annotate ns production "net.beta.kubernetes.io/network-policy={\"ingress\": {\"isolation\": \"DefaultDeny\"}}"
 ```
-
-
 
 更改策略（可以忽略）：
 
