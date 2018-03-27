@@ -3,7 +3,7 @@
 
 Prerequisites
 
-Network policies are implemented by the network plugin, so you must be using a networking solution which supports **`NetworkPolicy`** - simply creating the resource without a controller to implement it will have no effect.
+Network policies are implemented by the network plugin, so you must be using a networking solution which supports `NetworkPolicy` - simply creating the resource without a controller to implement it will have no effect.
 
 An exampleNetworkPolicymight look like this:
 
@@ -65,6 +65,91 @@ something：
 * ingress: EachNetworkPolicymay include a list of whitelistingressrules. Each rule allows traffic which matches both thefromandportssections. The example policy contains a single rule, which matches traffic on a single port, from one of three sources, the first specified via anipBlock, the second via anamespaceSelectorand the third via apodSelector.
 
 * egress: EachNetworkPolicymay include a list of whitelistegressrules. Each rule allows traffic which matches both thetoandportssections. The example policy contains a single rule, which matches traffic on a single port to any destination in10.0.0.0/24.
+
+## Default Policies {#default-policies}
+
+By default, if no policies exist in a namespace, then all ingress and egress traffic is allowed to and from pods in that namespace. The following examples let you change the default behavior in that namespace.
+
+### Default deny all ingress traffic {#default-deny-all-ingress-traffic}
+
+You can create a “default” isolation policy for a namespace by creating a NetworkPolicy that selects all pods but does not allow any ingress traffic to those pods.
+
+```
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+```
+
+This ensures that even pods that aren’t selected by any other NetworkPolicy will still be isolated. This policy does not change the default egress isolation behavior
+
+### Default allow all ingress traffic {#default-allow-all-ingress-traffic}
+
+If you want to allow all traffic to all pods in a namespace \(even if policies are added that cause some pods to be treated as “isolated”\), you can create a policy that explicitly allows all traffic in that namespace.
+
+```
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all
+spec:
+  podSelector: {}
+  ingress:
+  - {}
+```
+
+### Default deny all egress traffic {#default-deny-all-egress-traffic}
+
+You can create a “default” egress isolation policy for a namespace by creating a NetworkPolicy that selects all pods but does not allow any egress traffic from those pods.
+
+```
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+```
+
+This ensures that even pods that aren’t selected by any other NetworkPolicy will not be allowed egress traffic. This policy does not change the default ingress isolation behavior.
+
+### Default allow all egress traffic {#default-allow-all-egress-traffic}
+
+If you want to allow all traffic from all pods in a namespace \(even if policies are added that cause some pods to be treated as “isolated”\), you can create a policy that explicitly allows all egress traffic in that namespace.
+
+```
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all
+spec:
+  podSelector: {}
+  egress:
+  - {}
+```
+
+### Default deny all ingress and all egress traffic {#default-deny-all-ingress-and-all-egress-traffic}
+
+You can create a “default” policy for a namespace which prevents all ingress AND egress traffic by creating the following NetworkPolicy in that namespace.
+
+```
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+```
 
 
 
