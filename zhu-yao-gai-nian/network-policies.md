@@ -148,8 +148,12 @@ spec:
   policyTypes:
   - Ingress
   - Egress
-
 ```
+
+参考资料：
+
+1. _https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/_
+2. _https://github.com/ahmetb/kubernetes-network-policy-recipes_
 
 
 
