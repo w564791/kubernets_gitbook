@@ -21,6 +21,7 @@
     * [Affinity](zhu-yao-gai-nian/affinity.md)
     * [Job](zhu-yao-gai-nian/job.md)
     * [kubeconfig](zhu-yao-gai-nian/kubeconfig.md)
+    * Network Policies
   * [关于防火墙](guan-yu-fang-huo-qiang.md)
 * [在CentOS7上部署kubernetes1.7.6集群](1bu-shu-zhi-nan.md)
   * [资源类型](1bu-shu-zhi-nan/zi-yuan-lei-xing.md)
