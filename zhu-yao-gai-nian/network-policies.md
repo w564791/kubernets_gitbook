@@ -1,3 +1,5 @@
+本文档基于K8S 1.10
+
 * A network policy is a specification of how groups of pods are allowed to communicate with each other and other network endpoints.
 * NetworkPolicy resources use labels to select pods and define rules which specify what traffic is allowed to the selected pods
 
@@ -152,8 +154,8 @@ spec:
 
 参考资料：
 
-1. _https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/_
-2. _https://github.com/ahmetb/kubernetes-network-policy-recipes_
+1. [https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/)
+2. [https://github.com/ahmetb/kubernetes-network-policy-recipes](https://github.com/ahmetb/kubernetes-network-policy-recipes)
 
 
 
