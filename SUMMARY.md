@@ -34,6 +34,7 @@
   * [node部署](1bu-shu-zhi-nan/13-nodebu-shu.md)
     * [使用aws-vpc](1bu-shu-zhi-nan/13-nodebu-shu/shi-yong-aws-vpc-backend.md)
     * [使用kube-router](1bu-shu-zhi-nan/13-nodebu-shu/shi-yong-kube-router.md)
+    * 使用calico作为pod-to-pod网络组件
   * [kube-dns部署](1bu-shu-zhi-nan/14-kube-dnsbu-shu.md)
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
@@ -42,7 +43,7 @@
   * [Kubernetes TSL bootstrapping ](1bu-shu-zhi-nan/kubernetes-tsl-bootstrapping.md)
   * [kubernetes 亲和性调度](1bu-shu-zhi-nan/kubernetes-qin-he-xing-diao-du.md)
   * [RBAC](1bu-shu-zhi-nan/rbac.md)
-* 最佳配置（网上摘抄）
+* [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
   * [cannot create certificate signing request](yu-dao-de-yi-xie-wen-ti/unable-to-register-node-19216870175-with-api-server-unauthorized.md)
