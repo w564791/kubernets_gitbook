@@ -1,3 +1,6 @@
+
+---
+
 # 在kubernetes集群中部署calico
 
 ## Requirements {#requirements}
@@ -381,7 +384,6 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
     metadata:
       name: calico-node
       namespace: kube-system
-
 
 ## [Custom Installation](https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/integration) {#custom-installation}
 
