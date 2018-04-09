@@ -59,8 +59,7 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
 
     ---
 
-    # The following contains k8s Secrets for use with a TLS enabled etcd cluster.
-    # For information on populating Secrets, see http://kubernetes.io/docs/user-guide/secrets/
+
     apiVersion: v1
     kind: Secret
     type: Opaque
