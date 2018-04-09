@@ -117,7 +117,52 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
                   value: "192.168.0.0/16" #此处需要修改为controller里配置的IP池
     ........
 
-##  {#custom-installation}
+```
+# kubectl create -f  calico.yaml
+```
+
+![](/assets/calico-node.png)
+
+本例使用了aws云服务器，跨区域容灾，除了以上文档，还需要做额外配置。官方说明如下
+
+![](/assets/TIM图片20180409160614.png)操作方法如下：
+
+1.删除已经存在的IP池（命令行工具需要额外下载）
+
+```
+# ./calicoctl delete ippool default-ipv4-ippool
+```
+
+2.新建IP池
+
+```
+# ./calicoctl apply -f - << EOF
+   apiVersion: projectcalico.org/v3
+   kind: IPPool
+   metadata:
+   name: ippool-ipip-1
+   spec:
+     cidr: 192.168.0.0/16
+     ipipMode: Always
+     natOutgoing: true
+   EOF
+```
+
+## 测试： {#custom-installation}
+
+```
+# kubectl run nginx --image=nginx --replicas=2
+```
+
+![](/assets/nginx.png)ping测试
+
+![](/assets/ping测试.png)
+
+查看节点路由
+
+![](/assets/route.png)
+
+
 
 ## [Custom Installation](https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/integration) {#custom-installation}
 
