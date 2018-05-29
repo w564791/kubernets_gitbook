@@ -35,6 +35,7 @@
     * [使用aws-vpc](1bu-shu-zhi-nan/13-nodebu-shu/shi-yong-aws-vpc-backend.md)
     * [使用kube-router作为cluster网络组件](1bu-shu-zhi-nan/13-nodebu-shu/shi-yong-kube-router.md)
     * [使用calico（pod-to-pod）](1bu-shu-zhi-nan/13-nodebu-shu/shi-yong-calico-pod-to-pod.md)
+    * [注册node](1bu-shu-zhi-nan/13-nodebu-shu/zhu-cenode.md)
   * [kube-dns部署](1bu-shu-zhi-nan/14-kube-dnsbu-shu.md)
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
