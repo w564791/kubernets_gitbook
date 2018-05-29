@@ -5,20 +5,19 @@
 ```
 # cat kubelet-csr.json
 {
-	"CN": "system:node:192.168.178.132",
-	"key": {
-		"algo": "rsa",
-		"size": 2048
-	},
-	"names": [{
-		"C": "CN",
-		"L": "BeiJing",
-		"ST": "BeiJing",
-		"O": "system:nodes",
-		"OU": "System"
-	}]
+    "CN": "system:node:192.168.178.132",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [{
+        "C": "CN",
+        "L": "BeiJing",
+        "ST": "BeiJing",
+        "O": "system:nodes",
+        "OU": "System"
+    }]
 }
-
 ```
 
 生成证书:
@@ -27,7 +26,6 @@
 # cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem -ca-key=/etc/kubernetes/ssl/ca-key.pem --config=/usr/local/src/ssl/ca-config.json -profile=kubernetes kubelet-csr.json | cfssljson -bare kubelet
 # ls kubelet*pem
 kubelet-key.pem  kubelet.pem
-
 ```
 
 生成 `--kubeconfig`文件
@@ -81,9 +79,7 @@ users:
     client-key-data: ...
 ```
 
-
-
-配置kubelet.service
+配置kubelet.service\(注意kubelet.conf文件路径\)
 
 ```
 [Unit]
@@ -115,10 +111,9 @@ ExecStart=/bin/kubelet \
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
-
 ```
 
-PS:  去掉`--bootstrap-kubeconfig`参数,即不使用bootstrap方式注册node; 
+PS:  去掉`--bootstrap-kubeconfig`参数,即不使用bootstrap方式注册node;
 
 启动kubelet
 
