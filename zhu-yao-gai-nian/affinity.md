@@ -148,6 +148,53 @@ spec:
 * 如果在Admission control里定义了包含LimitPodHardAntiAffinityTopology,那么针对RequiredDuringScheduling的Pod互斥性定义就被限制为kubernetes.io/hostname
 * 在PreferredDuringScheduling类型的Pod互斥性中,空的topologyKey会被解释为kubernetes.io/hostname,failure-domain.beta.kubernetes.io/zono,failure-domain.beta.kubernetes.io/region的组合
 
+```
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: busybox
+  name: busybox
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      run: busybox
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: busybox
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: run
+                  operator: In
+                  values:
+                  - busybox
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - command:
+        - sleep
+        - "3000"
+        image: busybox
+        imagePullPolicy: Always
+        name: busybox
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+```
+
+非强制亲和性,可以不调度到一台上,但是不强制\(当节点不可用或无节点可用时\)
+
 ## Taints和Tolerations
 
 NodeAffinity是在Pod上定义的一种属性,使得Pod能调度到某些Node上运行,Taints恰好相反,它拒绝Pod运行
