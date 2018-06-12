@@ -41,8 +41,8 @@ FROM  [_https://servicemesher.github.io/blog/introducing-the-istio-v1alpha3-rout
 
 ### base: {#gateway}
 
-1. istio 0.8已在集群中安装安装
-2. bookinfo事例已部署
+1. [istio 0.8已在集群中安装安装](/istio-08lts/istio-08bu-shu.md)
+2. [bookinfo示例已部署](/istio-08lts/bookinfoshi-li-bu-shu.md)
 
 ### Gateway {#gateway}
 
