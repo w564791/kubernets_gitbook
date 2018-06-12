@@ -20,8 +20,6 @@ FROM  [_https://servicemesher.github.io/blog/introducing-the-istio-v1alpha3-rout
 * 编写模型时应该“生产者导向”和“以Host为中心”，而不是通过组合多个规则来编写模型。 例如，所有与特定Host关联的规则被配置在一起，而不是单独配置。
 * 将路由与路由后行为清晰分开。
 
-
-
 ## v1alpha3中的配置资源 {#v1alpha3中的配置资源}
 
 在一个典型的网格中，通常有一个或多个用于终止外部TLS链接，将流量引入网格的负载均衡器（我们称之为gateway）。 然后流量通过sidecar网关（sidecar gateway）流经内部服务。应用程序使用外部服务的情况也很常见（例如访问Google Maps API），一些情况下，这些外部服务可能被直接调用；但在某些部署中，网格中所有访问外部服务的流量可能被要求强制通过专用的出口网关（Egress gateway）。 下图描绘了网关在网格中的使用情况。
@@ -39,11 +37,9 @@ FROM  [_https://servicemesher.github.io/blog/introducing-the-istio-v1alpha3-rout
 
 下图描述了跨多个配置资源的控制流程。
 
-
-
 ![](/assets/import1231.png)
 
-### base:  {#gateway}
+### base: {#gateway}
 
 1. istio 0.8已在集群中安装安装
 2. bookinfo事例已部署
@@ -55,6 +51,4 @@ FROM  [_https://servicemesher.github.io/blog/introducing-the-istio-v1alpha3-rout
 对于入口流量管理，您可能会问：为什么不直接使用Kubernetes Ingress API？原因是Ingress API无法表达Istio的路由需求。Ingress试图在不同的HTTP代理之间取一个公共的交集，因此只能支持最基本的HTTP路由，最终导致需要将代理的其他高级功能放入到注解（annotation）中，而注解的方式在多个代理之间是不兼容的，无法移植。
 
 Istio`Gateway`通过将L4-L6配置与L7配置分离的方式克服了`Ingress`的这些缺点。`Gateway`只用于配置L4-L6功能（例如，对外公开的端口、TLS配置），所有主流的L7代理均以统一的方式实现了这些功能。 然后，通过在`Gateway`上绑定`VirtualService`的方式，可以使用标准的Istio规则来控制进入`Gateway`的HTTP和TCP流量。
-
-
 

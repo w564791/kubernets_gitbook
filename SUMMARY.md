@@ -24,7 +24,7 @@
     * [Network Policies](zhu-yao-gai-nian/network-policies.md)
   * [关于防火墙](guan-yu-fang-huo-qiang.md)
   * [istio 0.8\(LTS\)](istio-08lts.md)
-    * istio 0.8部署
+    * [istio 0.8部署](istio-08lts/istio-08bu-shu.md)
     * bookinfo示例部署
 * [在CentOS7上部署kubernetes1.7.6集群](1bu-shu-zhi-nan.md)
   * [资源类型](1bu-shu-zhi-nan/zi-yuan-lei-xing.md)
