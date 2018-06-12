@@ -221,8 +221,6 @@ Updated config virtual-service/default/ratings to revision 617014
 
 整个评论服务失败的原因是因为我们的Bookinfo应用程序有一个错误。 产品页面和评论服务之间的超时时间比评论和评分服务之间的超时（硬编码连接超时时间为10秒）要少（总共3s + 1次重试= 6s）。 典型的企业应用程序可能出现这些类型的错误，其中不同的团队独立开发不同的微服务。 Istio的故障注入规则可以帮助您识别这些异常情况，而不会影响最终用户。
 
-
-
 ### 使用HTTP终止注入故障
 
 ```
@@ -252,5 +250,5 @@ spec:
         subset: v1
 ```
 
-
+以用户“jason”登录。 如果规则成功传播到所有窗格，您应该立即看到页面加载了“_Ratings service is currently unavailable_”消息。 从用户“jason”注销，您应该可以在产品页面上看到带评级星的评论。
 
