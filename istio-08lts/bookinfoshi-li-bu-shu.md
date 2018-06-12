@@ -13,5 +13,5 @@ wget https://raw.githubusercontent.com/istio/istio/release-0.8/samples/bookinfo/
 istioctl  kube-inject -f bookinfo.yaml |kubectl  create -f -
 ```
 
-
+确认bookinfo应用完全启动
 
