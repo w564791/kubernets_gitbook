@@ -52,3 +52,49 @@ FROM  [_https://servicemesher.github.io/blog/introducing-the-istio-v1alpha3-rout
 
 Istio`Gateway`通过将L4-L6配置与L7配置分离的方式克服了`Ingress`的这些缺点。`Gateway`只用于配置L4-L6功能（例如，对外公开的端口、TLS配置），所有主流的L7代理均以统一的方式实现了这些功能。 然后，通过在`Gateway`上绑定`VirtualService`的方式，可以使用标准的Istio规则来控制进入`Gateway`的HTTP和TCP流量。
 
+```
+# cat bookinfo-gateway.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bookinfo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - bookinfo-gateway  #绑定gateway ,官网下载的例子(绑定了不存在的bookinfo和mesh GateWay)也能暴露服务,不知道是不是这个选项无效
+  http:
+  - match:
+    - uri:
+        exact: /productpage
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        prefix: /api/v1/products
+    route:
+    - destination:
+        host: productpage
+        port:
+          number: 9080
+
+```
+
+
+
