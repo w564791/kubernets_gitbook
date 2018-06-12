@@ -132,8 +132,6 @@ spec:
         subset: v1
 ```
 
-
-
 将默认流量导入version: v1标签的容器,将cookie包含user=jason的用户流量导入version: v2标签的容器
 
 实际上在`VirtualService`中hosts部分设置只是虚拟的目的地，因此不一定是已在网格中注册的服务。这允许用户为在网格内没有可路由条目的虚拟主机的流量进行建模。通过将`VirtualService`绑定到同一Host的`Gateway`配置（如前一节所述 ），可向网格外部暴露这些Host。
@@ -182,6 +180,43 @@ spec:
 ```
 
 在单个`DestinationRule`中指定多个策略（例如上面实例中的缺省策略和v2版本特定的策略）。
+
+### 使用HTTP延迟注入故障
+
+```
+
+# cat route-rule-ratings-test-delay.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(user=jason)(;.*)?$"
+    fault:
+      delay:
+        percent: 100
+        fixedDelay: 7s
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+        
+        
+# istioctl  replace -f route-rule-ratings-test-delay.yaml
+Updated config virtual-service/default/ratings to revision 617014
+
+
+```
 
 
 
