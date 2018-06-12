@@ -74,8 +74,6 @@ Gateway可以用于建模边缘代理或纯粹的内部代理，如第一张图�
 
 ### VirtualService {#virtualservice}
 
-
-
 要为进入上面的Gateway的流量配置相应的路由，必须为同一个host定义一个VirtualService，并使用配置中的gateways字段绑定到前面定义的Gateway 上：
 
 ```
@@ -108,6 +106,82 @@ spec:
 用一种叫做“Virtual services”的东西代替路由规则可能看起来有点奇怪，但对于它配置的内容而言，这事实上是一个更好的名称，特别是在重新设计API以解决先前模型的可扩展性问题之后。
 
 实际上，发生的变化是：在之前的模型中，需要用一组相互独立的配置规则来为特定的目的服务设置路由规则，并通过precedence字段来控制这些规则的顺序；在新的API中，则直接对（虚拟）服务进行配置，该虚拟服务的所有规则以一个有序列表的方式配置在对应的VirtualService资源中。
+
+v1alph3示例
+
+```
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(user=jason)(;.*)?$"
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+```
+
+
+
+将默认流量导入version: v1标签的容器,将cookie包含user=jason的用户流量导入version: v2标签的容器
+
+实际上在`VirtualService`中hosts部分设置只是虚拟的目的地，因此不一定是已在网格中注册的服务。这允许用户为在网格内没有可路由条目的虚拟主机的流量进行建模。通过将`VirtualService`绑定到同一Host的`Gateway`配置（如前一节所述 ），可向网格外部暴露这些Host。
+
+除了这个重大的重构之外，`VirtualService`还包括其他一些重要的改变：
+
+1. 可以在`VirtualService`配置中表示多个匹配条件，从而减少对冗余的规则设置。
+2. 每个服务版本都有一个名称（称为服务子集）。属于某个子集的一组Pod/VM在`DestinationRule`中定义，具体定义参见下节。
+3. 通过使用带通配符前缀的DNS来指定`VirtualService`的host，可以创建单个规则以作用于所有匹配的服务。例如，在Kubernetes中，在`VirtualService`中使用`*.foo.svc.cluster.local`作为host,可以对`foo`命名空间中的所有服务应用相同的重写规则。
+
+### DestinationRule {#destinationrule}
+
+[DestinationRule](https://istio.io/docs/reference/config/istio.networking.v1alpha3/#DestinationRule)用于配置在将流量转发到服务时应用的策略集。这些策略应由服务提供者撰写，用于描述断路器、负载均衡、TLS设置等。
+
+除了下述改变外，`DestinationRule`与其前身`DestinationPolicy`大致相同。
+
+1. [DestinationRule](https://istio.io/docs/reference/config/istio.networking.v1alpha3/#DestinationRule)的`host`可以包含通配符前缀，以允许单个规则应用于多个服务。
+
+2. `DestinationRule`定义了目的host的子集`subsets`（例如：命名版本）。 这些subset用`VirtualService`的路由规则设置中，可以将流量导向服务的某些特定版本。通过这种方式为版本命名后，可以在不同的虚拟服务中明确地引用这些命名版本的subset，简化Istio代理发出的统计数据，并可以将subsets编码到SNI头中。
+
+为reviews服务配置策略和subsets的`DestinationRule`可能如下所示：
+
+```
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+  - name: v3
+    labels:
+      version: v3
+```
+
+在单个`DestinationRule`中指定多个策略（例如上面实例中的缺省策略和v2版本特定的策略）。
 
 
 
