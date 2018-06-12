@@ -68,7 +68,12 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
----
+
+```
+
+要为进入上面的Gateway的流量配置相应的路由，必须为同一个host定义一个VirtualService，并使用配置中的gateways字段绑定到前面定义的Gateway 上：
+
+```
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -93,7 +98,6 @@ spec:
         host: productpage
         port:
           number: 9080
-
 ```
 
 
