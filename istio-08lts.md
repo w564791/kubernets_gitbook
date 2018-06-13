@@ -273,7 +273,6 @@ spec:
         host: reviews
         subset: v2
 EOF
-
 ```
 
 2.添加2秒的延迟呼叫`ratings`服务：
@@ -297,10 +296,10 @@ spec:
         host: ratings
         subset: v1
 EOF
-
 ```
 
-3.在浏览器中打开Bookinfo URL（http：// $ GATEWAY\_URL / productpage）您应该看到Bookinfo应用程序正常工作（显示评分星），但每当刷新页面时都会有2秒的延迟。
+3.在浏览器中打开Bookinfo URL（http：// $ GATEWAY\_URL / productpage）  
+您应该看到Bookinfo应用程序正常工作（显示评分星），但每当刷新页面时都会有2秒的延迟。
 
 4.现在为reviews服务呼叫添加1秒的请求超时
 
@@ -321,6 +320,8 @@ spec:
     timeout: 1s
 EOF
 ```
+
+5. 刷新Bookinfo网页,您现在应该看到它在仍然是2秒返回，但评论返回_Sorry, product reviews are currently unavailable for this book._
 
 
 
