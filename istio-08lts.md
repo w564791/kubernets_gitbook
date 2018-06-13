@@ -463,9 +463,9 @@ sys    0m0.004s
 
 1.创建一个`Kubernetes Secret`来保存密钥/证书
 
-使用kubectl在`istio-system`命名空间创建名为`istio-ingressgateway-certs`的`secret, `istio会自动加载`Secret`
+使用kubectl在`istio-system`命名空间创建名为`istio-ingressgateway-certs`的`secret,`istio会自动加载`Secret`
 
-注意:`Secret`必须在`istio-system`并且名称为`istio-ingressgateway-certs,`否则其不能被正确加载`  `
+注意:`Secret`必须在`istio-system`并且名称为`istio-ingressgateway-certs,`否则其不能被正确加载` `
 
 `# kubectl create -n istio-system secret tls istio-ingressgateway-certs --key /tmp/tls.key --cert /tmp/tls.crt`
 
