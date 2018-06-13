@@ -323,5 +323,5 @@ EOF
 
 1. 刷新Bookinfo网页,您现在应该看到它在仍然是2秒返回，评论返回_Sorry, product reviews are currently unavailable for this book._
 
-因为在获取ratings时 我们注入了2秒的延迟
+\(按理说这里超时时间设置为1秒,页面应该在1秒内返回,不知道为什么这里等了2秒\)
 
