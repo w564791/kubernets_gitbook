@@ -370,8 +370,6 @@ spec:
         - containerPort: 8000
 ```
 
-
-
 ```
 kubectl apply -f <(istioctl kube-inject -f httpbin.yaml)
 ```
