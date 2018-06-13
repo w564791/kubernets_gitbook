@@ -74,6 +74,12 @@ spec:
 
 Gateway可以用于建模边缘代理或纯粹的内部代理，如第一张图所示。无论在哪个位置，所有网关都可以用相同的方式进行配置和控制。
 
+只能同时存在一个gateway,否则会报错:
+
+```
+[warning][config] bazel-out/k8-opt/bin/external/envoy/source/common/config/_virtual_includes/grpc_mux_subscription_lib/common/config/grpc_mux_subscription_impl.h:70] gRPC config for type.googleapis.com/envoy.api.v2.Listener rejected: Error adding/updating listener 0.0.0.0_80: error adding listener '0.0.0.0:80': multiple filter chains with the same matching rules are defined
+```
+
 ### VirtualService {#virtualservice}
 
 要为进入上面的Gateway的流量配置相应的路由，必须为同一个host定义一个VirtualService，并使用配置中的gateways字段绑定到前面定义的Gateway 上：
