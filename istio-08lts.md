@@ -457,7 +457,7 @@ user    0m0.004s
 sys    0m0.004s
 ```
 
-### 添加一个安全端口（HTTPS）到我们的网关 {#add-a-secure-port-https-to-our-gateway}
+### 添加一个安全端口（HTTPS）到gateway\(未验证\) {#add-a-secure-port-https-to-our-gateway}
 
 在本小节中，我们将添加到网关端口443来处理HTTPS流量。我们用证书和私钥创建一个秘密。然后Gateway，除了之前在端口80上定义的服务器之外，我们用先前定义替换为包含端口443上的服务器的定义。
 
@@ -468,6 +468,35 @@ sys    0m0.004s
 注意:`Secret`必须在`istio-system`并且名称为`istio-ingressgateway-certs,`否则其不能被正确加载` `
 
 `# kubectl create -n istio-system secret tls istio-ingressgateway-certs --key /tmp/tls.key --cert /tmp/tls.crt`
+
+```
+cat <<EOF | istioctl replace -f -
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: httpbin-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default ingress gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "httpbin.example.com"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+    hosts:
+    - "httpbin.example.com"
+EOF
+```
 
 
 
