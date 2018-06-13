@@ -325,5 +325,56 @@ EOF
 
 \(按理说这里超时时间设置为1秒,页面应该在1秒内返回,不知道为什么这里等了2秒,难道还有重试1次?\)
 
+## 了解发生了什么 {#understanding-what-happened}
+
+在此任务中，您使用Istio将调用`reviews`微服务的请求超时设置为1秒（而不是默认的15秒）。由于该`reviews`服务随后`ratings`在处理请求时调用该服务，因此您使用Istio在呼叫中注入了2秒的延迟时间`ratings`，以便您可以使`reviews`服务花费超过1秒的时间来完成，因此您可以看到超时运行。
+
+您发现Bookinfo产品页面（调用`reviews`服务来填充页面）而不显示评论，显示消息：_Sorry, product reviews are currently unavailable for this book_。这是它从reviews服务收到超时错误的结果。
+
+# 控制入口流量 {#title}
+
+部署`httpbin`应用程序
+
+```
+# cat httpbin.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  labels:
+    app: httpbin
+spec:
+  ports:
+  - name: http
+    port: 8000
+  selector:
+    app: httpbin
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: httpbin
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v1
+    spec:
+      containers:
+      - image: docker.io/citizenstig/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        ports:
+        - containerPort: 8000
+```
+
+
+
+```
+kubectl apply -f <(istioctl kube-inject -f httpbin.yaml)
+```
+
 
 
