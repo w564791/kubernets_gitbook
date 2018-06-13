@@ -28,6 +28,7 @@
     * [使用HTTP终止注入故障](istio-08lts/shi-yong-http-zhong-zhi-zhu-ru-gu-zhang.md)
     * [设置请求超时](she-zhi-qing-qiu-chao-shi.md)
     * [控制入口流量](kong-zhi-ru-kou-liu-liang.md)
+    * [控制出口流量](kong-zhi-chu-kou-liu-liang.md)
     * [bookinfo示例部署](istio-08lts/bookinfoshi-li-bu-shu.md)
     * [istio 0.8部署](istio-08lts/istio-08bu-shu.md)
 * [在CentOS7上部署kubernetes1.7.6集群](1bu-shu-zhi-nan.md)
