@@ -436,8 +436,6 @@ access-control-allow-origin: *
 access-control-allow-credentials: true
 content-length: 0
 x-envoy-upstream-service-time: 4
-
-
 ```
 
 请求`delay`页面
@@ -454,11 +452,22 @@ content-length: 531
 x-envoy-upstream-service-time: 2005
 
 
-real	0m2.018s
-user	0m0.004s
-sys	0m0.004s
-
+real    0m2.018s
+user    0m0.004s
+sys    0m0.004s
 ```
+
+### 添加一个安全端口（HTTPS）到我们的网关 {#add-a-secure-port-https-to-our-gateway}
+
+在本小节中，我们将添加到网关端口443来处理HTTPS流量。我们用证书和私钥创建一个秘密。然后Gateway，除了之前在端口80上定义的服务器之外，我们用先前定义替换为包含端口443上的服务器的定义。
+
+1.创建一个`Kubernetes Secret`来保存密钥/证书
+
+使用kubectl在`istio-system`命名空间创建名为`istio-ingressgateway-certs`的`secret, `istio会自动加载`Secret`
+
+注意:`Secret`必须在`istio-system`并且名称为`istio-ingressgateway-certs,`否则其不能被正确加载`  `
+
+`# kubectl create -n istio-system secret tls istio-ingressgateway-certs --key /tmp/tls.key --cert /tmp/tls.crt`
 
 
 
