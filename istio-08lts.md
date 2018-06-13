@@ -252,3 +252,75 @@ spec:
 
 以用户“jason”登录。 如果规则成功传播到所有窗格，您应该立即看到页面加载了“_Ratings service is currently unavailable_”消息。 从用户“jason”注销，您应该可以在产品页面上看到带评级星的评论。
 
+## 设置请求超时 {#request-timeouts}
+
+可以使用路由规则的http requests timeout字段指定http请求的超时值。默认情况下，超时时间为15秒，但在此任务中，我们将覆盖reviews服务超时时间为1秒。然而，为了看到它的效果，我们还会在ratings服务调用中引入一个人为的2秒延迟
+
+1.将请求路由到`reviews`服务的v2 ，即调用该ratings服务的版本
+
+```
+cat <<EOF | istioctl replace -f -
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v2
+EOF
+
+```
+
+2.添加2秒的延迟呼叫`ratings`服务：
+
+```
+cat <<EOF | istioctl replace -f -
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - fault:
+      delay:
+        percent: 100
+        fixedDelay: 2s
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+EOF
+
+```
+
+3.在浏览器中打开Bookinfo URL（http：// $ GATEWAY\_URL / productpage）您应该看到Bookinfo应用程序正常工作（显示评分星），但每当刷新页面时都会有2秒的延迟。
+
+4.现在为reviews服务呼叫添加1秒的请求超时
+
+```
+cat <<EOF | istioctl replace -f -
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v2
+    timeout: 1s
+EOF
+```
+
+
+
