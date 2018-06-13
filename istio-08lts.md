@@ -321,7 +321,7 @@ spec:
 EOF
 ```
 
-5. 刷新Bookinfo网页,您现在应该看到它在仍然是2秒返回，但评论返回_Sorry, product reviews are currently unavailable for this book._
+5. 刷新Bookinfo网页,您现在应该看到它在仍然是2秒返回，评论返回_Sorry, product reviews are currently unavailable for this book._
 
 
 
