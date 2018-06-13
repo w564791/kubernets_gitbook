@@ -39,6 +39,8 @@ FROM  [_https://servicemesher.github.io/blog/introducing-the-istio-v1alpha3-rout
 
 ![](/assets/import1231.png)
 
+_以下内容翻译自官网,水平有限,如有错误,还请谅解_
+
 ### base: {#gateway}
 
 1. [istio 0.8已在集群中安装安装](/istio-08lts/istio-08bu-shu.md)
