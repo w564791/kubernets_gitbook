@@ -19,8 +19,6 @@ bookinfo架构
 
 The Bookinfo application is broken into four separate microservices:
 
-
-
 productpage. productpage microservice调用details 和reviews来填充页面
 
 details. 包含书籍信息。.
@@ -31,13 +29,11 @@ ratings. 该服务随reviews一起包含书籍排行信息.
 
 有3个版本的reviews微服务:
 
+* 版本v1不会调用评分服务。
+* 版本v2调用评分服务，并将每个评分显示为1至5个黑星。
+* 版本v3调用评分服务，并将每个评分显示为1到5个红色星星。
 
 
-Version v1 doesn’t call the ratings service.
-
-Version v2 calls the ratings service, and displays each rating as 1 to 5 black stars.
-
-Version v3 calls the ratings service, and displays each rating as 1 to 5 red stars.
 
 确认bookinfo应用完全启动
 
