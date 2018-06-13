@@ -60,7 +60,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "httpbin.example.com"
+    - "*"
 EOF
 ```
 
