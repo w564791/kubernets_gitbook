@@ -395,7 +395,6 @@ spec:
     hosts:
     - "httpbin.example.com"
 EOF
-
 ```
 
 配置`VirtualService`
@@ -423,6 +422,41 @@ spec:
           number: 8000
         host: httpbin
 EOF
+```
+
+请求页面`status`页面
+
+```
+# curl --head  http://httpbin.example.com/status/200
+HTTP/1.1 200 OK
+server: envoy
+date: Wed, 13 Jun 2018 08:07:20 GMT
+content-type: text/html; charset=utf-8
+access-control-allow-origin: *
+access-control-allow-credentials: true
+content-length: 0
+x-envoy-upstream-service-time: 4
+
+
+```
+
+请求`delay`页面
+
+```
+# time curl --head  http://httpbin.example.com/delay/2
+HTTP/1.1 200 OK
+server: envoy
+date: Wed, 13 Jun 2018 08:10:59 GMT
+content-type: application/json
+access-control-allow-origin: *
+access-control-allow-credentials: true
+content-length: 531
+x-envoy-upstream-service-time: 2005
+
+
+real	0m2.018s
+user	0m0.004s
+sys	0m0.004s
 
 ```
 
