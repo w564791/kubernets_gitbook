@@ -31,6 +31,7 @@
     * [控制出口流量](kong-zhi-chu-kou-liu-liang.md)
     * [bookinfo示例部署](istio-08lts/bookinfoshi-li-bu-shu.md)
     * [istio 0.8部署](istio-08lts/istio-08bu-shu.md)
+    * [控制出口tcp流量](kong-zhi-chu-kou-tcp-liu-liang.md)
 * [在CentOS7上部署kubernetes1.7.6集群](1bu-shu-zhi-nan.md)
   * [资源类型](1bu-shu-zhi-nan/zi-yuan-lei-xing.md)
   * [格式化输出](1bu-shu-zhi-nan/ge-shi-hua-shu-chu.md)
