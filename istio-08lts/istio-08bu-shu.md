@@ -29,10 +29,9 @@ istio-telemetry-6554768879-k7tff           2/2       Running     4          1d
 istio-tracing-754cdfd695-hb77x             1/1       Running     1          1d
 prometheus-86cb6dd77c-gsl9f                1/1       Running     3          1d
 servicegraph-5849b7d696-djj8t              1/1       Running     7          1d
-
 ```
 
-修改ingressgateway暴露方式为nodePort
+修改ingressgateway暴露方式为nodePort,默认不会启动80,443端口,当gateway创建时,80,443才会启动
 
 ```
 istio-ingressgateway       NodePort    10.254.150.79    <none>        80:80/TCP,443:443/TCP,31400:31400/TCP
