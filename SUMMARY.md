@@ -30,6 +30,7 @@
     * [控制入口流量](kong-zhi-ru-kou-liu-liang.md)
     * [控制出口流量](kong-zhi-chu-kou-liu-liang.md)
     * [控制出口tcp流量](kong-zhi-chu-kou-tcp-liu-liang.md)
+    * [熔断](rong-duan.md)
     * [bookinfo示例部署](istio-08lts/bookinfoshi-li-bu-shu.md)
     * [istio 0.8部署](istio-08lts/istio-08bu-shu.md)
 * [在CentOS7上部署kubernetes1.7.6集群](1bu-shu-zhi-nan.md)
