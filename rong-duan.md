@@ -60,7 +60,6 @@ spec:
         baseEjectionTime: 3m
         maxEjectionPercent: 100
 EOF
-
 ```
 
 ### 启动客户端
@@ -88,7 +87,6 @@ spec:
         - containerPort: 8079
           name: grpc-ping
 EOF
-
 ```
 
 检查客户端d奥httpbin的连接
@@ -122,7 +120,6 @@ x-envoy-upstream-service-time: 4
   "origin": "127.0.0.1",
   "url": "http://httpbin:8000/get"
 }
-
 ```
 
 可以按到,请求成功,下面开始搞事情
@@ -161,7 +158,6 @@ Code 503 : 2 (10.0 %)
 Response Header Sizes : count 20 avg 207.3 +/- 69.1 min 0 max 231 sum 4146
 Response Body/Total Sizes : count 20 avg 603.3 +/- 123.2 min 217 max 645 sum 12066
 All done 20 calls (plus 0 warmup) 9.789 ms avg, 193.6 qps
-
 ```
 
 可以看到几乎所有请求都通过了
@@ -204,6 +200,5 @@ Code 503 : 2 (10.0 %)
     Code 503 : 17 (85.0 %)
     <<<<<<>>>>>>>
 
-
-手动打点,顺便求推荐热力图软件![](/assets/relitu.png)
+![](/assets/relitu2.png)
 
