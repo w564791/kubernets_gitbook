@@ -112,7 +112,11 @@ EOF
 
 ### 直接调用外部服务\(稍后翻译\)
 
-如果您想完全绕过Istio请求特么定的IP范围,您可以配置Envoy sidecars以防止他们拦截外部请求,sidecar模板的-i参数来实现,具体怎么操作,我还在研究中 :\)
+如果您想完全绕过Istio请求特么定的IP范围,您可以配置Envoy sidecars以防止他们拦截外部请求,sidecar模板的-i参数来实现\)
+
+修改istio-demo.yaml文件
+
+搜索`index .ObjectMeta.Annotations "traffic.sidecar.istio.io/includeOutboundIPRanges"`字段,约851行处,修改\*为你想要的值即可
 
 ## 了解发生了什么 {#understanding-what-happened}
 
