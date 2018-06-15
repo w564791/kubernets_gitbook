@@ -200,5 +200,20 @@ Code 503 : 2 (10.0 %)
     Code 503 : 17 (85.0 %)
     <<<<<<>>>>>>>
 
-![](/assets/relitu2.png)
+### ![](/assets/relitu2.png)清理现场
+
+Remove the rules.
+
+```
+$ istioctl delete destinationrule httpbin
+```
+
+Shutdown the[httpbin](https://github.com/istio/istio/tree/release-0.8/samples/httpbin)service and client.
+
+```
+$ kubectl delete deploy httpbin fortio-deploy
+$ kubectl delete svc httpbin
+```
+
+
 
