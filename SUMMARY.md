@@ -54,6 +54,7 @@
     * [熔断](rong-duan.md)
     * [流量镜像](liu-liang-jing-xiang.md)
     * [bookinfo示例部署](istio-08lts/bookinfoshi-li-bu-shu.md)
+    * [istio 0.8部署](istio-08bu-shu.md)
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
