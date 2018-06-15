@@ -22,7 +22,6 @@ spec:
         ports:
         - containerPort: 8080
 EOF
-
 ```
 
 httpbin-V2：
@@ -49,7 +48,6 @@ spec:
         ports:
         - containerPort: 8080
 EOF
-
 ```
 
 httpbin service
@@ -69,7 +67,6 @@ spec:
   selector:
     app: httpbin
 EOF
-
 ```
 
 ### 创建默认路由策略 {#creating-default-routing-policy}
@@ -106,7 +103,6 @@ spec:
     labels:
       version: v2
 EOF
-
 ```
 
 现在所有的流量都应该`httpbin v1`服务。我们尝试发送一些流量：
@@ -128,7 +124,7 @@ $ kubectl exec -it $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/heade
 }
 ```
 
-如果我们检查日志`v1`和`v2`我们的`httpbin `pod，我们应该只看到访问日志条目`v1`：
+如果我们检查日志`v1`和`v2`我们的`httpbin`pod，我们应该只看到访问日志条目`v1`：
 
 ```bash
 $ export V1_POD=$(kubectl get pod -l app=httpbin,version=v1 -o jsonpath={.items..metadata.name})
@@ -163,7 +159,6 @@ spec:
       host: httpbin
       subset: v2
 EOF
-
 ```
 
 此路线规则指定我们将100％的流量路由到v1。最后一节指定我们想镜像到`httpbin v2`服务。当流量被镜像时，请求将被发送到镜像服务，其主机/权限标头附加-shadow。例如，cluster-1成为cluster-1-shadow。
@@ -172,7 +167,6 @@ EOF
 
 ```
 $ kubectl exec -it $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' | python -m json.tool
-
 ```
 
 我们应该看到访问日志记录为`v1`和`v2`。创建的访问日志`v2`是实际要发送的请求`v1`的镜像。
