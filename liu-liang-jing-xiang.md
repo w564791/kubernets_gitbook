@@ -182,5 +182,22 @@ $ kubectl logs -f $V2_POD -c httpbin
 127.0.0.1 - - [07/Mar/2018:19:26:44 +0000] "GET /headers HTTP/1.1" 200 361 "-" "curl/7.35.0"
 ```
 
+### 清理现场
+
+Remove the rules.
+
+```
+$ istioctl delete virtualservice httpbin
+$ istioctl delete destinationrule httpbin
+```
+
+Shutdown the[httpbin](https://github.com/istio/istio/tree/release-0.8/samples/httpbin)service and client.
+
+```
+$ kubectl delete deploy httpbin-v1 httpbin-v2 sleep
+
+$ kubectl delete svc httpbin
+```
+
 
 
