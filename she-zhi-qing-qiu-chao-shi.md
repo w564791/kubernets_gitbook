@@ -77,3 +77,14 @@ EOF
 
 您发现Bookinfo产品页面（调用`reviews`服务来填充页面）而不显示评论，显示消息：_Sorry, product reviews are currently unavailable for this book_。这是它从reviews服务收到超时错误的结果。
 
+### 清理现场
+
+Remove the application routing rules.
+
+```
+istioctl delete -f samples/bookinfo/routing/route-rule-all-v1.yaml
+
+```
+
+
+
