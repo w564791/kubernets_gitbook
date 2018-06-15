@@ -165,5 +165,17 @@ spec:
 EOF
 ```
 
+### 清理现场
+
+Delete the`Gateway`configuration, the`VirtualService`and the secret, and shutdown the[ httpbin](https://github.com/istio/istio/blob/release-0.8/samples/httpbin) service:
+
+```bash
+istioctl delete gateway httpbin-gateway
+istioctl delete virtualservice httpbin
+kubectl delete --ignore-not-found=true -n istio-system secret istio-ingressgateway-certs
+kubectl delete --ignore-not-found=true -f samples/httpbin/httpbin.yaml
+
+```
+
 
 
