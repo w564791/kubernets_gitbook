@@ -94,8 +94,8 @@ Docker Engine 是在 Containerd 之上构建的。下个版本的[Docker CE](htt
 
 Containerd 的[命名空间](https://github.com/containerd/containerd/blob/master/docs/namespaces.md)机制，让 Kubelet 和 Docker Engine 之间无法互相访问对方的容器和镜像。这样就保证了他们无法互相影响，这样的后果：
 
-*   用 docker ps 命令无法看到 Kubernetes 创建的容器；而应该使用 crictl ps。反之亦然，用 crictl ps 也是无法看到 Docker CLI 创建的容器。crictl create 以及 crictl runp 命令只用于出错。不推荐在生产节点上手动使用 crictl 启动 Pod 或者容器。
-*   docker images 不会看到 Kubernetes 拉回的镜像。同样需要使用 crictl images 命令。反过来用 docker pull、docker load 或者 docker build 生成的镜像，Kubernetes 也是无法看到的。可以使用 crictl pull 命令来替代，可以使用 \[ctr\]\([https://github.com/containerd/containerd/blob/master/docs/man/ctr.1.md](https://github.com/containerd/containerd/blob/master/docs/man/ctr.1.md)\) cri load 来载入镜像。
+* 用 docker ps 命令无法看到 Kubernetes 创建的容器；而应该使用 crictl ps。反之亦然，用 crictl ps 也是无法看到 Docker CLI 创建的容器。crictl create 以及 crictl runp 命令只用于出错。不推荐在生产节点上手动使用 crictl 启动 Pod 或者容器。
+* docker images 不会看到 Kubernetes 拉回的镜像。同样需要使用 crictl images 命令。反过来用 docker pull、docker load 或者 docker build 生成的镜像，Kubernetes 也是无法看到的。可以使用 crictl pull 命令来替代，可以使用 \[ctr\]\([https://github.com/containerd/containerd/blob/master/docs/man/ctr.1.md](https://github.com/containerd/containerd/blob/master/docs/man/ctr.1.md)\) cri load 来载入镜像。
 
 ## 总结 {#总结}
 
