@@ -94,5 +94,18 @@ Docker Engine 是在 Containerd 之上构建的。下个版本的[Docker CE](htt
 
 Containerd 的[命名空间](https://github.com/containerd/containerd/blob/master/docs/namespaces.md)机制，让 Kubelet 和 Docker Engine 之间无法互相访问对方的容器和镜像。这样就保证了他们无法互相影响，这样的后果：
 
+*   用 docker ps 命令无法看到 Kubernetes 创建的容器；而应该使用 crictl ps。反之亦然，用 crictl ps 也是无法看到 Docker CLI 创建的容器。crictl create 以及 crictl runp 命令只用于出错。不推荐在生产节点上手动使用 crictl 启动 Pod 或者容器。
+*   docker images 不会看到 Kubernetes 拉回的镜像。同样需要使用 crictl images 命令。反过来用 docker pull、docker load 或者 docker build 生成的镜像，Kubernetes 也是无法看到的。可以使用 crictl pull 命令来替代，可以使用 \[ctr\]\([https://github.com/containerd/containerd/blob/master/docs/man/ctr.1.md](https://github.com/containerd/containerd/blob/master/docs/man/ctr.1.md)\) cri load 来载入镜像。
+
+## 总结 {#总结}
+
+* Containerd 1.1 天然支持 CRI，可以直接给 Kubernetes 使用。
+* Containerd 1.1 满足生产要求。
+* Containerd 1.1 在 Pod 启动延迟和系统资源占用方面具有良好的性能表现。
+* `crictl`是用于和 Containerd 1.1 以及其他 cri 兼容的容器运行时进行操作和节点除错的 CLI 工具。
+* 下一个 Docker CE 版本会包含 Containerd 1.1。用户有选择继续使用 Docker 来满足 Kubernetes 之外的容器需求，同时让 Kubernetes 使用来自 Docker 的同样的底层容器运行时。
+
+
+
 
 
