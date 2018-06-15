@@ -101,10 +101,17 @@ spec:
       tls:
         mode: SIMPLE # initiates HTTPS when accessing edition.cnn.com
 EOF
-
 ```
 
-这次我们收到_200 OK_作为第一个也是唯一的回应。Istio执行了TLS发起，`curl`因此原始HTTP请求以HTTPS的形式被转发到_cnn.com_。_cnn.com_的服务器直接返回内容，无需重定向。我们避免了客户端和服务器之间的双向往返，并且请求保留了网格的加密
+这次我们收到_200 OK_作为第一个也是唯一的回应。Istio执行了TLS发起，`curl`因此原始HTTP请求以HTTPS的形式被转发到_cnn.com_。_cnn.com_的服务器直接返回内容，无需重定向。我们避免了客户端和服务器之间的双向往返，并且请求保留了网格的加密。
 
-。
+### 清理现场
+
+Remove the`ServiceEntry`we created.
+
+```
+$ istioctl delete serviceentry wikipedia-ext
+```
+
+
 
