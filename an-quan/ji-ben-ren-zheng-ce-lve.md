@@ -356,7 +356,7 @@ sleep.legacy to httpbin.foo  code:  200
 sleep.legacy to httpbin.bar  code:  200
 ```
 
-清理现场:
+### 清理现场:
 
 ```
 istioctl delete policy -n foo example-1 example-3
