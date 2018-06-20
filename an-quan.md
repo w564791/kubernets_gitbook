@@ -257,7 +257,6 @@ spec:
   peers:
   - mtls:
 EOF
-
 ```
 
 校验结果: 所有到达httpbin.bar的请求都失败
@@ -315,7 +314,6 @@ spec:
   targets:
   - name: httpbin
 EOF
-
 ```
 
 校验请求: 此时没有sidecar的sleep.legacy可以正常请求httbin.foo,但是具有sidecar的pod,无法成功请求到httpbin.foo
@@ -328,7 +326,6 @@ sleep.bar to httpbin.foo  code:  503
 sleep.bar to httpbin.bar  code:  200
 sleep.legacy to httpbin.foo  code:  200
 sleep.legacy to httpbin.bar  code:  200
-
 ```
 
 创建目标规则,禁用服务级别的TLS
@@ -345,7 +342,6 @@ spec:
     tls:
       mode: DISABLE
 EOF
-
 ```
 
 校验请求: 所有pod均成功返回,可以看到svc级别的策略否决了命名空间级别策略
@@ -358,6 +354,13 @@ sleep.bar to httpbin.foo  code:  200
 sleep.bar to httpbin.bar  code:  200
 sleep.legacy to httpbin.foo  code:  200
 sleep.legacy to httpbin.bar  code:  200
+```
+
+清理现场:
+
+```
+istioctl delete policy -n foo example-1 example-3
+istioctl delete destinationrule -n foo example-1 example-3
 ```
 
 
