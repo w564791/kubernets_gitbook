@@ -110,8 +110,6 @@ spec:
 
 pod 需要调度到某个 zone（通过 failure-domain.beta.kubernetes.io/zone指定），这个 zone 必须有一个节点上运行了这样的 pod：这个 pod 有 security:S1 label。互斥性保证节点最好不要调度到这样的节点，这个节点上运行了某个 pod，而且这个 pod 有 security:S2 label。
 
-
-
 * pod的亲和性操作符也包含In NotIn,Exists,DoesNoExist,Gt,Lt
 * 在pod亲和性和RequiredDuringScheduling互斥性的定义中,不允许使用空的topologyKey
 * 如果在Admission control里定义了包含LimitPodHardAntiAffinityTopology,那么针对RequiredDuringScheduling的Pod互斥性定义就被限制为kubernetes.io/hostname
@@ -192,4 +190,36 @@ tolerations:
 ```
 
 上述定义的意思是,如果pod正在运行,所在节点被加入一个匹配的Taint,则这个Pod会持续在这个节点上存活3600秒,然后被驱逐,如果在这个宽限期内,Taint被移除,那么不会触发驱逐事件
+
+## 示例
+
+```
+spec:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+             labelSelector:
+                matchExpressions:
+                - key: name
+                  operator: In
+                  values:
+                  - jenkins-slave
+             topologyKey: kubernetes.io/hostname
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 2
+          preference:
+            matchExpressions:
+            - key: jenkins-slave
+              operator: In
+              values:
+              - scheduler
+```
+
+* 非强制不调度到包含name=jenkins-slave的pod的节点上
+* 非强制调度到jenkins-slave=scheduler的节点上
+
+
 
