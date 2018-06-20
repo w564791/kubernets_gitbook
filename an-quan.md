@@ -13,7 +13,6 @@ kubectl apply -f <(istioctl kube-inject -f samples/httpbin/httpbin.yaml) -n bar
 kubectl apply -f <(istioctl kube-inject -f samples/sleep/sleep.yaml) -n bar
 kubectl create ns legacy
 kubectl apply -f samples/sleep/sleep.yaml -n legacy
-
 ```
 
 * 通过使用curl命令检验设定`foo`，`bar`或`legacy`），所有请求都应该返回HTTP代码200。
@@ -35,7 +34,6 @@ sleep.bar to httpbin.foo: 200
 sleep.bar to httpbin.bar: 200
 sleep.legacy to httpbin.foo: 200
 sleep.legacy to httpbin.bar: 200
-
 ```
 
 同时确认系统中没有认证策略
@@ -43,7 +41,6 @@ sleep.legacy to httpbin.bar: 200
 ```
 # kubectl get policies.authentication.istio.io --all-namespaces
 No resources found.
-
 ```
 
 ## 为命名空间中的所有服务启用相互TLS {#enable-mutual-tls-for-all-services-in-a-namespace}
@@ -74,7 +71,6 @@ sleep.bar to httpbin.bar: 200
 sleep.legacy to httpbin.foo: 000
 command terminated with exit code 56
 sleep.legacy to httpbin.bar: 200
-
 ```
 
 添加目标规则以将客户端配置为使用MUTUAL\_TLS：
@@ -92,7 +88,6 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 EOF
-
 ```
 
 校验请求,此时拥有部署有sidecar的应用,能够正常请求foo命名空间的应用,而部署时没有部署sidecar的应用sleep.legacy不可访问foo命名空间的应用
@@ -106,7 +101,6 @@ sleep.bar to httpbin.bar: 200
 sleep.legacy to httpbin.foo: 000
 command terminated with exit code 56
 sleep.legacy to httpbin.bar: 200
-
 ```
 
 * 假设当前系统中可没有其他DestinationRule规则,\*`*.foo.svc.cluster.local`匹配foo命名空间中的所有服务,
@@ -134,7 +128,6 @@ spec:
   peers:
   - mtls:
 EOF
-
 ```
 
 校验请求:此时拥有sidecar的应用均不可请求到httpbin.bar,包括不具有sidecar的应用sleep.legacy也不可请求到httpbin.bar
@@ -148,7 +141,6 @@ sleep.bar to httpbin.bar: 503
 sleep.legacy to httpbin.foo: 200
 sleep.legacy to httpbin.bar: 000
 command terminated with exit code 56
-
 ```
 
 添加MUTUAL\_TLS 目标规则
@@ -165,7 +157,6 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 EOF
-
 ```
 
 校验请求:此时拥有sidecar的应用可请求到httpbin.bar,但不具有sidecar的应用sleep.legacy不可请求到httpbin.bar
@@ -179,6 +170,72 @@ sleep.bar to httpbin.bar: 200
 sleep.legacy to httpbin.foo: 200
 sleep.legacy to httpbin.bar: 000
 command terminated with exit code 56
+```
+
+如果我们在bar命名空间有其他的服务,那么其他服务是不会受到影响的,这里把tls修改到123端口,8000端口不启用tls认证
+
+```
+cat <<EOF | istioctl replace -n bar -f -
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "example-2"
+spec:
+  targets:
+  - name: httpbin
+    ports:
+    - number: 1234
+  peers:
+  - mtls:
+EOF
+
+```
+
+校验请求:此时在8000端口上,已经取消了tls认证,但是DestinationRule依旧存在,所有来自有sidecar的应用无法请求成功,但是没有sidecar的应用sleep.legacy能正常请求.
+
+```
+
+root@128:/home/kinglong/istio/tsl# for from in "foo" "bar" "legacy"; do for to in "foo" "bar"; do kubectl exec $(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name}) -c sleep -n ${from} -- curl http://httpbin.${to}:8000/ip -s -o /dev/null -w "sleep.${from} to httpbin.${to}: %{http_code}\n"; done; done
+sleep.foo to httpbin.foo: 200
+sleep.foo to httpbin.bar: 503
+sleep.bar to httpbin.foo: 200
+sleep.bar to httpbin.bar: 503
+sleep.legacy to httpbin.foo: 200
+sleep.legacy to httpbin.bar: 200
+```
+
+修改DestinationRule到1234端口
+
+```
+cat <<EOF | istioctl replace -n bar -f -
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "example-2"
+spec:
+  host: httpbin.bar.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+    portLevelSettings:
+    - port:
+        number: 1234
+      tls:
+        mode: ISTIO_MUTUAL
+EOF
+
+```
+
+校验请求:可以看到请求8000端口都能成功,TLS认证已经修改为1234端口
+
+```
+# for from in "foo" "bar" "legacy"; do for to in "foo" "bar"; do kubectl exec $(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name}) -c sleep -n ${from} -- curl http://httpbin.${to}:8000/ip -s -o /dev/null -w "sleep.${from} to httpbin.${to}: %{http_code}\n"; done; done
+sleep.foo to httpbin.foo: 200
+sleep.foo to httpbin.bar: 200
+sleep.bar to httpbin.foo: 200
+sleep.bar to httpbin.bar: 200
+sleep.legacy to httpbin.foo: 200
+sleep.legacy to httpbin.bar: 200
 
 ```
 
