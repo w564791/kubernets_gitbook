@@ -105,7 +105,7 @@ sleep.legacy to httpbin.bar: 200
 
 * 假设当前系统中可没有其他DestinationRule规则,\*`*.foo.svc.cluster.local`匹配foo命名空间中的所有服务,
 
-清理现场
+### 清理现场
 
 ```
 istioctl delete DestinationRule example-1 -n foo
@@ -188,13 +188,11 @@ spec:
   peers:
   - mtls:
 EOF
-
 ```
 
 校验请求:此时在8000端口上,已经取消了tls认证,但是DestinationRule依旧存在,所有来自有sidecar的应用无法请求成功,但是没有sidecar的应用sleep.legacy能正常请求.
 
 ```
-
 root@128:/home/kinglong/istio/tsl# for from in "foo" "bar" "legacy"; do for to in "foo" "bar"; do kubectl exec $(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name}) -c sleep -n ${from} -- curl http://httpbin.${to}:8000/ip -s -o /dev/null -w "sleep.${from} to httpbin.${to}: %{http_code}\n"; done; done
 sleep.foo to httpbin.foo: 200
 sleep.foo to httpbin.bar: 503
@@ -223,7 +221,6 @@ spec:
       tls:
         mode: ISTIO_MUTUAL
 EOF
-
 ```
 
 校验请求:可以看到请求8000端口都能成功,TLS认证已经修改为1234端口
@@ -236,7 +233,131 @@ sleep.bar to httpbin.foo: 200
 sleep.bar to httpbin.bar: 200
 sleep.legacy to httpbin.foo: 200
 sleep.legacy to httpbin.bar: 200
+```
 
+### 清理现场
+
+```
+istioctl delete destinationrule -n bar example-2
+istioctl delete policy -n bar example-2
+```
+
+## 具有命名空间以及svc级别的策略
+
+假设我们已经在foo命名空间添加了命名空间级别的策略.
+
+```
+cat <<EOF | istioctl create -f -
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "example-1"
+  namespace: "foo"
+spec:
+  peers:
+  - mtls:
+EOF
+
+```
+
+校验结果: 所有到达httpbin.bar的请求都失败
+
+```
+# for from in "foo" "bar" "legacy"; do for to in "foo" "bar"; do kubectl exec $(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name}) -c sleep -n ${from} -- curl http://httpbin.${to}:8000/ip -s -o /dev/null -w "sleep.${from} to httpbin.${to}: %{http_code}\n"; done; done
+sleep.foo to httpbin.foo: 503
+sleep.foo to httpbin.bar: 200
+sleep.bar to httpbin.foo: 503
+sleep.bar to httpbin.bar: 200
+sleep.legacy to httpbin.foo: 000
+command terminated with exit code 56
+sleep.legacy to httpbin.bar: 200
+```
+
+为命名空间配置MUTUAL\_TLS:
+
+```
+cat <<EOF | istioctl create -f -
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "example-1"
+  namespace: "foo"
+spec:
+  host: "*.foo.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+EOF
+```
+
+校验请求
+
+```
+# for from in "foo" "bar" "legacy"; do for to in "foo" "bar"; do kubectl exec $(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name}) -c sleep -n ${from} -- curl http://httpbin.${to}:8000/ip -s -o /dev/null -w "sleep.${from} to httpbin.${to}  code:  %{http_code}\n"; done; done
+sleep.foo to httpbin.foo  code:  200
+sleep.foo to httpbin.bar  code:  200
+sleep.bar to httpbin.foo  code:  200
+sleep.bar to httpbin.bar  code:  200
+sleep.legacy to httpbin.foo  code:  000
+command terminated with exit code 56
+sleep.legacy to httpbin.bar  code:  200
+```
+
+添加另外一个策略禁用MUTUAL\_TLS,对等部分为空
+
+```
+cat <<EOF | istioctl create -n foo -f -
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "example-3"
+spec:
+  targets:
+  - name: httpbin
+EOF
+
+```
+
+校验请求: 此时没有sidecar的sleep.legacy可以正常请求httbin.foo,但是具有sidecar的pod,无法成功请求到httpbin.foo
+
+```
+# for from in "foo" "bar" "legacy"; do for to in "foo" "bar"; do kubectl exec $(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name}) -c sleep -n ${from} -- curl http://httpbin.${to}:8000/ip -s -o /dev/null -w "sleep.${from} to httpbin.${to}  code:  %{http_code}\n"; done; done
+sleep.foo to httpbin.foo  code:  503
+sleep.foo to httpbin.bar  code:  200
+sleep.bar to httpbin.foo  code:  503
+sleep.bar to httpbin.bar  code:  200
+sleep.legacy to httpbin.foo  code:  200
+sleep.legacy to httpbin.bar  code:  200
+
+```
+
+创建目标规则,禁用服务级别的TLS
+
+```
+cat <<EOF | istioctl create -n foo -f -
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "example-3"
+spec:
+  host: httpbin.foo.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+EOF
+
+```
+
+校验请求: 所有pod均成功返回,可以看到svc级别的策略否决了命名空间级别策略
+
+```
+# for from in "foo" "bar" "legacy"; do for to in "foo" "bar"; do kubectl exec $(kubectl get pod -l app=sleep -n ${from} -o jsonpath={.items..metadata.name}) -c sleep -n ${from} -- curl http://httpbin.${to}:8000/ip -s -o /dev/null -w "sleep.${from} to httpbin.${to}  code:  %{http_code}\n"; done; done
+sleep.foo to httpbin.foo  code:  200
+sleep.foo to httpbin.bar  code:  200
+sleep.bar to httpbin.foo  code:  200
+sleep.bar to httpbin.bar  code:  200
+sleep.legacy to httpbin.foo  code:  200
+sleep.legacy to httpbin.bar  code:  200
 ```
 
 
