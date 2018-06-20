@@ -2,8 +2,6 @@ containerd 下载地址 [https://github.com/containerd/containerd/releases/downl
 
 `crictl`工具下载地址: [https://github.com/kubernetes-incubator/cri-tools/releases/download/v1.0.0-beta.1/crictl-v1.0.0-beta.1-linux-amd64.tar.gz](https://github.com/kubernetes-incubator/cri-tools/releases/download/v1.0.0-beta.1/crictl-v1.0.0-beta.1-linux-amd64.tar.gz)
 
-
-
 kubelet配置
 
 ```
@@ -40,7 +38,6 @@ ExecStart=/bin/kubelet \
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
-
 ```
 
 containerd配置
@@ -48,8 +45,16 @@ containerd配置
 生成默认配置
 
 ```
-# containerd config default > /etc/containerd/config.toml 
+# containerd config default > /etc/containerd/config.toml
 ```
+
+修改默认配置文件:
+
+```
+sandbox_image = "docker.io/w564791/pause:3.1"
+```
+
+* containerd默认是去Google仓库拉镜像,所以在使用时,最后加上镜像仓库地址
 
 containerd.service配置
 
@@ -62,9 +67,9 @@ ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) /usr/local/bin/containerd"
 Restart=always
 [Install]
 WantedBy=multi-user.target
-
-
 ```
 
+使用crictl 命令
 
+![](/assets/crictlimport.png)![](/assets/imagesimport.png)
 
