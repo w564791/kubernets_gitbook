@@ -27,5 +27,5 @@ $ kubectl create ns istio-system
 $ kubectl apply -n istio-system -f istio.yaml
 ```
 
-当命名空间有istio-injection=enabled的label的时候,部署项目时会自动注入sidecar,删除label时,自动注入sidecar失效,正在运行的项目且部署有sidecar,不会重建.
+当命名空间有istio-injection=enabled的label的时候,部署项目时会自动注入sidecar,删除label时,自动注入sidecar失效,正在运行的项目且部署有sidecar,不会重建,pod重启时,会自动剔除sidecar
 
