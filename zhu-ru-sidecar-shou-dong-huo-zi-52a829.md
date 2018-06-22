@@ -1,6 +1,6 @@
 ### 手动注入
 
-手动注入sidecar,主要有2种方式,默认的是从configMap种拉去配置,`injectConfig: istio-sidecar-injector`以及`meshConfig: istio`
+手动注入sidecar,主要有2种方式,默认的是从configMap种拉取配置,`injectConfig: istio-sidecar-injector`以及`meshConfig: istio`
 
 当然也可以从文件中读取配置,从configMap中拉去配置并保存在文件中
 
@@ -27,5 +27,5 @@ $ kubectl create ns istio-system
 $ kubectl apply -n istio-system -f istio.yaml
 ```
 
-当命名空间有istio-injection=enabled的label的时候,部署项目时会自动注入sidecar,删除label时,自动注入sidecar失效,正在运行的项目且部署有sidecar,不会重建,pod重启时,会自动剔除sidecar
+当命名空间有istio-injection=enabled的label的时候,部署项目时会自动注入sidecar,删除label时,自动注入sidecar失效,正在运行的项目且部署有sidecar,不会重建.
 
