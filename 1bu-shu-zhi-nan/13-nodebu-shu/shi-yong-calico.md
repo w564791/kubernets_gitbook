@@ -76,13 +76,11 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
     ---
     ..........
           containers:
-            # Runs calico
-    ode container on each Kubernetes node.  This
+            # Runs calico/node container on each Kubernetes node.  This
             # container programs network policy and routes on each
             # host.
             - name: calico-node
-              image: quay.io/calico
-    ode:v3.0.4
+              image: quay.io/calico/node:v3.0.4
               env:
                 # The location of the Calico etcd cluster.
                 - name: ETCD_ENDPOINTS
