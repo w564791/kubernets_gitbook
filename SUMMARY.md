@@ -59,6 +59,7 @@
     * [安全](an-quan.md)
       * [基本认证策略](an-quan/ji-ben-ren-zheng-ce-lve.md)
     * 安全
+    * bookinfo示例deploy
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
