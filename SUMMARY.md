@@ -58,7 +58,6 @@
     * [流量镜像](liu-liang-jing-xiang.md)
     * [安全](an-quan.md)
       * [基本认证策略](an-quan/ji-ben-ren-zheng-ce-lve.md)
-    * 安全
     * [bookinfo示例deploy](bookinfoshi-li-deploy.md)
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
