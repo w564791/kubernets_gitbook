@@ -37,6 +37,7 @@
     * [注册node](1bu-shu-zhi-nan/13-nodebu-shu/zhu-cenode.md)
     * [containerd使用记录](1bu-shu-zhi-nan/13-nodebu-shu/containerdshi-yong-ji-lu.md)
       * [部署containerd 1.1](1bu-shu-zhi-nan/13-nodebu-shu/containerdshi-yong-ji-lu/bu-shu.md)
+    * [使用calico cni](1bu-shu-zhi-nan/13-nodebu-shu/shi-yong-calico.md)
   * [kube-dns部署](1bu-shu-zhi-nan/14-kube-dnsbu-shu.md)
   * [dashboard部署](1bu-shu-zhi-nan/15-dashboardbu-shu.md)
   * [heapster插件部署](1bu-shu-zhi-nan/heapstercha-jian-bu-shu.md)
