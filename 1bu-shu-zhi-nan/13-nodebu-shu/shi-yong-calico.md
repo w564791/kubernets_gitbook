@@ -29,8 +29,7 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
     # Calico Version v3.0.4
     # https://docs.projectcalico.org/v3.0/releases#v3.0.4
     # This manifest includes the following component versions:
-    #   calico
-    ode:v3.0.4
+    #   calico/node:v3.0.4
     #   calico/cni:v2.0.3
     #   calico/kube-controllers:v2.0.2
 
