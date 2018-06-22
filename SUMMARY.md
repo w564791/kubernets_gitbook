@@ -47,6 +47,7 @@
   * [kubernetes 亲和性调度](1bu-shu-zhi-nan/kubernetes-qin-he-xing-diao-du.md)
   * [RBAC](1bu-shu-zhi-nan/rbac.md)
   * [istio 0.8\(LTS\)](istio-08lts.md)
+    * [注入sidecar\(手动或自动\)](zhu-ru-sidecar-shou-dong-huo-zi-52a829.md)
     * [使用HTTP延迟注入故障](gateway.md)
     * [使用HTTP终止注入故障](istio-08lts/shi-yong-http-zhong-zhi-zhu-ru-gu-zhang.md)
     * [设置请求超时](she-zhi-qing-qiu-chao-shi.md)
