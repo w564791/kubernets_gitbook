@@ -121,11 +121,11 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
 # kubectl create -f  calico.yaml
 ```
 
-![](blob:https://legacy.gitbook.com/d70e7dae-7244-48d6-bd41-48278cb09fbe)
+![](/assets/calico-deploy.png)
 
 本例使用了aws云服务器，跨区域容灾，除了以上文档，还需要做额外配置。官方说明如下
 
-![](blob:https://legacy.gitbook.com/5f487941-1774-446d-8c2c-3772775d6b50)操作方法如下：
+![](/assets/aws-calico.png)操作方法如下：
 
 1.删除已经存在的IP池（命令行工具需要额外下载）
 
@@ -157,13 +157,13 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
 # kubectl run nginx --image=nginx --replicas=2
 ```
 
-![](blob:https://legacy.gitbook.com/91d534b8-4823-4829-938b-d5304dea3d25)ping测试
+![](/assets/nginx-deploy.png)ping测试
 
-![](blob:https://legacy.gitbook.com/fb51e4dc-db03-41c2-9d56-0717006466be)
+![](/assets/calico-ping-test.png)
 
 查看节点路由
 
-![](blob:https://legacy.gitbook.com/4934e1f3-3151-4a6f-bcf7-70011f28fc5c)
+![](/assets/calico-ip-route.png)
 
 ## [Custom Installation](https://legacy.gitbook.com/book/w564791/kubernetes_gitbook/edit#)
 
