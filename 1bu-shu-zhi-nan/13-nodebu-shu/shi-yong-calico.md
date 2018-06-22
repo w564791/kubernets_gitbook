@@ -133,10 +133,7 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
 2.新建IP池
 
 ```
-# ./calicoctl apply -f - 
-<
-<
- EOF
+# ./calicoctl apply -f - <<  EOF
    apiVersion: projectcalico.org/v3
    kind: IPPool
    metadata:
