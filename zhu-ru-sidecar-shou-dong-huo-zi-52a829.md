@@ -9,7 +9,7 @@ kubectl -n istio-system get configmap istio-sidecar-injector -o=jsonpath='{.data
 kubectl -n istio-system get configmap istio -o=jsonpath='{.data.mesh}' > mesh-config.yaml
 ```
 
-使用配置文件创建项目
+修改后使用配置文件创建项目
 
 ```
 istioctl kube-inject \
