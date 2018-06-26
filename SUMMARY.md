@@ -56,10 +56,10 @@
     * [控制出口tcp流量](kong-zhi-chu-kou-tcp-liu-liang.md)
     * [熔断](rong-duan.md)
     * [流量镜像](liu-liang-jing-xiang.md)
+    * basic-acess-control
     * [安全](an-quan.md)
       * [基本认证策略](an-quan/ji-ben-ren-zheng-ce-lve.md)
     * [bookinfo示例deploy](bookinfoshi-li-deploy.md)
-    * basic-acess-control
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
