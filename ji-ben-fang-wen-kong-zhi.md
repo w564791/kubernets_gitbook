@@ -72,5 +72,14 @@ spec:
 EOF
 ```
 
+注意如下匹配规则
 
+```
+match: destination.labels["app"] == "ratings" && source.labels["app"]=="reviews" && source.labels["version"] == "v3"
+
+```
+
+他将拒绝来自app=reviews并且version=v3,目标是app=ratings的请求
+
+刷新productpage,如果以jason用户登录,可以看到黑星评价,如果用其他用户登录或者不等于,将不能看到评价
 
