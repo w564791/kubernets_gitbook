@@ -39,11 +39,43 @@ EOF
 
 ### 使用拒绝服务
 
-```
+实现目标:
+
+* 切断对reviews的v3版本的请求
 
 ```
+cat <<EOF | istioctl create -f -
+apiVersion: "config.istio.io/v1alpha2"
+kind: denier
+metadata:
+  name: denyreviewsv3handler
+spec:
+  status:
+    code: 7
+    message: Not allowed
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: checknothing
+metadata:
+  name: denyreviewsv3request
+spec:
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: denyreviewsv3
+spec:
+  match: destination.labels["app"] == "ratings" && source.labels["app"]=="reviews" && source.labels["version"] == "v3"
+  actions:
+  - handler: denyreviewsv3handler.denier
+    instances: [ denyreviewsv3request.checknothing ]
+EOF
+```
+
+注意一下match规则,他将拒绝来自reviews具有v3标签对ratings的请求
 
 ```
+match: destination.labels["app"] == "ratings" && source.labels["app"]=="reviews" && source.labels["version"] == "v3"
 
 ```
 
