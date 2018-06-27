@@ -113,5 +113,23 @@ spec:
 EOF
 ```
 
+* 此时除非以jason用户登录,能看到黑星评价意外,其他都只能看到红星评价,执行一下步骤以后,除非以jason用户登录,否则不能看到星级评价
+
+1. 创建listchecker
+
+```
+cat <<EOF | istioctl delete -f -
+apiVersion: config.istio.io/v1alpha2
+kind: listchecker
+metadata:
+  name: whitelist
+spec:
+  # providerUrl: ordinarily black and white lists are maintained
+  # externally and fetched asynchronously using the providerUrl.
+  overrides: ["v1", "v2"]  # overrides provide a static list
+  blacklist: false
+EOF
+```
+
 
 
