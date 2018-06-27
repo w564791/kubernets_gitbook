@@ -57,6 +57,7 @@
     * [熔断](rong-duan.md)
     * [流量镜像](liu-liang-jing-xiang.md)
     * [basic-acess-control](basic-acess-control.md)
+    * [安全请求控制](an-quan-qing-qiu-kong-zhi.md)
     * [安全](an-quan.md)
       * [基本认证策略](an-quan/ji-ben-ren-zheng-ce-lve.md)
     * [bookinfo示例deploy](bookinfoshi-li-deploy.md)
