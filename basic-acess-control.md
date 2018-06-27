@@ -144,5 +144,22 @@ spec:
 EOF
 ```
 
+3.启用whitelist检查ratings微服务
+
+```
+cat <<EOF | istioctl delete -f -
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: checkversion
+spec:
+  match: destination.labels["app"] == "ratings"
+  actions:
+  - handler: whitelist.listchecker
+    instances:
+    - appversion.listentry
+EOF
+```
+
 
 
