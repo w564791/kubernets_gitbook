@@ -1,6 +1,6 @@
 ### 在开始之前
 
-* 需要正确部署istio
+* 需要正确部署istio\(noauth\)
 * 部署[bookinfo](https://istio.io/docs/guides/bookinfo/)示例程序
 * 启用mtls
 * 运行一下命令创建sa,并且重新部署productpage
