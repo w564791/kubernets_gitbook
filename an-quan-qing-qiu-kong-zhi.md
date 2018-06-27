@@ -6,7 +6,6 @@
 
 ```
 kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo-add-serviceaccount.yaml)
-
 ```
 
 ### 使用拒绝访问控制
@@ -15,7 +14,45 @@ kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo-add-se
 
 * details服务拒绝来自productpage的请求
 
+1.当前请求productpage,可以看到左下角图书详细部分,改部分由details服务提供
 
+2.明确拒绝从productpage请求到details
+
+```
+cat <<EOF | istioctl create -f -
+apiVersion: "config.istio.io/v1alpha2"
+kind: denier
+metadata:
+  name: denyproductpagehandler
+spec:
+  status:
+    code: 7
+    message: Not allowed
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: checknothing
+metadata:
+  name: denyproductpagerequest
+spec:
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: denyproductpage
+spec:
+  match: destination.labels["app"] == "details" && source.user == "cluster.local/ns/default/sa/bookinfo-productpage"
+  actions:
+  - handler: denyproductpagehandler.denier
+    instances: [ denyproductpagerequest.checknothing ]
+EOF
+```
+
+注意以下match规则,它将匹配来自cluster.local/ns/default/sa/bookinfo-productpage的sa服务的请求,如果ns不是default,请替换source.user中的default字段
+
+```
+match: destination.labels["app"] == "details" && source.user == "cluster.local/ns/default/sa/bookinfo-productpage"
+
+```
 
 
 
