@@ -118,7 +118,7 @@ EOF
 1.配置adapter
 
 ```
-cat <<EOF | istioctl delete -f -
+cat <<EOF | istioctl create -f -
 apiVersion: config.istio.io/v1alpha2
 kind: listchecker
 metadata:
@@ -134,7 +134,7 @@ EOF
 2.创建listentry提取version标签
 
 ```
-cat <<EOF | istioctl delete -f -
+cat <<EOF | istioctl create -f -
 apiVersion: config.istio.io/v1alpha2
 kind: listentry
 metadata:
@@ -147,7 +147,7 @@ EOF
 3.启用whitelist检查ratings微服务
 
 ```
-cat <<EOF | istioctl delete -f -
+cat <<EOF | istioctl create -f -
 apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:
