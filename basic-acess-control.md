@@ -165,5 +165,11 @@ EOF
 
 ### 清理现场
 
+```
+# kubectl delete appversion appversion
+# kubectl  delete rule checkversion
+# kubectl delete listchecker whitelist
+```
+
 
 
