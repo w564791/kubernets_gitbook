@@ -51,8 +51,7 @@ EOF
 
 ```
 match: destination.labels["app"] == "details" && source.user == "cluster.local/ns/default/sa/bookinfo-productpage"
-
 ```
 
-
+刷新productpage页面,你会看到这个消息在页面的左下部分,"",这证实从productpage到details的请求被拒绝.
 
