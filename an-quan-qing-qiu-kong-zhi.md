@@ -88,6 +88,37 @@ match: destination.labels["app"] == "details" && source.user == "cluster.local/n
 
 刷新productpage页面,你会看到这个消息在页面的左下部分,"",这证实从productpage到details的请求被拒绝.
 
+### 清理现场
+
+```
+cat <<EOF | istioctl delete -f -
+apiVersion: "config.istio.io/v1alpha2"
+kind: denier
+metadata:
+  name: denyproductpagehandler
+spec:
+  status:
+    code: 7
+    message: Not allowed
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: checknothing
+metadata:
+  name: denyproductpagerequest
+spec:
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: denyproductpage
+spec:
+  match: destination.labels["app"] == "details" && source.user == "cluster.local/ns/default/sa/bookinfo-productpage"
+  actions:
+  - handler: denyproductpagehandler.denier
+    instances: [ denyproductpagerequest.checknothing ]
+EOF
+```
+
 ### 遇到的坑:
 
 如果不启用mtls,将会在`istio-policy`服务中看到如下错误
