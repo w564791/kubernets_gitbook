@@ -88,7 +88,7 @@ match: destination.labels["app"] == "details" && source.user == "cluster.local/n
 
 刷新productpage页面,你会看到这个消息在页面的左下部分,"",这证实从productpage到details的请求被拒绝.
 
-遇到的坑:
+### 遇到的坑:
 
 如果不启用mtls,将会在`istio-policy`服务中看到如下错误
 
