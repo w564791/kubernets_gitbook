@@ -76,7 +76,41 @@ EOF
 
 ```
 match: destination.labels["app"] == "ratings" && source.labels["app"]=="reviews" && source.labels["version"] == "v3"
+```
 
+## 使用_白名单_访问控制 {#access-control-using-whitelists}
+
+开始之前
+
+* 删除上节的denier配置
+
+```
+cat <<EOF | istioctl delete -f -
+apiVersion: "config.istio.io/v1alpha2"
+kind: denier
+metadata:
+  name: denyreviewsv3handler
+spec:
+  status:
+    code: 7
+    message: Not allowed
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: checknothing
+metadata:
+  name: denyreviewsv3request
+spec:
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: denyreviewsv3
+spec:
+  match: destination.labels["app"] == "ratings" && source.labels["app"]=="reviews" && source.labels["version"] == "v3"
+  actions:
+  - handler: denyreviewsv3handler.denier
+    instances: [ denyreviewsv3request.checknothing ]
+EOF
 ```
 
 
