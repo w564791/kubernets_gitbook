@@ -114,5 +114,11 @@ spec:
 EOF
 ```
 
+刷新productpage,可以看到页面正常返回,当以任意用户登录productpage时,此时使用了POST方法,页面返回如下内容
+
+```
+PERMISSION_DENIED:handler.rbac.istio-system:RBAC: permission denied.
+```
+
 
 
