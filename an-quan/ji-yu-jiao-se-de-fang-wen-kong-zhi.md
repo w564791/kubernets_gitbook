@@ -6,7 +6,6 @@
 
 ```
 kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo-add-serviceaccount.yaml)
-
 ```
 
 此时请求productpage,可以看到左下角图书详细信息,以及右边页面的评价信息.
@@ -14,7 +13,7 @@ kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo-add-se
 ## 启用Istio RBAC {#enabling-istio-rbac}
 
 ```
-cat << EOF |istioctl create -f -
+# cat << EOF |istioctl create -f -
 apiVersion: "config.istio.io/v1alpha2"
 kind: authorization
 metadata:
@@ -57,7 +56,6 @@ spec:
     instances:
     - requestcontext.authorization
 EOF
-
 ```
 
 如果你的命名空间不是default,请修改相应的字段
