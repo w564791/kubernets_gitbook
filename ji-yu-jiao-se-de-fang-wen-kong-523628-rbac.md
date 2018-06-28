@@ -155,6 +155,22 @@ spec:
   roleRef:
     kind: ServiceRole
     name: "products-viewer"
+```
+
+在想要公开服务访问的情况下,可以将subject字段的user设置为\*,其将为所有用户以及服务分配这个ServiceRole
+
+```
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRoleBinding
+metadata:
+  name: binding-products-allusers
+  namespace: default
+spec:
+  subjects:
+  - user: "*"
+  roleRef:
+    kind: ServiceRole
+    name: "products-viewer"
 
 ```
 
