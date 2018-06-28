@@ -64,5 +64,37 @@ Istio RBAC 采用`ServiceRole`以及`ServiceRoleBinding,`其类似于kubernetes�
 
 * **paths **HTTP请求列表,匹配"request context"中的`action.path`字段
 
+ServiceRole只适用于在metadata中指定namespace,services和methods是rules的必要字段,path为可选字段,如果没有指派或者设置为\*,那么将指配为"any"
+
+例如,这里有一个例子, servicerole名称为service-admin,其将拥有default命名空间的所有service的完全请求权限
+
+```
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRole
+metadata:
+  name: service-admin
+  namespace: default
+spec:
+  rules:
+  - services: ["*"]
+    methods: ["*"]
+
+```
+
+如下例子,servicerole名称为products-viewer,在default命名空间内,对"products.default.svc.cluster.local"有只读权限\(GET 以及HEAD\)
+
+```
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRole
+metadata:
+  name: products-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["products.default.svc.cluster.local"]
+    methods: ["GET", "HEAD"]
+
+```
+
 
 
