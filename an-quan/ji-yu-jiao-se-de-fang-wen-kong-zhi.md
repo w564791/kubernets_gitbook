@@ -68,5 +68,51 @@ EOF
 PERMISSION_DENIED:handler.rbac.istio-system:RBAC: permission denied.
 ```
 
+## 命名空间级访问控制 {#namespace-level-access-control}
+
+目标:指定命名空间中的所有服务\(或一组服务\),从另一命名空间的服务访问
+
+在bookinfo示例中 productpage,reviews,details,ratings服务部署在default命名空间,ingress部署在istio-system命名空间,所以本利中需要开放default以及istio-system空间的权限
+
+1.创建一个ServiceRole 命名为service-viewer,其对所有服务具有GET权限,但是限制条件为必须具有一定的标签
+
+```
+# cat << EOF |istioctl create -f -
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRole
+metadata:
+  name: service-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["*"]
+    methods: ["GET"]
+    constraints:
+    - key: "app"
+      values: ["productpage", "details", "reviews", "ratings"]
+EOF
+```
+
+2.创建一个ServiceRoleBinding,将service-viewer分配给istio-system和default命名空间中的所有角色
+
+```
+# cat << EOF |istioctl create -f -
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-service-viewer
+  namespace: default
+spec:
+  subjects:
+  - properties:
+      namespace: "istio-system"
+  - properties:
+      namespace: "default"
+  roleRef:
+    kind: ServiceRole
+    name: "service-viewer"
+EOF
+```
+
 
 
