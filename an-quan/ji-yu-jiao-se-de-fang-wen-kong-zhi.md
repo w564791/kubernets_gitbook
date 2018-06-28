@@ -120,5 +120,81 @@ EOF
 PERMISSION_DENIED:handler.rbac.istio-system:RBAC: permission denied.
 ```
 
+### 清理现场
+
+```
+# cat << EOF |istioctl delete -f -
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-service-viewer
+  namespace: default
+spec:
+  subjects:
+  - properties:
+      namespace: "istio-system"
+  - properties:
+      namespace: "default"
+  roleRef:
+    kind: ServiceRole
+    name: "service-viewer"
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRole
+metadata:
+  name: service-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["*"]
+    methods: ["GET"]
+    constraints:
+    - key: "app"
+      values: ["productpage", "details", "reviews", "ratings"]
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: authorization
+metadata:
+  name: requestcontext
+  namespace: istio-system
+spec:
+  subject:
+    user: source.user | ""
+    groups: ""
+    properties:
+      app: source.labels["app"] | ""
+      version: source.labels["version"] | ""
+      namespace: source.namespace | ""
+  action:
+    namespace: destination.namespace | ""
+    service: destination.service | ""
+    method: request.method | ""
+    path: request.path | ""
+    properties:
+      app: destination.labels["app"] | ""
+      version: destination.labels["version"] | ""
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rbac
+metadata:
+  name: handler
+  namespace: istio-system
+spec:
+  config_store_url: "k8s://"
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: rbaccheck
+  namespace: istio-system
+spec:
+  match: destination.namespace == "default"
+  actions:
+  - handler: handler.rbac
+    instances:
+    - requestcontext.authorization
+EOF
+```
+
 
 
