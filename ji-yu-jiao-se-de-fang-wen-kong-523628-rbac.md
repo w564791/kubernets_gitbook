@@ -8,7 +8,9 @@
 
 ![](/assets/rbac-istioimport.png)
 
+```
 RBAC引擎做工作内容如下
+```
 
 * 获取RBAC策略: rbac殷勤观察策略,如有变更,将对其进行更新
 * 授权请求: 当一个请求到来时,请求的上下文\(request context\)被传递给rbac引擎,其根据策略评估请求的上下文,返回授权结果\(ALLOW 或者DENY\)
@@ -49,9 +51,18 @@ spec:
 
 Istio RBAC 采用`ServiceRole`以及`ServiceRoleBinding,`其类似于kubernetes的CustomResourceDefinition \(CRD\)对象
 
-* **`ServiceRole `**定义了在网格中访问服务的角色
+* `ServiceRole`定义了在网格中访问服务的角色
 
-* **`ServiceRoleBinding`**为对象授予角色  \(e.g., a user, a group, a service\).
+* `ServiceRoleBinding`为对象授予角色  \(e.g., a user, a group, a service\).
+
+## ServiceRole
+
+一个`ServiceRole`包含了可能不仅一个规则的列表,每个规则包含如下标准字段
+
+* **services** 关于service名称的列表, 这是和 "request context"中的`action.service`匹配
+* **methods **请求方法列表,匹配"request context"中的`action.method`字段,为HTTP或者gRPC方法
+
+* **paths **HTTP请求列表,匹配"request context"中的`action.path`字段
 
 
 
