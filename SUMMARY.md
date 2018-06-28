@@ -47,7 +47,10 @@
   * [kubernetes 亲和性调度](1bu-shu-zhi-nan/kubernetes-qin-he-xing-diao-du.md)
   * [RBAC](1bu-shu-zhi-nan/rbac.md)
   * [istio 0.8\(LTS\)](istio-08lts.md)
-    * [注入sidecar\(手动或自动\)](zhu-ru-sidecar-shou-dong-huo-zi-52a829.md)
+    * 概念
+      * 认证策略
+      * mutual TLS\(MTLS\)
+      * 基于角色的访问控制\(rbac\)
     * [使用HTTP延迟注入故障](gateway.md)
     * [使用HTTP终止注入故障](istio-08lts/shi-yong-http-zhong-zhi-zhu-ru-gu-zhang.md)
     * [设置请求超时](she-zhi-qing-qiu-chao-shi.md)
@@ -60,8 +63,8 @@
       * [基本认证策略](an-quan/ji-ben-ren-zheng-ce-lve.md)
       * [安全请求控制](an-quan-qing-qiu-kong-zhi.md)
       * [basic-acess-control](basic-acess-control.md)
-      * 基于角色的访问控制\(rbac\)
     * [bookinfo示例deploy](bookinfoshi-li-deploy.md)
+    * [注入sidecar\(手动或自动\)](zhu-ru-sidecar-shou-dong-huo-zi-52a829.md)
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
   * [kubelet最佳配置](kubeletzui-jia-pei-zhi.md)
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
