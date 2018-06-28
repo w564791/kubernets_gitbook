@@ -78,7 +78,6 @@ spec:
   rules:
   - services: ["*"]
     methods: ["*"]
-
 ```
 
 如下例子,servicerole名称为products-viewer,在default命名空间内,对"products.default.svc.cluster.local"有只读权限\(GET 以及HEAD\)
@@ -93,6 +92,23 @@ spec:
   rules:
   - services: ["products.default.svc.cluster.local"]
     methods: ["GET", "HEAD"]
+```
+
+另外,对于所有的字段,istio RBAC支持前缀匹配以及后缀匹配,如下servicerole示例,在default命名空间内,允许针对于以test-开头的所有服务的所有请求,针对于"bookstore.default.svc.cluster.local"的"\*/reviews"路径\(包含"/books/reviews","/events/books/reviews"等\)的只读\(READ\)请求
+
+```
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRole
+metadata:
+  name: tester
+  namespace: default
+spec:
+  rules:
+  - services: ["test-*"]
+    methods: ["*"]
+  - services: ["bookstore.default.svc.cluster.local"]
+    paths: ["*/reviews"]
+    methods: ["GET"]
 
 ```
 
