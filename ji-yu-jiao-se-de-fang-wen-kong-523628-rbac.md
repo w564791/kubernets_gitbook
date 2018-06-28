@@ -128,6 +128,33 @@ spec:
     constraints:
     - key: "version"
       values: ["v1", "v2"]
+```
+
+## ServiceRoleBinding
+
+规范的ServiceRoleBinding包含如下2部分
+
+* **roleRef **指定**同一命名空间**的ServiceRole资源
+
+* **subjects **分配角色的的对象列表,其主体可以是user或者group,也可以是一组属性,\(“user” 或者“group” 或 “properties”\)必包含其一,并且必须匹配request context自subject字段
+
+如下示例,命名为test-binding-products的ServiceRoleBinding资源,在abc命名空间中绑定了products-viewer的ServiceRole,以及alice@yahoo.com用户,以及reviews.abc.svc.cluster.local服务
+
+```
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRoleBinding
+metadata:
+  name: test-binding-products
+  namespace: default
+spec:
+  subjects:
+  - user: "alice@yahoo.com"
+  - properties:
+      service: "reviews.abc.svc.cluster.local"
+      namespace: "abc"
+  roleRef:
+    kind: ServiceRole
+    name: "products-viewer"
 
 ```
 
