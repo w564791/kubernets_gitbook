@@ -17,7 +17,7 @@ RBAC引擎做工作内容如下
 
 request context为实例提供请求模板,request context包含请求认证模块的所有请求和环境信息,尤其是如下两部分:
 
-* **subject: **包含主叫方的身份列表\(list\),包含了"user","groups",或者其他属性,例如namespace,service 
+* **subject: **包含主叫方的身份列表\(list\),包含了"user","groups",或者其他属性,例如namespace,service
 
 * **action: **指定"service如何被访问",期包含"namespace","service","path","method";以及其属性
 
@@ -43,8 +43,15 @@ spec:
     path: request.path | ""
     properties:
       version: request.headers["version"] | ""
-
 ```
+
+## Istio RBAC 策略 {#istio-rbac-policy}
+
+Istio RBAC 采用`ServiceRole`以及`ServiceRoleBinding,`其类似于kubernetes的CustomResourceDefinition \(CRD\)对象
+
+* **`ServiceRole `**定义了在网格中访问服务的角色
+
+* **`ServiceRoleBinding`**为对象授予角色  \(e.g., a user, a group, a service\).
 
 
 
