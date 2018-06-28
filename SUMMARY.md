@@ -50,7 +50,7 @@
     * 概念
       * 认证策略
       * mutual TLS\(MTLS\)
-      * 基于角色的访问控制\(rbac\)
+      * [基于角色的访问控制\(rbac\)](ji-yu-jiao-se-de-fang-wen-kong-523628-rbac.md)
     * [使用HTTP延迟注入故障](gateway.md)
     * [使用HTTP终止注入故障](istio-08lts/shi-yong-http-zhong-zhi-zhu-ru-gu-zhang.md)
     * [设置请求超时](she-zhi-qing-qiu-chao-shi.md)
