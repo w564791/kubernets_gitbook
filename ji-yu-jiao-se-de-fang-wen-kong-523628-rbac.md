@@ -171,6 +171,39 @@ spec:
   roleRef:
     kind: ServiceRole
     name: "products-viewer"
+```
+
+## Enabling Istio RBAC {#enabling-istio-rbac}
+
+Istio RBAC可以通过如下方法被启用,该规则包含2个部分,
+
+* 第一个部分定义rbac handler,共有个块,"config\_store\_url"以及"cache\_duration","config\_store\_url"指定rbac引擎从哪里获取rbac策略,默认的值是"k8s://",当然也可以设置为本地目录"fs:///tmp/testdata/configroot",`"cache_duration"`指定其授权结果在客户端上缓存的持续时间,默认值为1分钟
+* 第二部分定义了一个rule,其指定了使用哪个request context
+
+如下示例.在default命名空间中启用rbac,并且缓存时间为30秒
+
+```
+apiVersion: "config.istio.io/v1alpha2"
+kind: rbac
+metadata:
+  name: handler
+  namespace: istio-system
+spec:
+  config_store_url: "k8s://"
+  cache_duration: "30s"
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: rbaccheck
+  namespace: istio-system
+spec:
+  match: destination.namespace == "default"
+  actions:
+  # handler and instance names default to the rule's namespace.
+  - handler: handler.rbac
+    instances:
+    - requestcontext.authorization
 
 ```
 
