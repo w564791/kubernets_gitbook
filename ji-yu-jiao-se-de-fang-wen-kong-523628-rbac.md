@@ -109,6 +109,25 @@ spec:
   - services: ["bookstore.default.svc.cluster.local"]
     paths: ["*/reviews"]
     methods: ["GET"]
+```
+
+在ServiceRole中,namespace+services+paths+methods定义了"服务如何被允许请求",在某些情况下,可能需要额外的功能限制,例如,规则可能只适合于某个版本,或者其只适用于标记了foo标签的服务,我们可以通过自定义字段,轻松指定这些约束.
+
+如下示例,被命名为products-viewer-version的ServiceRole,增加了约束条件,将version限制为v1或者v2, version条件由request context的`"action.properties.version"`字段提供
+
+```
+apiVersion: "config.istio.io/v1alpha2"
+kind: ServiceRole
+metadata:
+  name: products-viewer-version
+  namespace: default
+spec:
+  rules:
+  - services: ["products.default.svc.cluster.local"]
+    methods: ["GET", "HEAD"]
+    constraints:
+    - key: "version"
+      values: ["v1", "v2"]
 
 ```
 
