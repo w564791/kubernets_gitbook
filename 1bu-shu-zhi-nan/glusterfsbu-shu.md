@@ -143,8 +143,7 @@ Deployment complete!
 查看heketi的ClusterIP地址，storage class里似乎无法用域名通信，抛错
 
 ```
-root@node1:~/gluster-kubernetes3/deploy/kube-templates# kubectl get svc/heketi --template 'http://{{.spec.clusterIP}}:{{(index .spec.ports 0).port}}'
-http://10.254.112.16:8080
+root@node1:~/gluster-kubernetes3/deploy/kube-templates# kubectl get svc/heketi --template 'http://{{.spec.clusterIP}}:{{(index .spec.ports 0).port}}' http://10.254.112.16:8080
 ```
 
 复制上面的地址到storage class的yaml文件
