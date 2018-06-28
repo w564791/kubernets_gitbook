@@ -91,7 +91,7 @@ match: destination.labels["app"] == "details" && source.user == "cluster.local/n
 ### 清理现场
 
 ```
-cat <<EOF | istioctl delete -f -
+#cat <<EOF | istioctl delete -f -
 apiVersion: "config.istio.io/v1alpha2"
 kind: denier
 metadata:
@@ -117,6 +117,8 @@ spec:
   - handler: denyproductpagehandler.denier
     instances: [ denyproductpagerequest.checknothing ]
 EOF
+# istioctl delete DestinationRule example-1 -n default
+# istioctl delete policy example-1 -n default
 ```
 
 ### 遇到的坑:
