@@ -5,7 +5,7 @@
 
 生成CA证书,脚本来自[istio官方github](https://github.com/istio/istio/edit/release-0.8/security/samples/plugin_ca_certs/)
 
-使用到的ca.cfg
+gen\_certs.sh脚本使用到的ca.cfg
 
 ```
 [req]
@@ -29,7 +29,7 @@ subjectAltName = @alt_names
 DNS.1 = ca.istio.io
 ```
 
-脚本**gen\_certs.sh**
+执行脚本**gen\_certs.sh**
 
 ```
 echo 'Generate key and cert for root CA.'
@@ -66,10 +66,7 @@ cp ca-cert.pem cert-chain.pem
 ```
 # ls /usr/local/src/cert/
 ca-cert.pem  ca.cfg  ca-key.pem  cert-chain.pem  cert.sh  root-cert.pem  root-key.pem
-
 ```
-
-
 
 ## 插入现有证书和密钥 {#plugging-in-the-existing-certificate-and-key}
 
@@ -78,14 +75,13 @@ ca-cert.pem  ca.cfg  ca-key.pem  cert-chain.pem  cert.sh  root-cert.pem  root-ke
 1.创建一个秘密cacert，包括所有输入文件ca-cert.pem，ca-key.pem，root-cert.pem和cert-chain.pem：
 
 ```
-# kubectl create secret generic cacerts -n istio-system --from-file=ca-cert.pem     --from-file=ca-key.pem --from-file=root-cert.pem     --from-file=cert-chain.pem
+# kubectl create secret generic cacerts -n istio-system --from-file=/usr/local/src/cert/ca-cert.pem     --from-file=/usr/local/src/cert/ca-key.pem --from-file=/usr/local/src/cert/root-cert.pem     --from-file=/usr/local/src/cert/cert-chain.pem
 ```
 
 2.重新部署Citadel，它从安装文件中读取证书和密钥：
 
 ```
-kubectl apply -f install/kubernetes/istio-citadel-plugin-certs.yaml
-
+# kubectl apply -f install/kubernetes/istio-citadel-plugin-certs.yaml
 ```
 
 PS:如果您使用不同的证书secret名称，则需要更改`istio-citadel-plugin-certs.yaml`文件中的相应的参数
@@ -93,8 +89,7 @@ PS:如果您使用不同的证书secret名称，则需要更改`istio-citadel-pl
 3.为了确保sidecar拿到新的证书,删除Citadel生成的secret\(以istio.\*命名\)
 
 ```
-kubectl delete secret istio.default
-
+# kubectl delete secret istio.default
 ```
 
 ## 验证新证书 {#verifying-the-new-certificates}
@@ -107,14 +102,12 @@ kubectl delete secret istio.default
     # kubectl exec -it $RATINGSPOD -c istio-proxy -- /bin/cat /etc/certs/root-cert.pem > /tmp/pod-root-cert.pem
     # kubectl exec -it $RATINGSPOD -c istio-proxy -- /bin/cat /etc/certs/cert-chain.pem > /tmp/pod-cert-chain.pem
 
-
 验证根证书自己的证书相同
 
 ```
 # openssl x509 -in /usr/local/src/cert/root-cert.pem -text -noout > /tmp/root-cert.crt.txt
 # openssl x509 -in /tmp/pod-root-cert.pem -text -noout > /tmp/pod-root-cert.crt.txt
 # diff /tmp/root-cert.crt.txt /tmp/pod-root-cert.crt.txt
-
 ```
 
 预期输出结果为空
@@ -126,7 +119,6 @@ kubectl delete secret istio.default
 # openssl x509 -in /usr/local/src/cert/ca-cert.pem -text -noout > /tmp/ca-cert.crt.txt
 # openssl x509 -in /tmp/pod-cert-chain-ca.pem -text -noout > /tmp/pod-cert-chain-ca.crt.txt
 # diff /tmp/ca-cert.crt.txt /tmp/pod-cert-chain-ca.crt.txt
-
 ```
 
 期望输出结果为空
@@ -137,7 +129,6 @@ kubectl delete secret istio.default
 # head -n 21 /tmp/pod-cert-chain.pem > /tmp/pod-cert-chain-workload.pem
 # openssl verify -CAfile <(cat /usr/local/src/cert/ca-cert.pem /usr/local/src/cert/root-cert.pem) /tmp/pod-cert-chain-workload.pem
 /tmp/pod-cert-chain-workload.pem: OK
-
 ```
 
 ### 清理现场
