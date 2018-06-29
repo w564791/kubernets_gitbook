@@ -131,6 +131,26 @@ PS:如果您使用不同的证书secret名称，则需要更改`istio-citadel-pl
 /tmp/pod-cert-chain-workload.pem: OK
 ```
 
+### 从外部使用证书
+
+获取productpage ClusterIP地址
+
+```
+# kubectl get svc productpage --template 'https://{{.spec.clusterIP}}:{{(index .spec.ports 0).port}}'
+https://10.254.97.12:9080
+```
+
+从sidecar中拿到证书
+
+```
+# kubectl  cp productpage-v1-7bbdd59459-4w26m:/etc/certs ./certs  -c  istio-proxy
+# curl -k --key key.pem --cert cert-chain.pem --cacert root-cert.pem https://10.254.97.12:9080  -s -o /dev/null -w "%{http_code}\n"
+200
+
+```
+
+
+
 ### 清理现场
 
 
