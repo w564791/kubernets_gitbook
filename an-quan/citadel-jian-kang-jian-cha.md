@@ -18,7 +18,6 @@ $ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
 
 ```
 $ kubectl apply -f install/kubernetes/istio-citadel-with-health-check.yaml
-
 ```
 
 确认Citadel已经部署service
@@ -26,7 +25,6 @@ $ kubectl apply -f install/kubernetes/istio-citadel-with-health-check.yaml
 ```
 $ kubectl get svc -n istio-system --selector=app=istio-citadel
 istio-citadel   ClusterIP   10.254.239.137   <none>        8060/TCP,9093/TCP   3d
-
 ```
 
 确认DNS能正确解析域名
@@ -34,13 +32,11 @@ istio-citadel   ClusterIP   10.254.239.137   <none>        8060/TCP,9093/TCP   3
 ```
 # ping istio-citadel.istio-system
 PING istio-citadel.istio-system.svc.cluster.local (10.254.239.137): 56 data bytes
-
 ```
 
 验证健康检查工作内容
 
     # kubectl logs `kubectl get po -n istio-system | grep istio-citadel | awk '{print $1}'` -n istio-system
-
 
 将看到如下输出:
 
@@ -52,7 +48,6 @@ PING istio-citadel.istio-system.svc.cluster.local (10.254.239.137): 56 data byte
 ...
 2018-02-27T04:30:25.485315Z     info    CSR successfully signed.
 ...
-
 ```
 
 ### \(可选\)配置健康检查
@@ -75,7 +70,6 @@ livenessProbe:
   initialDelaySeconds: 60
   periodSeconds: 60
 ...
-
 ```
 
 liveness-probe-path 和probe-path均是指向健康检查状态文件,`liveness-probe-interval`是更新状态文件的间隔,如果Citadel是健康的.probe-check-interval是健康检查的间隔,interval是自上次健康检查以来经过的最长的时间
@@ -88,8 +82,6 @@ liveness-probe-path 和probe-path均是指向健康检查状态文件,`liveness-
 
 ```
  kubectl  apply -f install/kubernetes/istio-demo.yaml
-
-
 ```
 
 
