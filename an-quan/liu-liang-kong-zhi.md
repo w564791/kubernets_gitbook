@@ -216,8 +216,14 @@ spec:
 ## 清理现场
 
 ```
-
+# kubectl delete memquota  -n istio-system handler
+# kubectl -n istio-system delete quotas requestcount
+# kubectl -n istio-system delete rules quota
+# kubectl -n istio-system delete QuotaSpec request-count
+# kubectl -n istio-system delete QuotaSpecBinding request-count
 ```
+
+
 
 
 
