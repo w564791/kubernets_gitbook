@@ -185,7 +185,7 @@ spec:
     namespace: default
 ```
 
-`QuotaSpecBinding`将`QuotaSpec`绑定到我们的想要应用的服务,必须为每个服务定义命名空间,所以QuotaSpecBinding可以不用和我们想要应用的service部署到相同的命名空间
+`QuotaSpecBinding`将`QuotaSpec`绑定到我们的想要应用的服务,必须为每个服务定义命名空间,所以QuotaSpecBinding可以不用和我们想要应用的service部署到相同的命名空间,注意我们是部署在istio-system命名空间的,但是service是在default命名空间,此处一定要注意声明service所在的命名空间.
 
 8.刷新productpage页面,v3请求为5秒每个\(多次刷新提示_Ratings service is currently unavailable_\),如果你连续不断的请求,星星每5秒加载一次,如果以jason用户登录,则v2限制为10秒5个请求,对于其他服务,限制为5000QPS速率
 
