@@ -97,3 +97,5 @@ request-count   21m
 
 8.刷新productpage页面,v3请求为5秒每个\(多次刷新提示_Ratings service is currently unavailable_\),如果你连续不断的请求,星星每5秒加载一次,如果以jason用户登录,则v2限制为10秒5个请求,对于其他服务,限制为5000QPS速率
 
+
+
