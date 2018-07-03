@@ -211,5 +211,13 @@ spec:
 
 ## 了解速率限制 {#understanding-rate-limits}
 
-每个quota事例,例如`requestcount`都代表一组计数器,如果请求数在`expiration`时间内达到`maxAmount,`Mixer返回`RESOURCE_EXHAUSTED`消息给`proxy,proxy`将直接返回`HTTP 429 `
+每个quota事例,例如`requestcount`都代表一组计数器,如果请求数在`expiration`时间内达到`maxAmount,`Mixer返回`RESOURCE_EXHAUSTED`消息给`proxy,proxy`将直接返回`HTTP 429`
+
+## 清理现场
+
+```
+
+```
+
+
 
