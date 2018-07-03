@@ -4,3 +4,5 @@
 
 Citadel包含一个探针,可以定期检查Citadel的状态,如果Citadel是健康的,改探针客户端更新修改时间的健康状态文件\(该文件为空\),否则,其什么都不做,Citadel依靠K8S的liveness和readiness探针来检查的时间间隔和健康状态文件,如果文件未在一段时间内更新,则触发探测并重启Citadel容器
 
+
+
