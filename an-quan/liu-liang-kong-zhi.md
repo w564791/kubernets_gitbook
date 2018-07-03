@@ -113,7 +113,6 @@ spec:
     sourceVersion: source.labels["version"] | "unknown"
     destination: destination.labels["app"] | destination.service | "unknown"
     destinationVersion: destination.labels["version"] | "unknown"
-
 ```
 
 quota模板定义了4个`dimensions,`memquota的使用这些`dimensions`来匹配某些属性的请求.`destination`将会被匹配到在 destination.labels\["app"\], destination.service, "unknown"中第一个非空的值,更多信息点击[这里](https://istio.io/docs/reference/config/policy-and-telemetry/expression-language/)
@@ -135,7 +134,6 @@ spec:
   - handler: handler.memquota
     instances:
     - requestcount.quota
-
 ```
 
 该rule告诉mixer调用handler.memquota ,并传递使用requestcount.quota构造对象,这有效的将quota模板映射到memquota
@@ -211,7 +209,7 @@ spec:
 
 该quota应用于源和目标命名空间不相同的请求.
 
-
+## 了解速率限制 {#understanding-rate-limits}
 
 
 
