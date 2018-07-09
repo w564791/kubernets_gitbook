@@ -70,6 +70,7 @@
     * [数据](shu-ju.md)
       * [Distributed Tracing](distributed-tracing.md)
       * [收集metrics和logs](shou-jimetricshe-logs.md)
+      * [收集TCP服务的metrics](istio-08lts/collecting-tcp-metrics.md)
     * [bookinfo示例deploy](bookinfoshi-li-deploy.md)
     * [注入sidecar\(手动或自动\)](zhu-ru-sidecar-shou-dong-huo-zi-52a829.md)
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
