@@ -40,7 +40,6 @@ spec:
         port:
           number: 16686
 ---
-
 ```
 
 ### 使用bookinfo示例生成追踪
@@ -52,6 +51,10 @@ spec:
 ![](/assets/jaeger-result.png)红色感叹号表示有错误,点击可以查看更详细的信息
 
 ![](/assets/jaeger-err.png)可以看到此时的http.status\_code=0,因为在本示例之前,做过请求速率限制.该功能能更迅速定位问题,更清晰的了解各服务之间的时间消耗情况.
+
+## 了解发生了什么 {#understanding-what-happened}
+
+
 
 
 
