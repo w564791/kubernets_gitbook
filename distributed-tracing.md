@@ -54,7 +54,19 @@ spec:
 
 ## 了解发生了什么 {#understanding-what-happened}
 
+尽管istio代理能够自动发送spans,同时他们也需要一些提示来将这些内容联系在一起,所以,当proxies发送span信息应用时,程序需要传递适当的http头,span可以正确的关联到单个trace里.
 
+因此,应用程序需要收集传入请求中的以下header,并传到任务传出的request
+
+```
+x-request-id
+x-b3-traceid
+x-b3-spanid
+x-b3-parentspanid
+x-b3-sampled
+x-b3-flags
+x-ot-span-context
+```
 
 
 
