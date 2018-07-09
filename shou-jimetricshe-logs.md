@@ -4,8 +4,6 @@
 
 * 正确安装istio
 
-
-
 ## 收集新的数据
 
 1.创建新的yaml文件,配置新的metric和日志流,istio会自动的生成和收集相应的数据
@@ -97,17 +95,15 @@ spec:
      instances:
      - newlog.logentry
 ---
-
 ```
 
 2.push新的配置
 
 ```
 # istioctl create -f new_telemetry.yaml
-
 ```
 
-3. 请求bookinfo的productpage页面
+1. 请求bookinfo的productpage页面
 
 4.查看Prometheus的数据
 
@@ -125,10 +121,19 @@ spec:
 {"level":"warn","time":"2018-07-09T06:28:47.749796Z","instance":"newlog.logentry.istio-system","destination":"istio-ingressgateway.istio-system.svc.cluster.local","latency":"8.979151ms","responseCode":200,"responseSize":1802,"source":"unknown","user":"unknown"}
 {"level":"warn","time":"2018-07-09T06:28:48.752131Z","instance":"newlog.logentry.istio-system","destination":"istio-telemetry.istio-system.svc.cluster.local","latency":"2.019855ms","responseCode":200,"responseSize":5,"source":"unknown","user":"unknown"}
 {"level":"warn","time":"2018-07-09T06:28:48.758448Z","instance":"newlog.logentry.istio-system","destination":"istio-telemetry.istio-system.svc.cluster.local","latency":"2.018155ms","responseCode":200,"responseSize":5,"source":"istio-ingressgateway.istio-system.svc.cluster.local","user":"unknown"}
-
 ```
 
 ## 了解telemetry配置
+
+在本次任务中,我们添加了istio的配置,其指示Mixer对于网格中的流量,自动的生成和报告系的metric和新的日志流
+
+增加的配置受到Mixer功能中的3中因素控制:
+
+1. 生成_instance_
+2. 创建_handlers_处理生成的_instance_
+3. Dispatch of _instances_ to _handlers _according to a set of _rules_
+
+## 理解metrics配置
 
 
 
