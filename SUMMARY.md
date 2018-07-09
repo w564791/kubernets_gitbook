@@ -59,7 +59,7 @@
     * [控制出口tcp流量](istio-08lts/kong-zhi-chu-kou-tcp-liu-liang.md)
     * [熔断](istio-08lts/rong-duan.md)
     * [流量镜像](istio-08lts/liu-liang-jing-xiang.md)
-    * [安全](an-quan/an-quan.md)
+    * [安全](an-quan/Security.md)
       * [基本认证策略](an-quan/ji-ben-ren-zheng-ce-lve.md)
       * [安全请求控制](an-quan-qing-qiu-kong-zhi.md)
       * [basic-acess-control](an-quan/basic-acess-control.md)
