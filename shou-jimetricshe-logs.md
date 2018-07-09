@@ -137,13 +137,15 @@ spec:
 
 metrics配置指示Mixer将metric发送到Prometheus,他使用了3个配置块:_instance,handler,rule_
 
-`kind: metric `块定义了名为`doublerequestcount`的metric,该实例配置告诉Mixer如何生成metric值,以及其他需求,当然,这些基于Envoy\(当然也包含Mixer自身\)
+`kind: metric`块定义了名为`doublerequestcount`的metric,该实例配置告诉Mixer如何生成metric值,以及其他需求,当然,这些基于Envoy\(当然也包含Mixer自身\)
 
 对于`doublerequestcount.metric`的每个instance,配置指示Mixer为instance提供值为2,这意味着该metric记录值等于收到请求的总数的2倍
 
 为每个`doublerequestcount.metric`实例指定一组`dimensions,`Dimensions提供了根据查询不同的需求和方向对metrics进行切片,聚合和分析,例如,可能需要在对应用程序行为进行故障排除时仅考虑对特定目标服务的查询请求
 
-配置指示Mixer根据属性值以及表面值填充这些`dimensions`的值,例如,对于`source `dimension,新的配置从source.service属性获取值,如果未获取到该值,rule会指示Mixer使用默认的""unknown"",对于`message `dimension,使用文字值"twice the fun!"
+配置指示Mixer根据属性值以及表面值填充这些`dimensions`的值,例如,对于`source`dimension,新的配置从source.service属性获取值,如果未获取到该值,rule会指示Mixer使用默认的""unknown"",对于`message`dimension,使用文字值"twice the fun!"
+
+`kind: prometheus`块定义了一个名叫doublehandler的handler,该handler的spec配置了Prometheus的metric标准,该值可以由Prometheus处理,该配置定义了一个名为double\_request\_count的指标,同时Prometheus adapter将istio\_添加到命名空间之前,所以该metric在Prometheus中查询值为istio\_double\_request\_count,该metric有3个label,其与doublerequestcount.metric相匹配
 
 
 
