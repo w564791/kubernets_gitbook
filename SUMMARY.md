@@ -67,6 +67,7 @@
       * [使用外部的证书](an-quan/shi-yong-wai-bu-de-zheng-shu.md)
       * [Citadel 健康检查](an-quan/citadel-jian-kang-jian-cha.md)
       * [流量控制](an-quan/liu-liang-kong-zhi.md)
+    * [Distributed Tracing](distributed-tracing.md)
     * [bookinfo示例deploy](bookinfoshi-li-deploy.md)
     * [注入sidecar\(手动或自动\)](zhu-ru-sidecar-shou-dong-huo-zi-52a829.md)
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
