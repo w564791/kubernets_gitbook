@@ -200,7 +200,7 @@ Code 503 : 2 (10.0 %)
     Code 503 : 17 (85.0 %)
     <<<<<<>>>>>>>
 
-### ![](/assets/testCODEimport.png)
+### ![](../assets/testCODEimport.png)
 
 ### 
 
