@@ -153,6 +153,8 @@ metrics配置指示Mixer将metric发送到Prometheus,他使用了3个配置块:_
 
 对于`kind: prometheus`handler,Mixer示例通过instance\_name匹配Prometheus metrics, instance\_name值必须是完全合格的Mixer 实例\(例如:`doublerequestcount.metric.istio-system`\)
 
+在该块,定义了计数类型为COUNTER,此计数器使用metric块的value进行计数
+
 `kind: rule`
 
 此块定义了一个名为doubleprom的rule,该rule只是Mixer发送所有的`doublerequestcount.metric`实例到`doublehandler.prometheus` handler,并且这里没有match规则,该rule配置在默认的namespace,所以对网格中的所有请求都会执行规则
