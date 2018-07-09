@@ -145,19 +145,19 @@ metrics配置指示Mixer将metric发送到Prometheus,他使用了3个配置块:_
 
 为每个`doublerequestcount.metric`实例指定一组`dimensions,`Dimensions提供了根据查询不同的需求和方向对metrics进行切片,聚合和分析,例如,可能需要在对应用程序行为进行故障排除时仅考虑对特定目标服务的查询请求
 
-配置指示Mixer根据属性值以及表面值填充这些`dimensions`的值,例如,对于`source`dimension,新的配置从source.service属性获取值,如果未获取到该值,rule会指示Mixer使用默认的""unknown"",对于`message`dimension,使用文字值"twice the fun!"
+配置指示Mixer根据属性值以及表面值填充这些`dimensions`的值,例如,对于`source`dimension,新的配置从`source.service`属性获取值,如果未获取到该值,rule会指示Mixer使用默认的"unknown,对于`message`dimension,使用文字值"`twice the fun!`"
 
 `kind: prometheus`
 
-此块定义了一个名叫doublehandler的handler,该handler的spec配置了Prometheus的metric标准,该值可以由Prometheus处理,该配置定义了一个名为double\_request\_count的指标,同时Prometheus adapter将istio\_添加到命名空间之前,所以该metric在Prometheus中查询值为istio\_double\_request\_count,该metric有3个label,其与doublerequestcount.metric相匹配
+此块定义了一个名叫doublehandler的handler,该handler的spec配置了Prometheus的metric标准,该值可以由Prometheus处理,该配置定义了一个名为double\_request\_count的指标,同时Prometheus adapter将istio\_添加到命名空间之前,所以该metric在Prometheus中查询值为`istio_double_request_count`,该metric有3个label,其与`doublerequestcount.metric`相匹配
 
-对于`kind: prometheus`handler,Mixer示例通过instance\_name匹配Prometheus metrics, instance\_name值必须是完全合格的Mixer 实例\(例如:`doublerequestcount.metric.istio-system`\)
+对于`kind: prometheus`handler,Mixer示例通过`instance_name`匹配Prometheus metrics, instance\_name值必须是完全合格的Mixer 实例\(例如:`doublerequestcount.metric.istio-system`\)
 
 在该块,定义了计数类型为COUNTER,此计数器使用metric块的value进行计数
 
 `kind: rule`
 
-此块定义了一个名为doubleprom的rule,该rule只是Mixer发送所有的`doublerequestcount.metric`实例到`doublehandler.prometheus` handler,并且这里没有match规则,该rule配置在默认的namespace,所以对网格中的所有请求都会执行规则
+此块定义了一个名为`doubleprom`的rule,该rule只是Mixer发送所有的`doublerequestcount.metric`实例到`doublehandler.prometheus` handler,并且这里没有match规则,该rule配置在默认的namespace,所以对网格中的所有请求都会执行规则
 
 ## 了解日志配置
 
