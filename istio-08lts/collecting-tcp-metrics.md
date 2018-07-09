@@ -117,7 +117,7 @@ $ istioctl create -f samples/bookinfo/kube/route-rule-ratings-db.yaml
 
 查询Prometheus中的数据(本例中去掉了metric中的mongo字样)
 
-![1531126847435](D:\tianbao\gitlab\code\kubernets_gitbook\assets\1531126847435.png)
+![1531126847435](../assets/1531126847435.png)
 
 ## 了解TCP数据收集
 
@@ -125,4 +125,4 @@ TCP数据收集方式和前一章[收集metrics和logs](../shou-jimetricshe-logs
 
 ## TCP属性
 
-![Attribute Generation Flow for TCP Services in an Istio Mesh.](D:\tianbao\gitlab\code\kubernets_gitbook\assets\istio-tcp-attribute-flow.svg) 
+![Attribute Generation Flow for TCP Services in an Istio Mesh.](../assets/istio-tcp-attribute-flow.svg) 
