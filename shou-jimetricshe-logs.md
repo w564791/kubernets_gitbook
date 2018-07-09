@@ -163,3 +163,23 @@ metrics配置指示Mixer将metric发送到Prometheus,他使用了3个配置块:_
 
 
 
+日志配置指示Mixer将日志输出到stdout,他同样也使用了3个块配置,`instance`,`handler`,以及`rule`
+
+`kind: logentry`
+
+该块定义了一个名为`newlog`的schema  ,用来生成日志,该instance告诉Mixer如何根据Envoy的报属性为request生成日志条目.
+
+`severity`参数表明日志等级,在本例中,使用`warning`日志级别,该值将被logentry handler映射为支持的日志级别
+
+`timestamp`参数提供日志项中的时间信息,在本例中,时间信息由`request.time`提供
+
+`variable`参数允许配置每个logentry中应包含的值,一组表达式控制从istio属性和文字值到构成logentry的值的映射,本例中,每个`logentry`实例都包含了一个名为`latency`的字段,该字段填充了`response.duration`的值,如果没有获取到`response.duration`的值,`latency`字段会设置为默认的`0ms`.
+
+`kind: stdio`
+
+该模块定义了一个名为`newhandler`的handler,该handler的spec字段配置了`stdio`适配器如何处理收到的`logentry` instance, `severity_levels`参数控制了`logentry`的关于`severity`的值如何映射到支持的日志级别,本例中,`warning`被映射到`WARING`日志级别,`outputAsJson`参数顶一个适配器以json格式输出
+
+`kind: rule`
+
+该块顶一个了名为`newlogstdio`的rule,他将指示Mixer发送所有的`newlog.logentry`实例到`newhandler.stdio`handler,本处`match`参数设置为`true`,所以该rule对网格中的所有请求执行规则
+
