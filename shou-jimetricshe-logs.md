@@ -151,5 +151,6 @@ metrics配置指示Mixer将metric发送到Prometheus,他使用了3个配置块:_
 
 此块定义了一个名叫doublehandler的handler,该handler的spec配置了Prometheus的metric标准,该值可以由Prometheus处理,该配置定义了一个名为double\_request\_count的指标,同时Prometheus adapter将istio\_添加到命名空间之前,所以该metric在Prometheus中查询值为istio\_double\_request\_count,该metric有3个label,其与doublerequestcount.metric相匹配
 
-对于`kind: prometheus `handler,Mixer示例通过instance\_name匹配Prometheus metrics, instance\_name值必须是完全合格的Mixer 实例\(例如:`doublerequestcount.metric.istio-system`\)
+对于`kind: prometheus`handler,Mixer示例通过instance\_name匹配Prometheus metrics, instance\_name值必须是完全合格的Mixer 实例\(例如:`doublerequestcount.metric.istio-system`\)  
+
 
