@@ -71,6 +71,7 @@
       * [Distributed Tracing](istio-08lts/distributed-tracing.md)
       * [收集metrics和logs](istio-08lts/shou-jimetricshe-logs.md)
       * [收集TCP服务的metrics](istio-08lts/collecting-tcp-metrics.md)
+      * [生成服务图](istio-08lts/generating-service-graph.md)
     * [bookinfo示例deploy](istio-08lts/bookinfoshi-li-deploy.md)
     * [注入sidecar\(手动或自动\)](istio-08lts/zhu-ru-sidecar-shou-dong-huo-zi-52a829.md)
 * [最佳配置（网上摘抄）](zui-jia-pei-zhi-ff08-wang-shang-zhai-chao-ff09.md)
