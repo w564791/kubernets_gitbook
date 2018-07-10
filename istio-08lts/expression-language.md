@@ -25,6 +25,6 @@
 | `request.size | 200`                                         | **int**     | `request.size` if available, otherwise 200.                  |
 | `request.headers["X-FORWARDED-HOST"] == "myhost"`            | **boolean** |                                                              |
 | `(request.headers["x-user-group"] == "admin") \|\| (request.auth.principal == "admin")` | **boolean** | True if the user is admin or in the admin group.             |
-| `(request.auth.principal | “nobody” ) == “user1”`            | **boolean** | True if `request.auth.principal` is “user1”, The expression will not error out if `request.auth.principal` is missing. |
+| `(request.auth.principal | "nobody" ) == "user1"`            | **boolean** | True if `request.auth.principal` is “user1”, The expression will not error out if `request.auth.principal` is missing. |
 | `source.labels["app"]=="reviews" && source.labels["version"]=="v3"` | **boolean** | True if app label is reviews and version label is v3, false otherwise. |
 
