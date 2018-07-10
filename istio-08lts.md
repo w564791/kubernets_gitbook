@@ -41,6 +41,10 @@ FROM  [_https://servicemesher.github.io/blog/introducing-the-istio-v1alpha3-rout
 
 _以下内容翻译自官网,水平有限,如有错误,还请谅解_
 
+# 测试场景
+
+![测试场景](assets/istio.svg) 
+
 ### base: {#gateway}
 
 1. [istio 0.8已在集群中安装安装](/istio-08lts/istio-08bu-shu.md)
@@ -188,14 +192,6 @@ spec:
 ```
 
 在单个`DestinationRule`中指定多个策略（例如上面实例中的缺省策略和v2版本特定的策略）。
-
-### 
-
-### 
-
-##  {#request-timeouts}
-
-#  {#title}
 
 
 
