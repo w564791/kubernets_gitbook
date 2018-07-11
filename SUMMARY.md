@@ -59,7 +59,7 @@
     * [控制出口tcp流量](istio-08lts/controller-tcp-engress.md)
     * [熔断](istio-08lts/break.md)
     * [流量镜像](istio-08lts/traffic-mirror.md)
-    * [安全](an-quan/Security.md)
+    * [安全](an-quan/security.md)
       * [基本认证策略](an-quan/basic-auth.md)
       * [安全请求控制](istio-08lts/security-request.md)
       * [basic-acess-control](an-quan/basic-acess-control.md)
