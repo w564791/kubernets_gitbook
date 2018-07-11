@@ -1,0 +1,38 @@
+kind: Endpoints
+apiVersion: v1
+metadata: 
+  name: node-exporter-swarm
+  labels:
+    app: node-exporter
+    k8s-app: node-exporter
+  namespace: monitoring
+subsets:
+- addresses:
+  - ip: 10.10.5.159
+  - ip: 10.10.6.63
+  - ip: 10.10.4.78
+  - ip: 10.10.5.245
+  - ip: 10.10.4.254
+  - ip: 10.10.7.12
+  - ip: 10.10.5.210
+  ports:
+  - port: 9100
+    name: http-metrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: node-exporter
+    k8s-app: node-exporter
+  name: node-exporter-swarm
+  namespace: monitoring
+spec:
+  clusterIP: None
+  ports:
+  - name: http-metrics
+    port: 9100
+    protocol: TCP
+    targetPort: 9100
+  sessionAffinity: None
+  type: ClusterIP

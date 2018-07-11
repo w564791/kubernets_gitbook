@@ -1,0 +1,36 @@
+kind: Endpoints
+apiVersion: v1
+metadata: 
+  name: api-monitor-swarm
+  labels:
+    pxsj-prod: python
+  namespace: monitoring
+subsets:
+- addresses:
+  - ip: 10.10.5.159
+  - ip: 10.10.6.63
+  - ip: 10.10.4.78
+  - ip: 10.10.5.245
+  - ip: 10.10.4.254
+  - ip: 10.10.7.12
+  - ip: 10.10.5.210
+  ports:
+  - port: 8000
+    name: http-metrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    pxsj-prod: python
+  name: api-monitor-swarm
+  namespace: monitoring
+spec:
+  clusterIP: None
+  ports:
+  - name: http-metrics
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  sessionAffinity: None
+  type: ClusterIP

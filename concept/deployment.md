@@ -74,7 +74,7 @@ Deployment为Pod和Replica Set（下一代Replication Controller）提供声明�
 
 参考：[https://kubernetes.io/docs/api-reference/v1.6/\#deploymentspec-v1beta1-apps](https://kubernetes.io/docs/api-reference/v1.6/#deploymentspec-v1beta1-apps)
 
-![](/assets/deployment-cheatsheet.png)
+![](../assets/deployment-cheatsheet.png)
 
 ## 创建Deployment
 

@@ -1,0 +1,45 @@
+apiVersion: v1
+data:
+  alertmanager.yaml: |
+    global:
+      resolve_timeout: 10m
+    route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 10s
+      group_interval: 2m
+      repeat_interval: 30m
+      receiver: 'dingtalk-all'
+      routes:
+      - receiver: 'dingtalk-java'
+        match_re:
+          labels: "msa_.*"
+      - receiver: 'dingtalk-java'
+        match_re:
+          labels: "mt_.*"
+      - receiver: 'dingtalk-go'
+        match_re:
+         labels: "go_.*"
+      - receiver: 'dingtalk-php'
+        match_re:
+          labels: "php_.*"
+    receivers:
+    - name: 'dingtalk-go'
+      webhook_configs:
+      - send_resolved: true
+        url: http://dingtalk:8060/dingtalk/webhook4/send
+    - name: 'dingtalk-java'
+      webhook_configs:
+      - send_resolved: true
+        url: http://dingtalk:8060/dingtalk/webhook3/send
+    - name: 'dingtalk-php'
+      webhook_configs:
+      - send_resolved: true
+        url: http://dingtalk:8060/dingtalk/webhook2/send
+    - name: 'dingtalk-all'
+      webhook_configs:
+      - send_resolved: true
+        url: http://dingtalk:8060/dingtalk/webhook1/send
+kind: ConfigMap
+metadata:
+  name: alertmanager-main
+  namespace: monitoring

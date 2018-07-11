@@ -8,7 +8,7 @@ Horizontal Pod Autoscaling仅适用于Deployment和ReplicationController（Repli
 
 Horizontal Pod Autoscaling由API server和controller共同实现。
 
-![](/assets/horizontal-pod-autoscaler.png)
+![](../assets/horizontal-pod-autoscaler.png)
 
 ## Metrics支持
 
