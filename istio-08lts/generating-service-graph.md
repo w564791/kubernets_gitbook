@@ -62,9 +62,9 @@ spec:
 
 ```
 
-查询http://YOURDOMAIN/force/forcegraph.html,可以看到如下页面
+查询`http://YOURDOMAIN/force/forcegraph.html`可以看到如下页面
 
 ![1531189745174](../assets/1531189745174.png)
 
-通过查询参数,可以添加一定的过滤条件,请求<http://YOURDOMAIN/force/forcegraph.html?time_horizon=15s&filter_empty=true>   添加`filter_empty=true `参数,将会显示当前时间范围内的接收的流量服务,`time_horizon=15s`影响之前的过滤器,并且会影响查看时的流量报告信息
+通过查询参数,可以添加一定的过滤条件,请求`<http://YOURDOMAIN/force/forcegraph.html?time_horizon=15s&filter_empty=true`  添加`filter_empty=true `参数,将会显示当前时间范围内的接收的流量服务,`time_horizon=15s`影响之前的过滤器,并且会影响查看时的流量报告信息
 
