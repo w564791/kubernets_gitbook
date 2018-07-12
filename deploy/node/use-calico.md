@@ -7,6 +7,7 @@
 * kube-proxy 不能设置 --masquerade-all 参数, 与calico的策略冲突.
 * Kubernetes NetworkPolicy API 需要Kubernetes v1.3.0以上.
 * 当RBAC 启用时, 需要配置正确的role以及serviceaccount.
+* 宿主机上必须勋在` /opt/cni/bin/ /etc/cni/net.d/` 2个目录
 
 ## [Calico Hosted Install](https://legacy.gitbook.com/book/w564791/kubernetes_gitbook/edit#)
 
@@ -26,24 +27,14 @@ wget https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation
 
 编辑yaml文件，需要修改的内容如下：
 
-    # Calico Version v3.0.4
-    # https://docs.projectcalico.org/v3.0/releases#v3.0.4
-    # This manifest includes the following component versions:
-    #   calico/node:v3.0.4
-    #   calico/cni:v2.0.3
-    #   calico/kube-controllers:v2.0.2
     
-    # This ConfigMap is used to configure a self-hosted Calico installation.
     kind: ConfigMap
     apiVersion: v1
     metadata:
       name: calico-config
       namespace: kube-system
     data:
-      # Configure this with the location of your etcd cluster.
       etcd_endpoints: "https://10.0.0.156:2379" #etcd通信地址，注意通信协议
-    
-      # Configure the Calico backend to use.
       calico_backend: "bird"
     
     .......

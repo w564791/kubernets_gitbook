@@ -6,11 +6,9 @@
 
 ## 架构
 
-![](/assets/rbac-istioimport.png)
+![](../assets/rbac-istioimport.png)
 
-```
 RBAC引擎做工作内容如下
-```
 
 * 获取RBAC策略: rbac殷勤观察策略,如有变更,将对其进行更新
 * 授权请求: 当一个请求到来时,请求的上下文\(request context\)被传递给rbac引擎,其根据策略评估请求的上下文,返回授权结果\(ALLOW 或者DENY\)

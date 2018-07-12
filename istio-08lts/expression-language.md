@@ -4,10 +4,10 @@
 | ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `==`              | Equals                                                       | `request.size == 200`                                        |                                                              |
 | `!=`              | Not Equals                                                   | `request.auth.principal != "admin"`                          |                                                              |
-| `\|\|`            | Logical OR                                                   | `(request.size == 200) \|\| (request.auth.principal == “admin”)` |                                                              |
+| `\|\|`            | Logical OR                                                   | `(request.size == 200) \|\| (request.auth.principal == "admin")` |                                                              |
 | `&&`              | Logical AND                                                  | `(request.size == 200) && (request.auth.principal == "admin")` |                                                              |
 | `[ ]`             | Map Access                                                   | `request.headers["x-id"]`                                    |                                                              |
-| `\|`              | First non empty                                              | `source.labels[“app”] \| source.labels[“svc”] \| “unknown”`  |                                                              |
+| `\|`              | First non empty                                              | `source.labels[“app”] \| source.labels[“svc”] \| "unknown"`  |                                                              |
 | `match`           | Glob match                                                   | `match(destination.service, "*.ns1.svc.cluster.local")`      | Matches prefix or suffix based on the location of `*`        |
 | `email`           | Convert a textual e-mail into the `EMAIL_ADDRESS`type        | `email("awesome@istio.io")`                                  | Use the `email` function to create an `EMAIL_ADDRESS`literal. |
 | `dnsName`         | Convert a textual DNS name into the `DNS_NAME`type           | `dnsName("www.istio.io")`                                    | Use the `dnsName` function to create a `DNS_NAME`literal.    |
