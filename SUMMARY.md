@@ -38,7 +38,7 @@
     * [containerd使用记录](deploy/node/containerd.md)
       * [部署containerd 1.1](deploy/node/containerd/deploy.md)
     * [使用calico cni](deploy/node/use-calico.md)
-  * [kube-dns部署](deploy/deploy-kube-dns.md)
+  * [CoreDNS部署](deploy/deploy-kube-dns.md)
   * [dashboard部署](deploy/dashboard-deploy.md)
   * [heapster插件部署](deploy/heapster.md)
   * [GlusterFS部署](deploy/glusterf.md)
