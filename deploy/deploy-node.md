@@ -167,7 +167,9 @@ ExecStart=/bin/kubelet \
 --cert-dir=/etc/kubernetes/ssl \
 --logtostderr=false --log-dir=/var/log/k8s  \
 --v=2 \
---config=/etc/kubernetes/kubelet.yaml  --allow-privileged=true
+--config=/etc/kubernetes/kubelet.yaml  \
+--allow-privileged=true  \
+--network-plugin=cni
 Restart=on-failure
 
 ```
