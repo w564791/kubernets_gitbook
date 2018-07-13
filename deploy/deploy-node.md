@@ -62,8 +62,27 @@ WantedBy=multi-user.target
 
 
 - kube-proxy 根据 `--cluster-cidr` 判断集群内部和外部流量，指定 `--cluster-cidr` 或 `--masquerade-all` 选项后 kube-proxy 才会对访问 Service IP 的请求做 SNAT；
+
 - `--kubeconfig` 指定的配置文件嵌入了 kube-apiserver 的地址、用户名、证书、秘钥等请求和认证信息；
+
 - 预定义的 RoleBinding `cluster-admin` 将User `system:kube-proxy` 与 Role `system:node-proxier` 绑定，该 Role 授予了调用 `kube-apiserver` Proxy 相关 API 的权限；
+
+  kube-proxy可以使用--config文件配置相应的选项
+
+  ```
+  apiVersion: kubeproxy.config.k8s.io/v1alpha1
+  bindAddress: 192.168.178.128
+  clientConnection:
+    kubeconfig: /etc/kubernetes/kube-proxy.kubeconfig
+  clusterCIDR: 20.254.0.0/16
+  healthzBindAddress: 192.168.178.128:10256
+  hostnameOverride: kube-node2
+  kind: KubeProxyConfiguration
+  metricsBindAddress: 192.168.178.128:10249
+  mode: "iptables"
+  ```
+
+  
 
 ## 生成kube-proxy.kubeconfig文件
 
@@ -125,7 +144,7 @@ $ kubectl create clusterrolebinding kubelet-bootstrap \
 * ##### kubelet 依赖docker服务,需要先启动docker
 * ##### kubelet 启动之前工作目录必须创建,否则会报错,如下:
 
-          `/usr/local/kubernetes/server/bin/kubele :No such file or ...`
+         /usr/local/kubernetes/server/bin/kubele :No such file or ...
 
 `kubelet`启动文件
 
@@ -135,48 +154,89 @@ $ kubectl create clusterrolebinding kubelet-bootstrap \
 [Unit]
 Description=Kubernetes Kubelet Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
-#After=docker.service
-#Requires=docker.service
+After=docker.service
+Requires=docker.service
 [Service]
 WorkingDirectory=/var/lib/kubelet
-ExecStart=/opt/kubernetes/server/bin/kubelet \
---address=192.168.178.128 \
+ExecStart=/bin/kubelet \
 --hostname-override=192.168.178.128 \
 --node-labels=node-role.kubernetes.io/k8s-node=true \
---image-gc-high-threshold=70 \
---image-gc-low-threshold=50 \
---port=10250 \
---network-plugin=cni \
---pod-infra-container-image=docker.io/w564791/pause:3.1 \
---cluster-dns=10.254.0.2 --cluster-domain=cluster.local.  \
---fail-swap-on=false \
---cgroup-driver=cgroupfs \
+--pod-infra-container-image=docker.io/w564791/pod-infrastructure:latest \
 --bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig \
 --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
 --cert-dir=/etc/kubernetes/ssl \
---hairpin-mode promiscuous-bridge \
---serialize-image-pulls=false  \
---allow-privileged=true \
 --logtostderr=false --log-dir=/var/log/k8s  \
---v=2
+--v=2 \
+--config=/etc/kubernetes/kubelet.yaml  --allow-privileged=true
 Restart=on-failure
-[Install]
-WantedBy=multi-user.target
 
 ```
 
 
 
 * `--address` 不能设置为 `127.0.0.1`，否则后续 Pods 访问 kubelet 的 API 接口时会失败，因为 Pods 访问的 `127.0.0.1` 指向自己而不是 kubelet；
+
 * `--experimental-bootstrap-kubeconfig` 指向 bootstrap kubeconfig 文件，kubelet 使用该文件中的用户名和 token 向 kube-apiserver 发送 TLS Bootstrapping 请求；
+
 * 管理员通过了 CSR 请求后，kubelet 自动在 `--cert-dir` 目录创建证书和私钥文件\(`kubelet-client.crt` 和 `kubelet-client.key`\)，然后写入 `--kubeconfig` 文件；
+
 * `--cluster-dns` 指定 kubedns 的 Service IP\(可以先分配，后续创建 kube-dns 服务时指定该 IP,这里暂时先不加,否则会启动失败\)，`--cluster-domain` 指定域名后缀，这两个参数同时指定后才会生效；
+
 * `--kubeconfig=/etc/kubernetes/kubelet.kubeconfig`中指定的`kubelet.kubeconfig`文件在第一次启动kubelet之前并不存在，请看下文，当通过CSR请求后会自动生成`kubelet.kubeconfig`文件，如果你的节点上已经生成了`~/.kube/config`文件，你可以将该文件拷贝到该路径下，并重命名为`kubelet.kubeconfig`，所有node节点可以共用同一个kubelet.kubeconfig文件，这样新添加的节点就不需要再创建CSR请求就能自动添加到kubernetes集群中,同样，在任意能够访问到kubernetes集群的主机上使用`kubectl —kubeconfig`命令操作集群时，只要使用`~/.kube/config`文件就可以通过权限认证，因为这里面已经有认证信息并认为你是admin用户，对集群拥有所有权限,但是**通常我们不建议这么做**
+
 * --pod-infra-container-image 指定POD运行时的基础镜像,建议先下载下来
+
 * --node-status-update-frequency 设置kublet每隔多久向apiserver报告状态,默认是10s
+
 * --docker-disable-shared-pid 在1.7版本中，部署glusterfs需要添加此项
+
 * --network-plugin=cni   使用cni插件
+
 * --fail-swap-on=false   不使用swap
+
+  ***上列参数部分在--config指定的配置文件里设置***,该文件可以使用如下命令从ready的node上获取
+
+  ```
+  url -sSL http://localhost:8080/api/v1/nodes/192.168.178.128/proxy/configz | jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
+  ```
+
+  
+
+  ```
+  # cat /etc/kubernetes/kubelet.yaml
+  ---
+  kind: KubeletConfiguration
+  apiVersion: kubelet.config.k8s.io/v1beta1
+  authentication:
+    x509:
+      clientCAFile: "/etc/kubernetes/ssl/ca.pem"
+    webhook:
+      enabled: false
+      cacheTTL: 2m0s
+    anonymous:
+      enabled: true
+  authorization:
+    mode: AlwaysAllow
+    webhook:
+      cacheAuthorizedTTL: 5m0s
+      cacheUnauthorizedTTL: 30s
+  address: 192.168.178.128
+  enableDebuggingHandlers: true
+  port: 10250
+  readOnlyPort: 10255
+  failSwapOn: false
+  cgroupDriver: cgroupfs
+  hairpinMode: promiscuous-bridge
+  serializeImagePulls: false
+  featureGates:
+    RotateKubeletClientCertificate: true
+    RotateKubeletServerCertificate: true
+  clusterDomain: cluster.local.
+  clusterDNS:
+  - 10.254.0.2
+  ```
+
+  
 
 ### 启动kublet
 
