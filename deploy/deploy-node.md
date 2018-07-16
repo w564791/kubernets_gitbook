@@ -74,7 +74,7 @@ WantedBy=multi-user.target
   bindAddress: 192.168.178.128
   clientConnection:
     kubeconfig: /etc/kubernetes/kube-proxy.kubeconfig
-  clusterCIDR: 20.254.0.0/16
+  clusterCIDR: 10.254.0.0/16
   healthzBindAddress: 192.168.178.128:10256
   hostnameOverride: kube-node2
   kind: KubeProxyConfiguration
@@ -199,7 +199,7 @@ Restart=on-failure
   ***上列参数部分在--config指定的配置文件里设置***,该文件可以使用如下命令从ready的node上获取
 
   ```
-  url -sSL http://localhost:8080/api/v1/nodes/192.168.178.128/proxy/configz | jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
+  # curl -sSL http://localhost:8080/api/v1/nodes/192.168.178.128/proxy/configz | jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
   ```
 
   

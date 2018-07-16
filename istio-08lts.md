@@ -49,6 +49,7 @@ _以下内容翻译自官网,水平有限,如有错误,还请谅解_
 
 1. [istio 0.8已在集群中安装安装](/istio-08lts/istio-08bu-shu.md)
 2. [bookinfo示例已部署](/istio-08lts/bookinfoshi-li-bu-shu.md)
+3. 在所有测试中,deploy需要设置containerPort,相应的pod才能正常代理
 
 ### Gateway {#gateway}
 

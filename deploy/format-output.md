@@ -44,3 +44,6 @@ $ kubectl get pods -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.
 
 
 
+- [Jsonpath](https://kubernetes.io/docs/user-guide/jsonpath/) reference guide
+- [Go template](https://golang.org/pkg/text/template/) reference guide
+
