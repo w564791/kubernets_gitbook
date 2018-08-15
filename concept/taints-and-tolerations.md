@@ -74,7 +74,27 @@ tolerations:
 * 如果未被忽略的节点没有effect为NoSchedule,但是最新的违背忽略的taint具有effect为PreferNoSchedule,kubernetes将尝试不将pd调度到该节点
 * 如果此时最新的未被忽略的taint具有effect为NoExecute时,pod将会被从该节点驱散\(如果pod运行在该节点的话\),并且不会调度到该节点上.
 
+比如,想想一个node上有如下taint:
 
+```
+kubectl taint nodes node1 key1=value1:NoSchedule
+kubectl taint nodes node1 key1=value1:NoExecute
+kubectl taint nodes node1 key2=value2:NoSchedule
+```
+
+pod具有2个tolerations
+
+```
+tolerations:
+- key: "key1"
+  operator: "Equal"
+  value: "value1"
+  effect: "NoSchedule"
+- key: "key1"
+  operator: "Equal"
+  value: "value1"
+  effect: "NoExecute"
+```
 
 
 
