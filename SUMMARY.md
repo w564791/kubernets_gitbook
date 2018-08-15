@@ -22,6 +22,7 @@
     * [Job](concept/job.md)
     * [kubeconfig](concept/kubeconfig.md)
     * [Network Policies](concept/network-policies.md)
+    * [Taints and Tolerations](concept/taints-and-tolerations.md)
   * [关于防火墙](firewall.md)
 * [在CentOS7上部署kubernetes1.10.2集群](deploy.md)
   * [资源类型](deploy/source.md)
@@ -79,6 +80,4 @@
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
   * [cannot create certificate signing request](yu-dao-de-yi-xie-wen-ti/unable-to-register-node-19216870175-with-api-server-unauthorized.md)
   * [User "system:node:192.168.70.175" cannot create nodes at the cluster scope](yu-dao-de-yi-xie-wen-ti/user-systemnode19216870175-cannot-create-nodes-at-the-cluster-scope.md)
-
-  
 
