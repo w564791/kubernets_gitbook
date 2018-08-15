@@ -45,9 +45,26 @@ tolerations:
 
 * operator为Exists\(这种情况下不应该指定value\) ,或者
 
-* operator为Equal,此时`value`相等
+* operator为Equal,此时value相等
 
+operator未指定时默认为Equal
 
+NOTE: 这里有2处需要特别注意:
+
+* 如果key为空并且operator为Equal时将匹配所有key,value和effect将容忍所有
+
+```
+tolerations:
+- operator: "Exists"
+```
+
+* 当effect为空时将匹配所有effects
+
+```
+tolerations:
+- key: "key"
+  operator: "Exists"
+```
 
 
 
