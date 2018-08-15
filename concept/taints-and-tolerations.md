@@ -115,7 +115,9 @@ tolerations:
 
 # 案例
 
+Taints 和tolerations非常灵活的驾驭pod从node驱散或者远离node,一些用例如下:
 
+* **Dedicated Nodes **
 
 
 
