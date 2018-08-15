@@ -18,7 +18,36 @@ $ kubectl taint nodes node1 name=tom:NoSchedule
 $ kubectl taint nodes node1 name:NoSchedule-
 ```
 
-当设置了taint时,可以在pod中设置toleration,以容忍该taint,如下两种tilerations都匹配上面创建的taint,此时该pod将能调度到node1上\(但不是必须\)
+当设置了taint时,可以在pod中设置toleration,以容忍该taint,如下3种\(精度从上到下依次降低\)tilerations都匹配上面创建的taint,此时该pod将能调度到node1上\(但不是必须\),第三种不建议,此时可能会调度到任何具有effect为NoSchedule的节点上.
+
+```
+tolerations:
+- key: "name"
+  operator: "Equal"
+  value: "tom"
+  effect: "NoSchedule"
+```
+
+```
+tolerations:
+- key: "name"
+  operator: "Exists"
+  effect: "NoSchedule"
+```
+
+```
+tolerations:
+- operator: "Exists"
+  effect: "NoSchedule"
+```
+
+当toleration的key和effects都与taint匹配,并且:
+
+* operator为Exists\(这种情况下不应该指定value\) ,或者
+
+* operator为Equal,此时`value`相等
+
+
 
 
 
