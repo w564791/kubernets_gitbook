@@ -10,13 +10,15 @@ Taints和Tolerations一起工作确保pod不被调度到不适当的node上,一�
 $ kubectl taint nodes node1 name=tom:NoSchedule
 ```
 
-这将在node1上设置key为name,value为tom,效果为NoSchedule 的taint,这意味着pod将不能调度到node1上,除非他具有匹配的toleration
+这将在node1上设置key为name,value为tom,effect为NoSchedule 的taint,这意味着pod将不能调度到node1上,除非他具有匹配的toleration
 
 使用如下命令移除该taint
 
 ```
 $ kubectl taint nodes node1 name:NoSchedule-
 ```
+
+当设置了taint时,可以在pod中设置toleration,以容忍该taint,如下两种tilerations都匹配上面创建的taint,此时该pod将能调度到node1上\(但不是必须\)
 
 
 
