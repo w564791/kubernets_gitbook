@@ -113,11 +113,7 @@ tolerations:
 
 意味着当该pod运行在node上,并且匹配taint时,pod将继续在节点上运行3600秒,之后被驱散,如果期间taint被删除,那么pod将不会被驱散
 
-# 案例
-
-Taints 和tolerations非常灵活的驾驭pod从node驱散或者远离node,一些用例如下:
-
-* **Dedicated Nodes **
+# 
 
 
 
