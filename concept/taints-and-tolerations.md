@@ -66,5 +66,7 @@ tolerations:
   operator: "Exists"
 ```
 
+上面的例子使用了NoSchedule 的effect,另外,你也能使用PreferNoSchedule的effect,这相对于NoSchedule来说,是一个偏向柔和的,或者说偏向软限制的,系统将避免放置一个不能容忍该污点的pod到该node上,但这不是必须的.第三种effect是NoExecute,稍后描述
 
+你可以在一个node上设置多个taint,也能在一个pod中设置多个toleration,kubernetes处理多个taint和toleration就像是一个过滤器,从所有node的taint开始,忽略那些已经匹配了toleration的pod,
 
