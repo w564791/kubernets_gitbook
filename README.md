@@ -7,36 +7,36 @@
 * scheduler:集群种的调度器,负责Pod在集群种节点的调度分配
 
                NoDiskConfict
-
+    
                PodFitsResources
-
+    
                PodSelectorMatchers
-
+    
                PodFitsHost
-
+    
                CheckNodeLabelPresence
-
+    
                CheckServiceAffinity
-
+    
                PodFitsPorts
-
+    
                LeastRequestedPriority
-
+    
                CalculateNodeLabelPriority
-
+    
                BalancedResourceAllocation 
 
 * controller-manager:集群内部的管理控制中心,其主要目的是实现Kubernetes集群的故障检测和恢复自动化工作
 
                Replication Controller
-
+    
                Node Controller
-
+    
                ResourceQuta Controller
-
+    
                Namespace Controller
 
-         
+​         
 
 * api-server:提供kubernetes集群的API调用,为集群资源对象的唯一操作入口,其他所有组件都必须通过它提供的API来操作资源数据,通过对相关数据”全量查询”+”变化监听”,这些组件可以很实时的完成相关的业务功能.
 

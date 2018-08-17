@@ -23,6 +23,7 @@
     * [kubeconfig](concept/kubeconfig.md)
     * [Network Policies](concept/network-policies.md)
     * [Taints and Tolerations](concept/taints-and-tolerations.md)
+    * [日志审计](concept/Auditing.md)
   * [关于防火墙](firewall.md)
 * [在CentOS7上部署kubernetes1.10.2集群](deploy.md)
   * [资源类型](deploy/source.md)
