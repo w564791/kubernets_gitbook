@@ -142,6 +142,13 @@ kubectl apply -f sleep-injected.yaml
 
 ```
 
+另外:  你也可以在pod的annotations添加如下字段,以便注入
+
+```
+annotations:
+       traffic.sidecar.istio.io/includeOutboundIPRanges: "192.168.1.0/24"
+```
+
 ## 了解发生了什么 {#understanding-what-happened}
 
 在这个任务中，我们研究了两种从Istio网格调用外部服务的方法：
