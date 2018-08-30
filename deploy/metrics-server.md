@@ -70,7 +70,7 @@ Aggregation Layer允许kubernetes apiserver使用其他拓展API,这些API不是
 aggregator.csr  aggregator.json  aggregator-key.pem  aggregator.pem
 ```
 
-在集群中创建RBAC规则,(可以保证kubectl top po|no能正常查询,其他没做测试)
+在集群中创建RBAC规则,(可以保证kubectl top po|no能正常查询,HPA可以正常调度,其他没做测试)
 
 ```yaml
 # cat aggregator.yaml
