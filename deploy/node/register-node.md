@@ -118,7 +118,7 @@ PS:  去掉`--bootstrap-kubeconfig`参数,即不使用bootstrap方式注册node;
 启动kubelet
 
 ```
-
+# systemctl start kubelet
 ```
 
 
