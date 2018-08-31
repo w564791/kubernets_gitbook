@@ -2,20 +2,18 @@
 
 kubernetes node 节点包含如下组件：
 
-* Calico:  3.0.6 (cni plugin version: v2.0.5 )
+* Calico:  3.0.6 \(cni plugin version: v2.0.5 \)
 * Docker 17.03.2-ce
 * kubelet
-* kube-proxy(iptables)
+* kube-proxy\(iptables\)
 
 ## 配置Calico
 
 详见[Calico部署章节](node/use-calico.md)
 
-
-
 ## 安装配置docker
 
-本例使用的是docker 
+本例使用的是docker
 
 安装如下:
 
@@ -23,7 +21,7 @@ kubernetes node 节点包含如下组件：
 略...
 ```
 
-修改docker日志记录方式为json-file(17.03.2-ce默认日志驱动是json-file无需修改)
+修改docker日志记录方式为json-file\(17.03.2-ce默认日志驱动是json-file无需修改\)
 
 启动docker
 
@@ -37,7 +35,7 @@ kubernetes node 节点包含如下组件：
 
 ### requirement
 
-- conntrack程序包
+* conntrack程序包
 
 **创建 kube-proxy 的service配置文件**
 
@@ -59,13 +57,11 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 ```
 
+* kube-proxy 根据 `--cluster-cidr` 判断集群内部和外部流量，指定 `--cluster-cidr` 或 `--masquerade-all` 选项后 kube-proxy 才会对访问 Service IP 的请求做 SNAT；
 
+* `--kubeconfig` 指定的配置文件嵌入了 kube-apiserver 的地址、用户名、证书、秘钥等请求和认证信息；
 
-- kube-proxy 根据 `--cluster-cidr` 判断集群内部和外部流量，指定 `--cluster-cidr` 或 `--masquerade-all` 选项后 kube-proxy 才会对访问 Service IP 的请求做 SNAT；
-
-- `--kubeconfig` 指定的配置文件嵌入了 kube-apiserver 的地址、用户名、证书、秘钥等请求和认证信息；
-
-- 预定义的 RoleBinding `cluster-admin` 将User `system:kube-proxy` 与 Role `system:node-proxier` 绑定，该 Role 授予了调用 `kube-apiserver` Proxy 相关 API 的权限；
+* 预定义的 RoleBinding `cluster-admin` 将User `system:kube-proxy` 与 Role `system:node-proxier` 绑定，该 Role 授予了调用 `kube-apiserver` Proxy 相关 API 的权限；
 
   kube-proxy可以使用--config文件配置相应的选项
 
@@ -81,8 +77,6 @@ WantedBy=multi-user.target
   metricsBindAddress: 192.168.178.128:10249
   mode: "iptables"
   ```
-
-  
 
 ## 生成kube-proxy.kubeconfig文件
 
@@ -128,7 +122,7 @@ kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
 
 ## 安装和配置 kubelet
 
-kubelet 启动时向 kube-apiserver 发送 TLS bootstrapping 请求(手动注册方式详见[手动注册node章节](node/register-node.md))，需要先将 bootstrap token 文件中的 kubelet-bootstrap 用户赋予 system:node-bootstrapper cluster 角色\(role\)，  
+kubelet 启动时向 kube-apiserver 发送 TLS bootstrapping 请求\(手动注册方式详见[手动注册node章节](node/register-node.md)\)，需要先将 bootstrap token 文件中的 kubelet-bootstrap 用户赋予 system:node-bootstrapper cluster 角色\(role\)，  
 然后 kubelet 才能有权限创建认证请求\(certificate signing requests\)，只需要执行一次，多次执行无效，并且抛错，但是没有影响。
 
 ```bash
@@ -144,7 +138,9 @@ $ kubectl create clusterrolebinding kubelet-bootstrap \
 * ##### kubelet 依赖docker服务,需要先启动docker
 * ##### kubelet 启动之前工作目录必须创建,否则会报错,如下:
 
-         /usr/local/kubernetes/server/bin/kubele :No such file or ...
+  ```
+     /usr/local/kubernetes/server/bin/kubele :No such file or ...
+  ```
 
 `kubelet`启动文件
 
@@ -171,10 +167,7 @@ ExecStart=/bin/kubelet \
 --allow-privileged=true  \
 --network-plugin=cni
 Restart=on-failure
-
 ```
-
-
 
 * `--address` 不能设置为 `127.0.0.1`，否则后续 Pods 访问 kubelet 的 API 接口时会失败，因为 Pods 访问的 `127.0.0.1` 指向自己而不是 kubelet；
 
@@ -196,15 +189,13 @@ Restart=on-failure
 
 * --fail-swap-on=false   不使用swap
 
-  ***上列参数部分在--config指定的配置文件里设置***,该文件可以使用如下命令从ready的node上获取
+  _**上列参数部分在--config指定的配置文件里设置**_,该文件可以使用如下命令从ready的node上获取
 
   ```
   # curl -sSL http://localhost:8080/api/v1/nodes/192.168.178.128/proxy/configz | jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
   ```
 
-  
-
-  ```
+```
   # cat /etc/kubernetes/kubelet.yaml
   ---
   kind: KubeletConfiguration
@@ -216,7 +207,7 @@ Restart=on-failure
       enabled: false
       cacheTTL: 2m0s
     anonymous:
-      enabled: true
+      enabled: false
   authorization:
     mode: AlwaysAllow
     webhook:
@@ -236,9 +227,7 @@ Restart=on-failure
   clusterDomain: cluster.local.
   clusterDNS:
   - 10.254.0.2
-  ```
-
-  
+```
 
 ### 启动kublet
 
@@ -298,7 +287,7 @@ NAME              STATUS                        ROLES      AGE       VERSION
 #  kubectl get po --selector=app=nginx -o wide 
 NAME                              READY     STATUS    RESTARTS   AGE       IP               NODE
 nginx-7c87cc96df-wz2f2            1/1       Running   0          2m        172.20.112.121   192.168.178.128
-nginx-7c87cc96df-4zjbr            1/1       Running   0          2m        172.20.112.73   192.168.178.128 
+nginx-7c87cc96df-4zjbr            1/1       Running   0          2m        172.20.112.73   192.168.178.128
 ```
 
 查看ep
@@ -316,8 +305,6 @@ nginx     172.20.112.121:80,172.20.112.73:80   1m
 NAME      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
 nginx     ClusterIP   10.254.92.250   <none>        80/TCP    1m
 ```
-
-
 
 使用http命令get svc地址:
 
@@ -358,6 +345,21 @@ Commercial support is available at
 <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>
+```
+
+在master上查看注册node上的容器日志时,需要在apiserver中加上如下参数
+
+```
+--kubelet-client-certificate=/etc/kubernetes/ssl/kubernetes.pem 
+--kubelet-client-key=/etc/kubernetes/ssl/kubernetes-key.pem 
+```
+
+丢失该参数时查看日志报错如下
+
+```
+# kubectl  logs ngins-574895dbf4-tvvgg  -c nginxs
+
+error: You must be logged in to the server (the server has asked for the client to provide credentials ( pods/log  nginx-574895dbf4-tvvgg))
 ```
 
 
