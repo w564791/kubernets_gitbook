@@ -13,7 +13,7 @@ kubernetes master 节点包含的组件：
 
 此处记录部署一个三个节点的高可用 kubernetes master 集群步骤,后续创建一个`load balancer`\(以前我用的nginx4层代理，此处我使用的是aws的classic LB，但是nginx的配置保留\)来代理访问`kube-apiserver` 的请求
 
-下载相应版本的二进制包
+[下载相应版本的二进制包](https://github.com/kubernetes/kubernetes/releases)
 
 此处使用的是v1.10.2版本
 
@@ -142,12 +142,11 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 ```
 
-
-
 * --logtostderr=false 是否将日志输出到标准输出,这里选择false,输出到 `--log-dir=/var/lib/k8s`目录
 * `--v=0` 设置日志等级
 
 * `--advertise-address` :该地址为`apiserver`集群广播地址,此地址必须能为集群其他部分访问到,如果为空,则使用`--bind-address`，如果`--bind-address`未被制定,那么将使用主机的默认地址；
+
 * `--etcd-servers :`指定etcd集群地址,这里使用https;
 
 * `--admission-control`,必须包含`ServiceAccount`;
@@ -205,7 +204,6 @@ Restart=on-failure --service-cluster-ip-range=79-65535
 LimitNOFILE=65536
 [Install]
 WantedBy=multi-user.target
-
 ```
 
 * `--service-cluster-ip-range` 参数指定 `Cluster`中 `Service`的CIDR范围，该网络在各 Node 间必须路由不可达，必须和 `kube-apiserver` 中的参数一致;
@@ -241,10 +239,7 @@ Restart=on-failure
 LimitNOFILE=65536
 [Install]
 WantedBy=multi-user.target
-
 ```
-
-
 
 ### 启动 kube-scheduler
 
@@ -271,5 +266,6 @@ etcd-0               Healthy   {"health": "true"}
 ```
 $ curl -k --cert /etc/kubernetes/ssl/ca.pem  --key /etc/kubernetes/ssl/ca-key.pem https://10.10.6.201:6443/apis
 ```
+
 
 
