@@ -140,7 +140,7 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
 }
 ```
 
-* 如果`hosts`字段不为空,则需要制定授权证书的IP或域名列表,由于该证书后续江北etcd集群和`kubernetes  master`集群所使用,所以上面指定了`etcd`集群,master集群的主机域名,`kubernetes`**服务的服务 IP **一般是`kue-apiserver`指定的`service-cluster-ip-range`网段的第一个IP，如 `10.254.0.1`,`kubernetes`一定要加,不然后面会遇到很多坑,
+* 如果`hosts`字段不为空,则需要制定授权证书的IP或域名列表,由于该证书后续江北etcd集群和`kubernetes  master`集群所使用,所以上面指定了`etcd`集群,master集群的主机域名,`kubernetes`**服务的服务 IP **一般是`kue-apiserver`指定的`service-cluster-ip-range`网段的第一个IP，如 `kubernetes`一定要加,不然后面会遇到很多坑,
 * 另外本例的LB并没有使用公网的DNS，建议使用公网的DNS
 * 此处的IP仅为master节点的IP，复用etcd数据库地址，添加node时无需额外生成证书
 
