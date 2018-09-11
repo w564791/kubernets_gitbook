@@ -108,7 +108,7 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
 # cat kubernetes-csr.json
 ```
 
-```
+```json
 {
     "CN": "kubernetes",
     "hosts": [
