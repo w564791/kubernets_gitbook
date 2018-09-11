@@ -182,6 +182,10 @@ kubernetes.csr  kubernetes-csr.json  kubernetes-key.pem  kubernetes.pem
 * `kube-apiserver` 预定义了一些 `RBAC`使用的 `RoleBindings`，如 `cluster-admin` 将 `Group system:masters`与 `Role cluster-admin` 绑定，该 `Role` 授予了调用`kube-apiserver`的所有 API的权限；
 * `OU`指定该证书的 `Group`为 `system:masters，kubelet` 使用该证书访问 `kube-apiserver`时 ，由于证书被 CA 签名，所以认证通过，同时由于证书用户组为经过预授权的 `system:masters`，所以被授予访问所有 API 的权限；
 
+
+
+
+
 生成 admin 证书和私钥
 
 ```
@@ -310,6 +314,14 @@ $ cfssl-certinfo -cert kubernetes.pem
     "10.10.5.105",
 
 ...
+```
+
+## 验证证书
+
+```
+# openssl verify -CAfile /etc/kubernetes/ssl/ca.pem /etc/kubernetes/ssl/kubernetes.pem
+/etc/kubernetes/ssl/kubernetes.pem: OK
+
 ```
 
 ## 分发证书

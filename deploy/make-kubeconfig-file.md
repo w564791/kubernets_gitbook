@@ -22,7 +22,7 @@ EOF
 ### 创建 kubelet bootstrapping kubeconfig 文件
 
 ```
-# cd/etc/kubernetes
+# cd /etc/kubernetes
 # 我这里的KUBE_APISERVER设置的ng(负载均衡器)的地址
 # export KUBE_APISERVER="https://xxxx"
 # 设置集群参数
@@ -122,10 +122,6 @@ users:
     client-certificate-data: ...
     client-key-data: ...
 ```
-
-* `admin.pem` 证书 OU 字段值为 `system:masters，kube-apiserver`预定义的 `RoleBinding cluster-admin`将 `Group system:masters` 与 `Role cluster-admin` 绑定，该 `Role`授予了调用`kube-apiserver`相关 API 的权限；
-* 生成的 `kubeconfig`被保存到 `~/.kube/config` 文件；
-* 文件中有`master server`指向,在使用kubectl命令时,默认会连接localhost:8080
 
 
 
