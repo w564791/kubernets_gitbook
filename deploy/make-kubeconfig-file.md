@@ -127,9 +127,7 @@ users:
 * 生成的 `kubeconfig`被保存到 `~/.kube/config` 文件；
 * 文件中有`master server`指向,在使用kubectl命令时,默认会连接localhost:8080
 
-* 此文件非常有用,后文用到的config2,即dashboard和kube-dns,都是使用此文件验证
 
-* 将此文件复制到`node`为`/etc/kubernetes/config2`待用
 
 
 
