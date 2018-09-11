@@ -158,7 +158,7 @@ kubernetes.csr  kubernetes-csr.json  kubernetes-key.pem  kubernetes.pem
 # cat admin-csr.json
 ```
 
-```
+```json
 {
     "CN": "admin",
     "hosts": [],
@@ -198,7 +198,7 @@ admin.csr admin-csr.json admin-key.pem admin.pem
 # cat kube-proxy-csr.json
 ```
 
-```
+```json
 {
     "CN": "system:kube-proxy",
     "hosts": [],
