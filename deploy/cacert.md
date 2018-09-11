@@ -148,7 +148,7 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
 
 ```
 # cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kubernetes-csr.json | cfssljson -bare kubernetes
-# ls kuberntes*
+# ls kubernetes*
 kubernetes.csr  kubernetes-csr.json  kubernetes-key.pem  kubernetes.pem
 ```
 
