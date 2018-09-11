@@ -18,7 +18,7 @@ etcd version: 3.2.7
 
 `systemd`启动文件: 三台`etcd`服务的配置都差不多,仅有`--name`部分有所改变,这里只列出一个配置文件\)
 
-```
+```bash
 [centos@ip-10-10-6-201 ssl]$ systemctl cat etcd
 # /usr/lib/systemd/system/etcd.service
 [Unit]
