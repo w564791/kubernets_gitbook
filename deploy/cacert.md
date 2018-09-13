@@ -140,7 +140,7 @@ ca-config.json  ca.csr  ca-csr.json  ca-key.pem  ca.pem
 }
 ```
 
-* 如果`hosts`字段不为空,则需要制定授权证书的IP或域名列表,由于该证书后续将被etcd集群和`kubernetes  master`集群所使用,所以上面指定了`etcd`集群,master集群的主机域名,`kubernetes`**服务的服务 IP **一般是`kue-apiserver`指定的`service-cluster-ip-range`网段的第一个IP，如 `kubernetes`一定要加,不然后面会遇到很多坑,
+* 如果`hosts`字段不为空,则需要制定授权证书的IP或域名列表,由于该证书后续将被etcd集群和`kubernetes  master`集群所使用,所以上面指定了`etcd`集群,master集群的主机域名,`kubernetes`**服务的服务 IP **一般是`kue-apiserver`指定的`service-cluster-ip-range`网段的第一个IP，如` 10.254.0.1 kubernetes`一定要加,不然后面会遇到很多坑,比如`calico-controller`默认会使用`https://kubernetes.default:443`和`kubernetes`交互
 * 另外本例的LB并没有使用公网的DNS，建议使用公网的DNS
 * 此处的IP仅为master节点的IP，复用etcd数据库地址，添加node时无需额外生成证书
 
@@ -181,10 +181,6 @@ kubernetes.csr  kubernetes-csr.json  kubernetes-key.pem  kubernetes.pem
 * 后续`kube-apiserver` 使用 `RBAC`对客户端\(如 `kubelet、kube-proxy、Pod`\)请求进行授权；
 * `kube-apiserver` 预定义了一些 `RBAC`使用的 `RoleBindings`，如 `cluster-admin` 将 `Group system:masters`与 `Role cluster-admin` 绑定，该 `Role` 授予了调用`kube-apiserver`的所有 API的权限；
 * `OU`指定该证书的 `Group`为 `system:masters，kubelet` 使用该证书访问 `kube-apiserver`时 ，由于证书被 CA 签名，所以认证通过，同时由于证书用户组为经过预授权的 `system:masters`，所以被授予访问所有 API 的权限；
-
-
-
-
 
 生成 admin 证书和私钥
 
@@ -321,7 +317,6 @@ $ cfssl-certinfo -cert kubernetes.pem
 ```
 # openssl verify -CAfile /etc/kubernetes/ssl/ca.pem /etc/kubernetes/ssl/kubernetes.pem
 /etc/kubernetes/ssl/kubernetes.pem: OK
-
 ```
 
 ## 分发证书
