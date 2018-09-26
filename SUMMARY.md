@@ -82,4 +82,5 @@
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
   * [cannot create certificate signing request](yu-dao-de-yi-xie-wen-ti/unable-to-register-node-19216870175-with-api-server-unauthorized.md)
   * [User "system:node:192.168.70.175" cannot create nodes at the cluster scope](yu-dao-de-yi-xie-wen-ti/user-systemnode19216870175-cannot-create-nodes-at-the-cluster-scope.md)
+  * [something](yu-dao-de-yi-xie-wen-ti/something.md)
 
