@@ -65,7 +65,7 @@ kubectl 在生成运行时对象后，开始为它[找到适当的 API 组和 AP
 
 那么 apiserver 如何对请求进行认证呢？当 kube-apiserver 第一次启动时，它会查看用户提供的所有 [CLI 参数](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/)，并组合成一个合适的令牌列表。
 
-**举个例子：**如果提供了 `--client-ca-file` 参数，则会将 x509 客户端证书认证添加到令牌列表中；如果提供了 `--token-auth-file` 参数，则会将 breaer token 添加到令牌列表中。
+**举个例子：** 如果提供了 `--client-ca-file` 参数，则会将 x509 客户端证书认证添加到令牌列表中；如果提供了 `--token-auth-file` 参数，则会将 breaer token 添加到令牌列表中。
 
 每次收到请求时，apiserver 都会[通过令牌链进行认证，直到某一个认证成功为止](https://github.com/kubernetes/apiserver/blob/51bebaffa01be9dc28195140da276c2f39a10cd4/pkg/authentication/request/union/union.go#L54)：
 
