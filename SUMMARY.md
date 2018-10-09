@@ -27,6 +27,7 @@
     * [Kubernetes TSL bootstrapping (转)](deploy/tsl-bootstrapping.md)
     * [kubectl run时发生了什么(转)](concept/whathappendwhentaskstart.md)
     * [请求都去哪儿了(转)](concept/wheretherequestgo.md)
+    * [理解Istio中Envoy代理 Sidecar注入以及流量劫持(转)](concept/sidecar.md)
   * [关于防火墙](firewall.md)
 * [在CentOS7上部署kubernetes1.10.2集群](deploy.md)
   * [资源类型](deploy/source.md)
