@@ -243,7 +243,7 @@ Infomer 是一种模式，它允许 Controller 查找缓存在本地内存中的
 - 将 `PodScheduled` 的 `status` 值设置为 True。可以通过 kubectl 来查看：
 
 ```bash
-$ kubectl get <PODNAME> -o go-template='{{range .status.conditions}}{{if eq .type "PodScheduled"}}{{.status}}{{end}}{{end}}'
+$ kubectl get <PODNAME> -o go-template='\{\{range .status.conditions\}\}\{\{if eq .type "PodScheduled"\}\}\{\{.status\}\}\{\{end\}\}\{\{end\}\}'
 ```
 
 一旦 Scheduler 将 Pod 调度到某个节点上，该节点的 `Kubelet` 就会接管该 Pod 并开始部署。
@@ -278,7 +278,7 @@ Note
    - 最后，Pod 的 `Condition` 字段由 Pod 内所有容器的状态决定。现在我们的容器还没有被容器运行时创建，所以 [`PodReady` 的状态被设置为 `False`](https://github.com/kubernetes/kubernetes/blob/fc8bfe2d8929e11a898c4557f9323c482b5e8842/pkg/kubelet/status/generate.go#L70-L81)。可以通过 kubectl 查看：
 
    ```bash
-   $ kubectl get <PODNAME> -o go-template='{{range .status.conditions}}{{if eq .type "Ready"}}{{.status}}{{end}}{{end}}'
+   $ kubectl get <PODNAME> -o go-template='\{\{range .status.conditions\}\}\{\{if eq .type "Ready"\}\}\{\{.status\}\}\{\{end\}\}\{\{end\}\}'
    ```
 
 3. 生成 PodStatus 之后（Pod 中的 `status` 字段），Kubelet 就会将它发送到 Pod 的状态管理器，该管理器的任务是通过 apiserver 异步更新 etcd 中的记录。

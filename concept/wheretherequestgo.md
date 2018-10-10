@@ -8,7 +8,7 @@ from [请求都去哪儿了?](https://www.yangcs.net/posts/where-is-the-request-
 
 ```bash
 # 获取 istio-pilot 的 ClusterIP
-$ export PILOT_SVC_IP=$(kubectl -n istio-system get svc -l app=istio-pilot -o go-template='{{range .items}}{{.spec.clusterIP}}{{end}}')
+$ export PILOT_SVC_IP=$(kubectl -n istio-system get svc -l app=istio-pilot -o go-template='\{\{range .items\}\}\{\{.spec.clusterIP\}\}\{\{end\}\}')
 
 # 查看 eds
 $ curl http://$PILOT_SVC_IP:8080/debug/edsz|grep "outbound|9080||productpage.default.svc.cluster.local" -A 27 -B 1
