@@ -1,7 +1,9 @@
 # Summary
 
 * [基础知识](README.md)
+
   * [主要概念](concept.md)
+
     * [Node](concept/node.md)
     * [Pod](concept/pod.md)
     * [Namspace](concept/namspaces.md)
@@ -24,10 +26,15 @@
     * [Network Policies](concept/network-policies.md)
     * [Taints and Tolerations](concept/taints-and-tolerations.md)
     * [日志审计](concept/Auditing.md)
+
+  * 转载的文档
+
     * [Kubernetes TSL bootstrapping (转)](deploy/tsl-bootstrapping.md)
     * [kubectl run时发生了什么(转)](concept/whathappendwhentaskstart.md)
     * [请求都去哪儿了(转)](concept/wheretherequestgo.md)
     * [理解Istio中Envoy代理 Sidecar注入以及流量劫持(转)](concept/sidecar.md)
+    * [通过消除特权容器的需求来提高Istio部署的安全性(译)](concept/istio-controller.md)
+
   * [关于防火墙](firewall.md)
 * [在CentOS7上部署kubernetes1.10.2集群](deploy.md)
   * [资源类型](deploy/source.md)
