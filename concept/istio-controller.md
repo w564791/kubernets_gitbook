@@ -56,5 +56,5 @@ $ helm template -n istio-pod-network-controller --set kubernetesDistribution=Ope
 
 istio-pod-network-controller是一个使Istio部署更安全的选项。它通过消除使用*特权* SCC 在Istio网格中运行pod的需要并允许它们仅使用*非根* SCC 运行。如果您决定采用此解决方案，请记住，这是一个尽力而为的项目，而不是Red Hat正式支持。
 
-PS:  在译者测试过程中发现一些问题,比如egress白名单注释: traffic.sidecar.istio.io/excludeOutboundIPRanges=0.0.0.0/0在原生init容器中能正确放行所有出口流量,但是在[istio-pod-network-controller](https://github.com/sabre1041/istio-pod-network-controller)中不能正确被识别,即便是在[istio-pod-network-controller](https://github.com/sabre1041/istio-pod-network-controller)已经挂载的配置文件中存在相应的配置,后续关注详见 [issue #18](**https://github.com/sabre1041/istio-pod-network-controller/issues/18**)
+PS:  在译者测试过程中发现一些问题,比如egress白名单注释: traffic.sidecar.istio.io/excludeOutboundIPRanges=0.0.0.0/0在原生init容器中能正确放行所有出口流量,但是在[istio-pod-network-controller](https://github.com/sabre1041/istio-pod-network-controller)中不能正确被识别,即便是在[istio-pod-network-controller](https://github.com/sabre1041/istio-pod-network-controller)已经挂载的配置文件中存在相应的配置,后续关注详见 [issue #18](https://github.com/sabre1041/istio-pod-network-controller/issues/18)
 

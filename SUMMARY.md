@@ -34,6 +34,7 @@
     * [请求都去哪儿了(转)](concept/wheretherequestgo.md)
     * [理解Istio中Envoy代理 Sidecar注入以及流量劫持(转)](concept/sidecar.md)
     * [通过消除特权容器的需求来提高Istio部署的安全性(译)](concept/istio-controller.md)
+    * [Istio流量管理实现机制深度解析(转)](concept/istio-network.md)
 
   * [关于防火墙](firewall.md)
 * [在CentOS7上部署kubernetes1.10.2集群](deploy.md)
