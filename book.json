@@ -1,0 +1,51 @@
+{
+    "title": "Cloudroom SDK Refference",
+    "description": "云屋视频SDK参考文档",
+    "author": "w564791",
+    "language": "zh-hans",
+    "styles": {
+        "website": "style.css"
+    },
+    "plugins": [
+        "-lunr",
+        "-search",
+        "-livereload",
+        "-sharing",
+        "book-summary-scroll-position-saver",
+        "expandable-chapters",
+        "search-plus",
+        "splitter",
+        "tbfed-pagefooter",
+        "back-to-top-button",
+        "yahei",
+        "katex",
+        "theme-api",
+        "theme-comscore"
+    ],
+    "pluginsConfig": {
+        "expandable-chapters": {},
+        "theme-api": { "theme": "light" },
+        "tbfed-pagefooter": {
+            "copyright": "&copy; w564791",
+            "modify_label": "文件修订时间：",
+            "modify_format": "YYYY-MM-DD HH:mm:ss"
+        },
+        "fontSettings": {
+            "theme": "white",
+            "family": "msyh",
+            "size": 2
+          }
+    },
+    "pdf": {
+        "toc": true,
+        "pageNumbers": true,
+        "fontSize": 18,
+        "paperSize": "a3",
+        "margin": {
+          "right": 30,
+          "left": 30,
+          "top": 30,
+          "bottom": 50
+        }
+      }
+}
