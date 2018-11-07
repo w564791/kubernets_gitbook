@@ -36,6 +36,8 @@
     * [通过消除特权容器的需求来提高Istio部署的安全性(译)](concept/istio-controller.md)
     * [Istio流量管理实现机制深度解析(转)](concept/istio-network.md)
     * [Prometheus-func(转)](concept/prometheus-func.md)
+    * [Kubernetes安全指南(转)](concept/k8s-security.md)
+    * [利用Kubernetes优雅的处理HTTP请求(转)](concept/k8s-http.md)
 
   * [关于防火墙](firewall.md)
 * [在CentOS7上部署kubernetes1.10.2集群](deploy.md)

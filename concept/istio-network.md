@@ -859,7 +859,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
 
 在该listener的配置中，我们可以看到并没有像inbound listener那样通过envoy.tcp_proxy直接指定一个downstream的cluster，而是通过rds配置了一个[路由规则9080](https://zhaohuabing.com/post/2018-09-25-istio-traffic-management-impl-intro/#routes)，在路由规则中再根据不同的请求目的地对请求进行处理。
 
-```
+```json
 {
      "version_info": "2018-09-06T09:34:19Z",
      "listener": {
@@ -887,11 +887,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
            "http_filters": [
             {
              "name": "mixer",
-             "config": {
-			  
-			  ......
-
-             }
+             "config": {}
             },
             {
              "name": "envoy.cors"
@@ -950,7 +946,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
 
 下面是9080的路由配置，从文件中可以看到对应了3个virtual host，分别是details、ratings和reviews，这三个virtual host分别对应到不同的[outbound cluster](https://zhaohuabing.com/post/2018-09-25-istio-traffic-management-impl-intro/#outbound-cluster)。
 
-```
+```json
 {
      "version_info": "2018-09-14T01:38:20Z",
      "route_config": {
@@ -986,10 +982,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
            "operation": "details.default.svc.cluster.local:9080/*"
           },
           "per_filter_config": {
-           "mixer": {
-            ......
-
-           }
+           "mixer": {}
           }
          }
         ]
@@ -1099,7 +1092,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
 
 4. 请求被Virtual Listener根据原目标IP（通配）和端口（9080）转发到0.0.0.0_9080这个listener。
 
-   ```
+   ```json
    {
     "version_info": "2018-09-06T09:34:19Z",
     "listener": {
@@ -1110,7 +1103,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
        "port_value": 15001
       }
      }
-     ......
+     ...
    
      "use_original_dst": true //请求转发给和原始目的IP:Port匹配的listener
     },
@@ -1118,7 +1111,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
 
 5. 根据0.0.0.0_9080 listener的http_connection_manager filter配置,该请求采用“9080” route进行分发。
 
-   ```
+   ```json
    {
     "version_info": "2018-09-06T09:34:19Z",
     "listener": {
@@ -1135,7 +1128,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
         {
          "name": "envoy.http_connection_manager",
          "config": {
-         ......
+         ...
    
           "rds": {
            "route_config_name": "9080",
@@ -1161,7 +1154,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
 
 6. “9080”这个route的配置中，host name为details:9080的请求对应的cluster为outbound|9080||details.default.svc.cluster.local
 
-   ```
+   ```json
    {
     "version_info": "2018-09-14T01:38:20Z",
     "route_config": {
@@ -1193,7 +1186,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
           "timeout": "0s",
           "max_grpc_timeout": "0s"
          },
-           ......
+           ...
    
           }
          }
@@ -1208,7 +1201,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
 
 7. outbound|9080||details.default.svc.cluster.local cluster为动态资源，通过eds查询得到其endpoint为192.168.206.21:9080。
 
-   ```
+   ```json
    {
    "clusterName": "outbound|9080||details.default.svc.cluster.local",
    "endpoints": [
@@ -1226,7 +1219,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
              }
            }
          },
-        ......  
+        ...  
        }
      ]
    }
@@ -1242,7 +1235,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
 
 11. 根据92.168.206.21_9080 listener的http_connection_manager filter配置,该请求对应的cluster为 inbound|9080||details.default.svc.cluster.local 。
 
-    ```
+    ```json
     {
      "version_info": "2018-09-06T09:34:16Z",
      "listener": {
@@ -1258,7 +1251,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
         "filters": [
          {
           "name": "envoy.http_connection_manager",
-          ......
+          ...
               
           "route_config": {
             "name": "inbound|9080||details.default.svc.cluster.local",
@@ -1274,7 +1267,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
                  "cluster": "inbound|9080||details.default.svc.cluster.local",
                  "timeout": "0.000s"
                 },
-                ......
+                ...
                     
                 "match": {
                  "prefix": "/"
@@ -1287,7 +1280,7 @@ Productpage Pod中的Envoy创建了多个Outbound Listener
              }
             ]
            },
-            ......
+            ...
                 
            ]
           }
