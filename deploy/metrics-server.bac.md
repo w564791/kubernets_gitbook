@@ -9,6 +9,8 @@ API与任何其他API没有区别：
 - 它可以通过与`/apis/metrics.k8s.io/`路径下的其他Kubernetes API相同的端点发现
 - 它提供相同的安全性，可扩展性和可靠性保证
 
+
+
 ## 配置K8S Aggregation Layer
 
 Aggregation Layer允许kubernetes apiserver使用其他拓展API,这些API不是kubernetes API的核心心部分
@@ -42,7 +44,7 @@ Aggregation Layer允许kubernetes apiserver使用其他拓展API,这些API不是
 ```json
 # cat aggregator.json
 {
-    "CN": "metrics-server", 
+    "CN": "metrics-server",
     "hosts": [],
     "key": {
         "algo": "rsa",
@@ -131,8 +133,8 @@ ExecStart=/bin/kube-apiserver \
 --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem \
 --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem \
 --client-ca-file=/etc/kubernetes/ssl/ca.pem \
---kubelet-client-certificate=/etc/kubernetes/ssl/kubernetes.pem \
---kubelet-client-key=/etc/kubernetes/ssl/kubernetes-key.pem \
+#--kubelet-client-certificate=/etc/kubernetes/ssl/kubernetes.pem \
+#--kubelet-client-key=/etc/kubernetes/ssl/kubernetes-key.pem \
 --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem  \
 --requestheader-client-ca-file=/etc/kubernetes/ssl/ca.pem \
 --proxy-client-cert-file=/etc/kubernetes/ssl/aggregator.pem \
@@ -141,7 +143,7 @@ ExecStart=/bin/kube-apiserver \
 --requestheader-group-headers=X-Remote-Group \
 --requestheader-username-headers=X-Remote-User \
 --enable-aggregator-routing=true \
---requestheader-allowed-names=metrics-server \
+--requestheader-allowed-names=metrics-server,admin \
 --etcd-cafile=/etc/kubernetes/ssl/ca.pem \
 --etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem \
 --etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem \
@@ -155,39 +157,5 @@ LimitNOFILE=65536
 [Install]
 WantedBy=multi-user.target
 
-```
-
-## **kubelet配置**
-
-配置kube-metrics通过kubelet的10255端口安全访问数据:
-
-修改kubelet配置,启用kubelet webhook
-
-```
-$ cat /etc/kubernetes/kubelet.yaml
-....
-authentication:
-  x509:
-    clientCAFile: "/etc/kubernetes/ssl/ca.pem"
-  webhook:
-    enabled: true  #启用kubeletweihook
-    cacheTTL: 1s
-  anonymous:
-    enabled: false #禁用kubelet匿名请求
-....
-```
-
-跳过metrics-server的权威证书认证过程:
-
-```
-$ kubectl  get deploy  metrics-server -n kube-system -o yaml
-....
-    spec:
-      containers:
-      - args:
-        - --kubelet-insecure-tls=true
-        image: w564791/metrics-server-amd64:v0.3.1
-
-....
 ```
 

@@ -151,6 +151,7 @@ Kubenretes1.6中使用etcd V3版本的API，使用`etcdctl`直接`ls`的话只�
 
 ```
 ETCDCTL_API=3 etcdctl get /registryamespaces/default -w=json|python -m json.tool
+ETCDCTL_API=3  etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/ssl/ca.pem --cert=/etc/kubernetes/ssl/kubernetes.pem --key=/etc/kubernetes/ssl/kubernetes-key.pem get/ --prefix   --keys-only
 ```
 
 * `-w`指定输出格式

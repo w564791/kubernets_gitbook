@@ -67,15 +67,15 @@ WantedBy=multi-user.target
 
   ```
   apiVersion: kubeproxy.config.k8s.io/v1alpha1
-  bindAddress: 192.168.178.128
   clientConnection:
     kubeconfig: /etc/kubernetes/kube-proxy.kubeconfig
   clusterCIDR: 10.254.0.0/16
-  healthzBindAddress: 192.168.178.128:10256
-  hostnameOverride: kube-node2
+  OOMScoreAdj: -999
+  PortRange : "30000-60000"
+  healthzBindAddress: 127.0.0.1:10256
   kind: KubeProxyConfiguration
-  metricsBindAddress: 192.168.178.128:10249
-  mode: "iptables"
+  metricsBindAddress: 127.0.0.1:10249
+  Mode: ProxyModeIPVS
   ```
 
 ## 生成kube-proxy.kubeconfig文件
@@ -196,37 +196,81 @@ Restart=on-failure
   ```
 
 ```
-  # cat /etc/kubernetes/kubelet.yaml
-  ---
-  kind: KubeletConfiguration
-  apiVersion: kubelet.config.k8s.io/v1beta1
-  authentication:
-    x509:
-      clientCAFile: "/etc/kubernetes/ssl/ca.pem"
-    webhook:
-      enabled: false
-      cacheTTL: 2m0s
-    anonymous:
-      enabled: false
-  authorization:
-    mode: AlwaysAllow
-    webhook:
-      cacheAuthorizedTTL: 5m0s
-      cacheUnauthorizedTTL: 30s
-  address: 192.168.178.128
-  enableDebuggingHandlers: true
-  port: 10250
-  readOnlyPort: 10255
-  failSwapOn: false
-  cgroupDriver: cgroupfs
-  hairpinMode: promiscuous-bridge
-  serializeImagePulls: false
-  featureGates:
-    RotateKubeletClientCertificate: true
-    RotateKubeletServerCertificate: true
-  clusterDomain: cluster.local.
-  clusterDNS:
-  - 10.254.0.2
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  x509:
+    clientCAFile: "/etc/kubernetes/ssl/ca.pem"
+  webhook:
+    enabled: true
+    cacheTTL: 1s
+  anonymous:
+    enabled: false
+authorization:
+  #mode: Webhook
+  mode: AlwaysAllow
+  webhook:
+    cacheAuthorizedTTL: 1s
+    cacheUnauthorizedTTL: 1s
+address: 192.168.178.128
+#tlsCertFile: "/etc/kubernetes/ssl/kubelet.crt"
+#tlsPrivateKeyFile: "/etc/kubernetes/ssl/kubelet.key"
+enableDebuggingHandlers: true
+port: 10250
+#readOnlyPort: 10255
+failSwapOn: false
+cgroupDriver: cgroupfs
+cgroupsPerQOS: true
+hairpinMode: promiscuous-bridge
+oomScoreAdj: -999
+registryBurst: 10
+registryPullQPS: 5
+kubeAPIBurst: 10
+kubeAPIQPS: 5
+imageGCHighThresholdPercent: 85
+imageGCLowThresholdPercent: 80
+imageMinimumGCAge: 2m0s
+iptablesDropBit: 15
+iptablesMasqueradeBit: 14
+healthzBindAddress: 127.0.0.1
+healthzPort: 10248
+httpCheckFrequency: 20s
+eventBurst: 10
+eventRecordQPS: 5
+configMapAndSecretChangeDetectionStrategy: Watch
+evictionHard:
+  imagefs.available: 15%
+  memory.available: 200Mi
+  nodefs.available: 10%
+  nodefs.inodesFree: 5%
+evictionSoft:
+  memory.available: 10%
+  nodefs.available: 2Gi
+evictionSoftGracePeriod:
+  memory.available: 1m30s
+  nodefs.available: 1m30s
+evictionPressureTransitionPeriod: 30s
+evictionMaxPodGracePeriod: 120
+evictionMinimumReclaim:
+  imagefs.available: 2Gi
+  memory.available: 0Mi
+  nodefs.available: 500Mi
+systemReserved:
+  cpu: 100m
+  ephemeral-storage: 1Gi
+  memory: 200Mi
+kubeReserved:
+  cpu: 100m
+  ephemeral-storage: 1Gi
+  memory: 200Mi
+serializeImagePulls: false
+featureGates:
+  RotateKubeletClientCertificate: true
+  RotateKubeletServerCertificate: true
+clusterDomain: cluster.local.
+clusterDNS:
+- 10.254.0.2
+
 ```
 
 ### 启动kublet
