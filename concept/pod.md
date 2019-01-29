@@ -23,7 +23,9 @@ Pods are employed a number of ways in a Kubernetes cluster, including:
 
 
 
-  [^pid命名空间共享]: 即Pod种的不同容器内程序可以看到其他容器程序的进程ID,Pod中的容器共享IP地址和端口号，它们之间可以通过localhost互相发现,pid命名空间共享在K8S1.8之前默认开启,并且需要docker 版本高于或者等于1.13.1,
+  ```
+  pid命名空间共享: 即Pod种的不同容器内程序可以看到其他容器程序的进程ID,Pod中的容器共享IP地址和端口号，它们之间可以通过localhost互相发现,pid命名空间共享在K8S1.8之前默认开启,并且需要docker 版本高于或者等于1.13.1,
+  ```
 
 * 网络命名空间: Pod种的多个容器能够访问同一个IP和端口范围,每个Pod都会被分配一个唯一的IP地址。Pod中的所有容器共享网络空间，包括IP地址和端口,Pod中的容器与外界通信时，必须分配共享网络资源（例如使用宿主机的端口映射）;
 
