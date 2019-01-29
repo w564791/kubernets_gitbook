@@ -19,10 +19,18 @@ Pods are employed a number of ways in a Kubernetes cluster, including:
 
 一个Pod种的应用容器共享同一组资源:
 
-* PID命名空间:Pod种的不用应用程序可以看到其他应用程序的进程IDPod中的容器共享IP地址和端口号，它们之间可以通过`localhost`互相发现;
-* 网络命名空间:Pod种的多个容器能够访问同一个IP和端口范围,每个Pod都会被分配一个唯一的IP地址。Pod中的所有容器共享网络空间，包括IP地址和端口,Pod中的容器与外界通信时，必须分配共享网络资源（例如使用宿主机的端口映射）;
-* IPC命名空间:Pod种的多个容器能使用SystemV IPC或POSIX消息队列进行通信
-* UTS命名空间:Pod种的多个容器共享一个主机名
+* PID命名空间:  pod有独立的pid命名空间,这相对于宿主机,pid是可以与宿主机重复的;
+
+
+
+  [^pid命名空间共享]: 即Pod种的不同容器内程序可以看到其他容器程序的进程ID,Pod中的容器共享IP地址和端口号，它们之间可以通过localhost互相发现,pid命名空间共享在K8S1.8之前默认开启,并且需要docker 版本高于或者等于1.13.1,
+
+* 网络命名空间: Pod种的多个容器能够访问同一个IP和端口范围,每个Pod都会被分配一个唯一的IP地址。Pod中的所有容器共享网络空间，包括IP地址和端口,Pod中的容器与外界通信时，必须分配共享网络资源（例如使用宿主机的端口映射）;
+
+* IPC命名空间: Pod种的多个容器能使用SystemV IPC或POSIX消息队列进行通信
+
+* UTS命名空间: Pod种的多个容器共享一个主机名
+
 * Volumes\(共享存储卷\):Pod种的各个容器可以访问在Pod级别定义的Volumes,Volume跟pod有相同的生命周期（当其UID存在的时候）。当Pod因为某种原因被删除或者被新创建的相同的Pod取代，它相关的东西（例如volume）也会被销毁和再创建一个新的volume。
 
 ## 使用Pod

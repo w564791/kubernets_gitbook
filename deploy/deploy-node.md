@@ -238,32 +238,39 @@ httpCheckFrequency: 20s
 eventBurst: 10
 eventRecordQPS: 5
 configMapAndSecretChangeDetectionStrategy: Watch
+####硬驱逐阈值####
 evictionHard:
   imagefs.available: 15%
   memory.available: 200Mi
   nodefs.available: 10%
   nodefs.inodesFree: 5%
+####软驱逐阈值####
 evictionSoft:
   memory.available: 10%
   nodefs.available: 2Gi
+####驱逐间隔####
 evictionSoftGracePeriod:
   memory.available: 1m30s
   nodefs.available: 1m30s
 evictionPressureTransitionPeriod: 30s
 evictionMaxPodGracePeriod: 120
+####驱逐时需要释放的最少资源####
 evictionMinimumReclaim:
   imagefs.available: 2Gi
   memory.available: 0Mi
   nodefs.available: 500Mi
+####为系统预留的资源####
 systemReserved:
   cpu: 100m
   ephemeral-storage: 1Gi
   memory: 200Mi
+####为kubelet预留的资源####
 kubeReserved:
   cpu: 100m
   ephemeral-storage: 1Gi
   memory: 200Mi
 serializeImagePulls: false
+####自动轮替证书####
 featureGates:
   RotateKubeletClientCertificate: true
   RotateKubeletServerCertificate: true
