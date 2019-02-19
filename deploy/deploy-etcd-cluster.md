@@ -213,3 +213,12 @@ $ etcd \
 
 
 
+数据恢复
+
+```
+# ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/ssl/ca.pem --cert=/etc/kubernetes/ssl/kubernetes.pem --key=/etc/kubernetes/ssl/kubernetes-key.pem member list
+2019-02-19 10:44:23.533758 I | warning: ignoring ServerName for user-provided CA for backwards compatibility is deprecated
+8e9e05c52164694d, started, etcd, http://localhost:2380, https://192.168.178.128:2379
+
+```
+
