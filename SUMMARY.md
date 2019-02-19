@@ -42,6 +42,7 @@
     * [cni-plugin工作原理(转)](concept/cni-plugin.md)
 
   * [关于防火墙](firewall.md)
+
 * [在CentOS7上部署kubernetes1.10.2集群](deploy.md)
   * [资源类型](deploy/source.md)
   * [格式化输出](deploy/format-output.md)
@@ -95,8 +96,15 @@
     * [注入sidecar\(手动或自动\)](istio-08lts/sidecar.md)
     * [词汇](istio-08lts/attribute-vocabulary.md)
     * [表达式](istio-08lts/expression-language.md)
+
 * [遇到的一些问题](yu-dao-de-yi-xie-wen-ti.md)
+
   * [cannot create certificate signing request](yu-dao-de-yi-xie-wen-ti/unable-to-register-node-19216870175-with-api-server-unauthorized.md)
   * [User "system:node:192.168.70.175" cannot create nodes at the cluster scope](yu-dao-de-yi-xie-wen-ti/user-systemnode19216870175-cannot-create-nodes-at-the-cluster-scope.md)
   * [something](yu-dao-de-yi-xie-wen-ti/something.md)
+
+* 漏洞报告(2019)
+
+  - [CVE-2019-5736](concept/CVE-2019-5736.md)
+
 

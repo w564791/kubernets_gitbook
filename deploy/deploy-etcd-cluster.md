@@ -168,25 +168,48 @@ $ echo L3JlZ2lzdHJ5L25hbWVzcGFjZXMvYXV0b21vZGVs|base64 -d
 
 ### 对于 API 3 备份与恢复方法
 
-在命令行设置：
+etcd v3恢复时,所有节点都需要恢复snapshot文件,当集群使用`etcdctl snapshot restore`时,会创建新的数据目录,如果未指定`--data-dir` 将在当前目录创建新的数据目录,目录命名方式未`--name`指定的名称与`.etcd`的组合,例如`--name test`此时新的数据目录名称被设定为``test.etcd` ,当不指定`--name`时,新的数据目录被默认命名为`default.etcd`
+
+如下集群数据恢复方法来自官网,未做加密验证,生产使用时,建议加上`https`证书验证:
 
 ```
-# export ETCDCTL_API=3
-```
+# the following creates new etcd data directories
+$ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
+  --name m1 \
+  --initial-cluster m1=http://host1:2380,m2=http://host2:2380,m3=http://host3:2380 \
+  --initial-cluster-token etcd-cluster-1 \
+  --initial-advertise-peer-urls http://host1:2380
+$ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
+  --name m2 \
+  --initial-cluster m1=http://host1:2380,m2=http://host2:2380,m3=http://host3:2380 \
+  --initial-cluster-token etcd-cluster-1 \
+  --initial-advertise-peer-urls http://host2:2380
+$ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \
+  --name m3 \
+  --initial-cluster m1=http://host1:2380,m2=http://host2:2380,m3=http://host3:2380 \
+  --initial-cluster-token etcd-cluster-1 \
+  --initial-advertise-peer-urls http://host3:2380
 
-备份数据：
+# Next, start `etcd` with the new data directories:
+
+
+$ etcd \
+  --name m1 \
+  --listen-client-urls http://host1:2379 \
+  --advertise-client-urls http://host1:2379 \
+  --listen-peer-urls http://host1:2380 &
+$ etcd \
+  --name m2 \
+  --listen-client-urls http://host2:2379 \
+  --advertise-client-urls http://host2:2379 \
+  --listen-peer-urls http://host2:2380 &
+$ etcd \
+  --name m3 \
+  --listen-client-urls http://host3:2379 \
+  --advertise-client-urls http://host3:2379 \
+  --listen-peer-urls http://host3:2380 &
 
 ```
-# etcdctl --endpoints localhost:2379 snapshot save snapshot.db
-```
-
-恢复：
-
-```
-# etcdctl snapshot restore snapshot.db --name m3 --data-dir=/home/etcd_data
-```
-
-### 
 
 
 
