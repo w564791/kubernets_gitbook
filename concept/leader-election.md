@@ -180,7 +180,7 @@ type LeaderElectionRecord struct {
 
 
 
-我们再来看看一个非leader的节点是如果成为leader的
+我们再来看看一个非leader的节点是如何成为leader的
 
 //首先是入口
 
