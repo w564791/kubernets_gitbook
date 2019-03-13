@@ -75,8 +75,71 @@ WantedBy=multi-user.target
   healthzBindAddress: 127.0.0.1:10256
   kind: KubeProxyConfiguration
   metricsBindAddress: 127.0.0.1:10249
-  Mode: ProxyModeIPVS
+  mode: ipvs
+  
   ```
+
+  使用如下命令查看proxyMode:
+
+  ```
+  $  curl 127.0.0.1:10249/proxyMode
+  ipvs
+  ```
+
+  详细的proxy配置查看kubeadm推荐配置如下:
+
+  ```
+  # kubectl get cm -n kube-system kube-proxy -o yaml
+  apiVersion: v1
+  data:
+    config.conf: |-
+      apiVersion: kubeproxy.config.k8s.io/v1alpha1
+      bindAddress: 0.0.0.0
+      clientConnection:
+        acceptContentTypes: ""
+        burst: 10
+        contentType: application/vnd.kubernetes.protobuf
+        kubeconfig: /var/lib/kube-proxy/kubeconfig.conf
+        qps: 5
+      clusterCIDR: 10.244.0.0/16
+      configSyncPeriod: 15m0s
+      conntrack:
+        max: null
+        maxPerCore: 32768
+        min: 131072
+        tcpCloseWaitTimeout: 1h0m0s
+        tcpEstablishedTimeout: 24h0m0s
+      enableProfiling: false
+      healthzBindAddress: 0.0.0.0:10256
+      hostnameOverride: ""
+      iptables:
+        masqueradeAll: false
+        masqueradeBit: 14
+        minSyncPeriod: 0s
+        syncPeriod: 30s
+      ipvs:
+        excludeCIDRs: null
+        minSyncPeriod: 0s
+        scheduler: ""
+        syncPeriod: 30s
+      kind: KubeProxyConfiguration
+      metricsBindAddress: 127.0.0.1:10249
+      mode: "ipvs"
+      nodePortAddresses: null
+      oomScoreAdj: -999
+      portRange: ""
+      resourceContainer: /kube-proxy
+      udpIdleTimeout: 250ms
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: kube-proxy
+    name: kube-proxy
+    namespace: kube-system
+  
+  ```
+
+
 
 ## 生成kube-proxy.kubeconfig文件
 

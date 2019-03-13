@@ -30,6 +30,7 @@
   * 转载的文档
 
     * [Kubernetes TSL bootstrapping (转)](deploy/tsl-bootstrapping.md)
+    * [聊聊K8S里controller和scheduler的leader-elect问题](concept/leader-election.md)
     * [kubectl run时发生了什么(转)](concept/whathappendwhentaskstart.md)
     * [请求都去哪儿了(转)](concept/wheretherequestgo.md)
     * [理解Istio中Envoy代理 Sidecar注入以及流量劫持(转)](concept/sidecar.md)
@@ -40,6 +41,7 @@
     * [Kubernetes安全指南(转)](concept/k8s-security.md)
     * [利用Kubernetes优雅的处理HTTP请求(转)](concept/k8s-http.md)
     * [cni-plugin工作原理(转)](concept/cni-plugin.md)
+    * [Docker daemon(译)](concept/pid1anddocker.md)
 
   * [关于防火墙](firewall.md)
 

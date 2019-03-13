@@ -168,7 +168,7 @@ $ echo L3JlZ2lzdHJ5L25hbWVzcGFjZXMvYXV0b21vZGVs|base64 -d
 
 ### 对于 API 3 备份与恢复方法
 
-etcd v3恢复时,所有节点都需要恢复snapshot文件,当集群使用`etcdctl snapshot restore`时,会创建新的数据目录,如果未指定`--data-dir` 将在当前目录创建新的数据目录,目录命名方式未`--name`指定的名称与`.etcd`的组合,例如`--name test`此时新的数据目录名称被设定为``test.etcd` ,当不指定`--name`时,新的数据目录被默认命名为`default.etcd`
+etcd v3恢复时,所有节点都需要恢复snapshot文件,当集群使用`etcdctl snapshot restore`时,会创建新的数据目录,如果未指定`--data-dir` 将在当前目录创建新的数据目录,目录命名方式为`--name`指定的名称与`.etcd`的组合,例如`--name test`此时新的数据目录名称被设定为`test.etcd` ,当不指定`--name`时,新的数据目录被默认命名为`default.etcd`
 
 如下集群数据恢复方法来自官网,未做加密验证,生产使用时,建议加上`https`证书验证:
 
