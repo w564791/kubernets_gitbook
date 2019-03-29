@@ -420,6 +420,8 @@ NAME      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
 nginx     ClusterIP   10.254.92.250   <none>        80/TCP    1m
 ```
 
+note: 所有`kubectl`命令都能使用`-v=10`来添加更详细输出
+
 使用http命令get svc地址:
 
 ```

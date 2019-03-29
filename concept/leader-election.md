@@ -262,7 +262,7 @@ func (le *LeaderElector) acquire(ctx context.Context) bool {
 
 ```
 
-//renew方法只有在其`OnStartedLeading`时才会调用,实现方式和acquire差不多,Until也是调用了`JitterUntil`函数
+//renew方法只有在其`acquire succeeded`时才会调用,实现方式和acquire差不多,Until也是调用了`JitterUntil`函数
 
 ```go
 
