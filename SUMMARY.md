@@ -28,6 +28,7 @@
 
   * [转载的文档]()
     * [Kubernetes TSL bootstrapping (转)](deploy/tsl-bootstrapping.md)
+    * [配置 Aggregation Layer(译)](concept/aggregation.md)
     * [聊聊K8S里controller和scheduler的leader-elect问题](concept/leader-election.md)
     * [kubectl run时发生了什么(转)](concept/whathappendwhentaskstart.md)
     * [请求都去哪儿了(转)](concept/wheretherequestgo.md)
@@ -58,7 +59,8 @@
     * [containerd使用记录](deploy/node/containerd.md)
       * [部署containerd 1.1](deploy/node/containerd/deploy.md)
     * [使用calico cni](deploy/node/use-calico.md)
-    * [使用metrics-server为集群提供监控指标](deploy/metrics-server.md)
+    * [配置 Aggregation Layer](concept/aggregation.md)
+      - [使用metrics-server为集群提供监控指标](deploy/metrics-server.md)
   * [CoreDNS部署](deploy/deploy-kube-dns.md)
   * [dashboard部署](deploy/dashboard-deploy.md)
   * [heapster插件部署](deploy/heapster.md)
