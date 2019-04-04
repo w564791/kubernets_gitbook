@@ -3,7 +3,7 @@
 配置 `Aggregation Layer`允许使用其他API拓展`kubernetes apiserver`,即便这些`api`并非是`kubernetes API`的核心`API`部分.
 
 - [在开始之前](#在开始之前)
-- [认证流程](#在开始之前认证流程)
+- [认证流程](#认证流程)
 - [启用Kubernetes Apiserver flags](#启用Kubernetes Apiserver flags)
 
 # 在开始之前
@@ -113,7 +113,7 @@ User与`kubernetes apiserver`交互,需要被允许访问该路径,`kubernetes a
 
 **Note**:  如上行为是`extension apiserver`利用利用`k8s.io/apiserver/`包的默认操作,其他人可能会用命令行选项覆盖它
 
-为了是`extension apiserver`能够在`kube-system`的`configMap`中检索数据,在`kube-system`有一个名为`extension-apiserver-authentication-reader`的`role`可以被使用
+为了使`extension apiserver`能够在`kube-system`的`configMap`中检索数据,在`kube-system`有一个名为`extension-apiserver-authentication-reader`的`role`可以被使用
 
 ## Extension Apiserver授权请求
 

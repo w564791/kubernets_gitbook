@@ -108,12 +108,11 @@ ExecStart=/bin/kube-apiserver \
 --requestheader-group-headers=X-Remote-Group \
 --requestheader-username-headers=X-Remote-User \
 #--enable-aggregator-routing=true \
---requestheader-allowed-names=metrics-server,admin,system:kube-proxy \
+--requestheader-allowed-names=system:kube-proxy \
 --etcd-cafile=/etc/kubernetes/ssl/ca.pem \
 --etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem \
 --etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem \
 --apiserver-count=1  \
---storage-backend=etcd3 \
 --audit-policy-file=/etc/kubernetes/audit.yaml --audit-log-path=/var/log/audit \
 --audit-log-maxage=1 --audit-log-maxbackup=1 --audit-log-maxsize=1024 --enable-swagger-ui
 Restart=always

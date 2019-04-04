@@ -62,6 +62,7 @@
     * [配置 Aggregation Layer](concept/aggregation.md)
       - [使用metrics-server为集群提供监控指标](deploy/metrics-server.md)
   * [CoreDNS部署](deploy/deploy-kube-dns.md)
+  * [使用ELF收集Kubernetes集群日志](concept/elk.md)
   * [dashboard部署](deploy/dashboard-deploy.md)
   * [heapster插件部署](deploy/heapster.md)
   * [GlusterFS部署](deploy/glusterf.md)
