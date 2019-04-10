@@ -86,13 +86,23 @@
             "O": "k8s",
             "OU": "System"
         }
-    ]
+    ],
+    "ca": {
+      "expiry": "87600h"
+     }
 }
 ```
 
 "CN"：`Common Name，kube-apiserver` 从证书中提取该字段作为请求的用户名 `(User Name)`;浏览器使用该字段验证网站是否合法;
 
 "O"：`Organization，kube-apiserver`从证书中提取该字段作为请求用户所属的组`(Group)`;
+
+"key": 定义建特性;
+
+- `algo `: 指定算法,可以是`rsa`或`ecdsa`
+- `size`: 
+
+"ca": 定义CA特性和有效期,单位包含h(`hours`)或者y(`years`)
 
 #### 生成 CA 证书和私钥
 
