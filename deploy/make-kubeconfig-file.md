@@ -21,14 +21,14 @@ EOF
 
 ### 创建 kubelet bootstrapping kubeconfig 文件
 
-```
+```bash
 # cd /etc/kubernetes
 # 我这里的KUBE_APISERVER设置的ng(负载均衡器)的地址
 # export KUBE_APISERVER="https://xxxx"
 # 设置集群参数
 # kubectl config set-cluster kubernetes \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem \
-  --embed-certs=true \
+  --embed-certs=false \
   --server=${KUBE_APISERVER} \
   --kubeconfig=bootstrap.kubeconfig
 # 设置客户端认证参数
@@ -44,23 +44,23 @@ EOF
 # kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
 ```
 
-* `--embed-certs` 为 true 时表示将`certificate-authority` 证书写入到生成的 `bootstrap.kubeconfig` 文件中；
+* `--embed-certs` 为 true 时表示将`certificate-authority` 证书写入到生成的 `bootstrap.kubeconfig` 文件中；本处设置为false,别问我为什么,宝宝心里苦
 * 设置客户端认证参数时没有指定秘钥和证书，后续由`kube-apiserver`自动生成；
 
 ### 创建 kube-proxy kubeconfig 文件
 
-```
+```bash
 # 设置集群参数
 # kubectl config set-cluster kubernetes \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem \
-  --embed-certs=true \
+  --embed-certs=false \
   --server=${KUBE_APISERVER} \
   --kubeconfig=kube-proxy.kubeconfig
 # 设置客户端认证参数
 # kubectl config set-credentials kube-proxy \
   --client-certificate=/etc/kubernetes/ssl/kube-proxy.pem \
   --client-key=/etc/kubernetes/ssl/kube-proxy-key.pem \
-  --embed-certs=true \
+  --embed-certs=false \
   --kubeconfig=kube-proxy.kubeconfig
 # 设置上下文参数
 # kubectl config set-context default \
@@ -72,7 +72,33 @@ EOF
 ```
 
 * 设置集群参数和客户端认证参数时 `--embed-certs`都为 `true`，这会将 `certificate-authority、client-certificate` 和 `client-key`指向的证书文件内容写入到生成的`kube-proxy.kubeconfig`文件中；
-* `kube-proxy.pem`证书中 `CN` 为`system:kube-proxy，kube-apiserver` 预定义的 `RoleBinding cluster-admin`将`User system:kube-proxy`与 `Role system:node-proxier`绑定，该 `Role`授予了调用`kube-apiserver Proxy`相关 `API`的权限；
+
+
+### 创建 kube-controller-manager kubeconfig 文件
+
+```bash
+# 设置集群参数
+# kubectl config set-cluster kubernetes \
+  --certificate-authority=/etc/kubernetes/ssl/ca.pem \
+  --embed-certs=false \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=kubeconfig
+# 设置客户端认证参数
+# kubectl config set-credentials system:kube-controller-manager \
+  --client-certificate=/etc/kubernetes/ssl/kube-controller-manager.pem \
+  --client-key=/etc/kubernetes/ssl/kube-controller-manager.pem \
+  --embed-certs=false \
+  --kubeconfig=kubeconfig
+# 设置上下文参数
+# kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=system:kube-controller-manager \
+  --kubeconfig=kubeconfig
+# 设置默认上下文
+# kubectl config use-context default --kubeconfig=kubeconfig
+```
+
+- 
 
 ### 分发 kubeconfig 文件
 
@@ -80,16 +106,16 @@ EOF
 
 ### 创建 kubectl kubeconfig 文件
 
-```
+```bash
 # 设置集群参数
 $ kubectl config set-cluster kubernetes \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem \
-  --embed-certs=true \
+  --embed-certs=false \
   --server=${KUBE_APISERVER}
 $ # 设置客户端认证参数
 $ kubectl config set-credentials admin \
   --client-certificate=/etc/kubernetes/ssl/admin.pem \
-  --embed-certs=true \
+  --embed-certs=false \
   --client-key=/etc/kubernetes/ssl/admin-key.pem
 $ # 设置上下文参数
 $ kubectl config set-context kubernetes \
@@ -101,11 +127,11 @@ $ kubectl config use-context kubernetes
 
 看下这个文件:
 
-```
+```yaml
 apiVersion: v1
 clusters:
 - cluster:
-    certificate-authority-data: ...
+    certificate-authority: ...
     server: https://xxxx
   name: kubernetes
 contexts:
@@ -119,8 +145,8 @@ preferences: {}
 users:
 - name: admin
   user:
-    client-certificate-data: ...
-    client-key-data: ...
+    client-certificate: ...
+    client-key: ...
 ```
 
 

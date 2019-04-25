@@ -16,7 +16,7 @@
 
   软策略和硬策略的区分是有用处的硬策略适用于 pod 必须运行在某种节点，否则会出现问题的情况，比如集群中节点的架构不同，而运行的服务必须依赖某种架构提供的功能；软策略不同，它适用于满不满足条件都能工作，但是满足条件更好的情况，比如服务最好运行在某个区域，减少网络传输等。这 种区分是用户的具体需求决定的，并没有绝对的技术依赖。
 
-* ```
+* ```yaml
   apiVersion: v1
   kind: Pod
   metadata:
@@ -45,7 +45,7 @@
       image: k8s.gcr.io/pause:2.0
   ```
 
-  这个 pod 同时定义了 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 两种 nodeAffinity。改规则表示pod可以调度到key是kubernetes.io/e2e-az-name，值是e2e-az1 或者e2e-az2的节点上，另外，在符合调度的节点中优先调度具有标签another-node-label-key:another-node-label-value的节点。
+  这个 pod 同时定义了 `requiredDuringSchedulingIgnoredDuringExecution` 和 `preferredDuringSchedulingIgnoredDuringExecution `两种 `nodeAffinity`。改规则表示pod可以调度到key是`kubernetes.io/e2e-az-name`，值是e2e-az1 或者e2e-az2的节点上，另外，在符合调度的节点中优先调度具有标签`another-node-label-key:another-node-label-value`的节点。
 
 这里的匹配逻辑是label在某个列表中，可选的操作符有：
 
@@ -79,7 +79,7 @@
 * failure-domain.beta.kubernetes.io/zone
 * failure-domain.beta.kubernetes.io/region
 
-```
+```yaml
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
@@ -131,7 +131,7 @@ kubectl taint nodes node1 key=value:NoSchedule
 
 这个设置为node1加上一个Taint,该Taint的键为key,值为value,效果是NoSchedule,这意味着pod除非明确声明可以容忍这个Taint,否则就不会调度到node1上去,然后需要在pod上声明Toleration
 
-```
+```yaml
 tolerations:
 - key: "key"
   operator: "Equal"
@@ -158,7 +158,7 @@ Pod的Toleration声明中的key和effect需要和Taint的设置保持一致,并�
 
 如下设置Node的Taint
 
-```
+```bash
 kubectl taint nodes node1 key1=value1:NoSchedule
 kubectl taint nodes node1 key1=value1:NoExecute
 kubectl taint nodes node1 key2=value2:NoSchedule
@@ -166,7 +166,7 @@ kubectl taint nodes node1 key2=value2:NoSchedule
 
 在pod上定义Tolerations:
 
-```
+```yaml
 tolerations:
 - key: "key1"
   operator: "Equal"
@@ -180,7 +180,7 @@ tolerations:
 
 这样的结果是改pod无法被调度到node1上去,因为第三个Taint没有匹配Toleration,但是如果该pod已经在node1上运行,那么在运行时设置上第三个Taint,他还能继续在Node上运行,这是因为Pod可以容忍前2个Taint.
 
-```
+```yaml
 tolerations:
 - key: "key1"
   operator: "Equal"
@@ -193,7 +193,7 @@ tolerations:
 
 ## 示例
 
-```
+```yaml
 spec:
     affinity:
       podAntiAffinity:
@@ -222,4 +222,69 @@ spec:
 * 非强制调度到jenkins-slave=scheduler的节点上
 
 
+
+在zone=z1和zone=z2的两个区域内的node上  平均调度pod
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: nginx
+  name: nginx
+  namespace: default
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      run: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: zone
+                operator: In
+                values:
+                - z1
+                - z2
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: run
+                  operator: In
+                  values:
+                  - nginx
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: run
+                  operator: In
+                  values:
+                  - nginx
+              topologyKey: zone
+            weight: 2
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+      restartPolicy: Always
+
+
+```
 

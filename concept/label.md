@@ -66,6 +66,7 @@ $ kubectl get pods -l environment=production,tier=frontend
 $ kubectl get pods -l 'environment in (production),tier in (frontend)'
 $ kubectl get pods -l 'environment in (production, qa)'
 $ kubectl get pods -l 'environment,environment notin (frontend)'
+$ kubectl  label no 192.168.178.128 node-role.kubernetes.io/k8s-master-
 ```
 
 ## 在API object中设置label selector

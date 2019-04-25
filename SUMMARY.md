@@ -25,6 +25,7 @@
     * [Network Policies](concept/network-policies.md)
     * [Taints and Tolerations](concept/taints-and-tolerations.md)
     * [日志审计](concept/Auditing.md)
+    * [apiVersion](concept/apiversion.md)
 
   * [转载的文档]()
     * [Kubernetes TSL bootstrapping (转)](deploy/tsl-bootstrapping.md)
@@ -41,6 +42,8 @@
     * [利用Kubernetes优雅的处理HTTP请求(转)](concept/k8s-http.md)
     * [cni-plugin工作原理(转)](concept/cni-plugin.md)
     * [Docker中的信号传递(译)](concept/pid1anddocker.md)
+    * [kubernetes可靠性](concept/reliability.md)
+    * [PodSecurityPolices](concept/podsecuritypolicy.md)
 
   * [关于防火墙](firewall.md)
 

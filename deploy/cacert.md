@@ -1,15 +1,32 @@
 ## 集群部件所需证书
 
-| CA&Key | etcd | kube-apiserver | kube-proxy | kubelet | kubectl | flanneld |
+| CA&Key | `etcd` | `kube-apiserver` | `kube-proxy` | `kubelet` | `kubectl` | `controller-manager` |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| ca.pem | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
-| ca-key.pem |  |  |  |  |  |  |
-| kubernetes.pem | ✔️ | ✔️ |  |  |  | ✔️ |
-| kubernetes-key.pem | ✔️ | ✔️ |  |  |  | ✔️ |
-| kube-proxy.pem |  |  | ✔️ |  |  |  |
-| kube-proxy-key.pem |  |  | ✔️ |  |  |  |
-| admin.pem |  |  |  |  | ✔️ |  |
-| admin-key.pem |  |  |  |  | ✔️ |  |
+| `ca.pem` | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ | ✔️ |
+| `ca-key.pem` |  |  |  |  |  | ✔️ |
+| `kubernetes.pem` | ✔️ | ✔️ |  |  |  |  |
+| `kubernetes-key.pem` | ✔️ | ✔️ |  |  |  |  |
+| `kube-proxy.pem` |  | ✔️ | ✔️ |  |  |  |
+| `kube-proxy-key.pem` |  | ✔️ | ✔️ |  |  |  |
+| `admin.pem` |  |  |  |  | ✔️ |  |
+| `admin-key.pem` |  |  |  |  | ✔️ |  |
+| `sa.key` | | | | |  | ✔️ |
+| `sa.pub` | | ✔️ | | |  |  |
+| `kube-controller-manager.pem` | | | | |  | ✔️ |
+| `kube-controller-manager-key.pem` | | | | |  | ✔️ |
+| `token` | ✔️ | | | ✔️ |  |  |
+
+生成service account密钥对
+
+```bash
+# openssl genrsa -out sa.key 4096
+# openssl rsa -in sa.key -pubout >sa.pub
+# ls sa.*
+sa.key  sa.pub
+
+```
+
+
 
 ## 安装CFSSL
 
@@ -239,6 +256,53 @@ admin.csr admin-csr.json admin-key.pem admin.pem
 kube-proxy.csr  kube-proxy-csr.json  kube-proxy-key.pem  kube-proxy.pem
 ```
 
+### 创建kube-controller-manager证书
+
+创建`kube-controller-manager`签名请求
+
+```bash
+# cat kube-controller-manager.json
+```
+
+
+
+```yaml
+{
+    "CN": "system:kube-controller-manager",
+    "hosts": [],
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "CN",
+            "ST": "BeiJing",
+            "L": "BeiJing",
+            "O": "system:kube-controller-manager",
+            "OU": "System"
+        }
+    ]
+}
+
+```
+
+- `CN`指定该证书的 `User`为 `system:kube-controller-manager`；
+- 将`User system:kube-controller-manager` 与 `ClusterRole system:kube-controller-manager`绑定；
+- 为什么要为`kube-controller-manager`创建一套单独的证书,在此之前,笔者一直为`controller manager`使用集群的admin权限,但是这在使用`PodSecurityPolicies`时是不被允许的,集群会跳过所有的PSP验证
+
+生成 `kube-controller-manager`客户端证书和私钥
+
+```
+#  cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes  kube-controller-manager.json | cfssljson -bare kube-controller-manager
+# ls kube-controller-manager*
+kube-controller-manager.csr  kube-controller-manager.json  kube-controller-manager-key.pem  kube-controller-manager.pem
+```
+
+### 
+
+
+
 ## 校验证书
 
 以 `kubernetes`证书为例
@@ -333,9 +397,7 @@ $ cfssl-certinfo -cert kubernetes.pem
 
 将生成的证书和秘钥文件（后缀名为.pem）拷贝到所有机器的`/etc/kubernetes/ssl`目录下备用；
 
-```
-# for i in k8s-1 k8s-2 k8s-3 k8s-4 ;do scp *pem root@$i:/etc/kubernetes/ssl/ ;done
-```
+将生成的`sa.key`以及`sa.pub`发送到master机器的`/etc/kubernetes/ssl`目录
 
 参考文档:
 

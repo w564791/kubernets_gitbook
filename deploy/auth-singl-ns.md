@@ -1,6 +1,6 @@
 **创建**`devuser-csr.json`**文件**
 
-```
+```json
 {
   "CN": "devuser",
   "hosts": [],
@@ -30,7 +30,7 @@
 ca-key.pem  ca.pem ca-config.json  devuser-csr.json
 ```
 
-```
+```bash
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes devuser-csr.json | cfssljson -bare devuser
 2018/01/08 14:43:03 [INFO] generate received request
 2018/01/08 14:43:03 [INFO] received CSR
@@ -60,12 +60,12 @@ devuser.csr  devuser-key.pem  devuser.pem
 
 ## 创建 kubeconfig 文件 {#创建-kubeconfig-文件}
 
-```
+```bash
 # 设置集群参数
 export KUBE_APISERVER="https://192.168.70.175"
 kubectl config set-cluster kubernetes \
 --certificate-authority=/etc/kubernetes/ssl/ca.pem \
---embed-certs=true \
+--embed-certs=false \
 --server=${KUBE_APISERVER} \
 --kubeconfig=devuser.kubeconfig
 
@@ -73,7 +73,7 @@ kubectl config set-cluster kubernetes \
 kubectl config set-credentials devuser \
 --client-certificate=/etc/kubernetes/ssl/devuser.pem \
 --client-key=/etc/kubernetes/ssl/devuser-key.pem \
---embed-certs=true \
+--embed-certs=false \
 --kubeconfig=devuser.kubeconfig
 
 # 设置上下文参数
@@ -127,4 +127,6 @@ Error from server (Forbidden): namespaces is forbidden: User "testuser" cannot l
 ```
 
 
+
+# 其实没这么麻烦,给个token就行了,上面都是初学的时候搞的
 

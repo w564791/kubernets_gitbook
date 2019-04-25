@@ -227,7 +227,6 @@ ExecStart=/bin/kubelet \
 --logtostderr=false --log-dir=/var/log/k8s  \
 --v=2 \
 --config=/etc/kubernetes/kubelet.yaml  \
---allow-privileged=true  \
 --network-plugin=cni
 Restart=on-failure
 ```
@@ -250,12 +249,15 @@ Restart=on-failure
 
 * --network-plugin=cni   使用cni插件
 
+* 本例已去除`--allow-privileged=true `参数,如需使用特权,请使用`PodSecurityPolicy`
+
 * --fail-swap-on=false   不使用swap
 
   _**上列参数部分在--config指定的配置文件里设置**_,该文件可以使用如下命令从ready的node上获取
 
   ```
   # curl -sSL http://localhost:8080/api/v1/nodes/192.168.178.128/proxy/configz | jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
+  #  kubectl get --raw /api/v1/nodes/192.168.178.128/proxy/configz|jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
   ```
 
 ```
