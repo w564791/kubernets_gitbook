@@ -63,7 +63,10 @@ spec:
   requiredDropCapabilities:
   - ALL
   runAsUser:
-    rule: RunAsAny
+    rule: MustRunAs
+    ranges:
+    - max: 65535
+      min: 1000
   seLinux:
     rule: RunAsAny
   supplementalGroups:
@@ -128,7 +131,10 @@ spec:
   requiredDropCapabilities:
   - ALL
   runAsUser:
-    rule: MustRunAsNonRoot
+    rule: MustRunAs
+    ranges:
+      - min: 1000
+        max: 100000
   seLinux:
     rule: RunAsAny
   supplementalGroups:

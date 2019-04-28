@@ -15,7 +15,7 @@ kubernetes master 节点包含的组件：
 
 [下载相应版本的二进制包](https://github.com/kubernetes/kubernetes/releases)
 
-此处使用的是v1.10.2版本
+此处使用的是v1.13.4版本
 
 ```
 root@node1:~# tree /opt/kubernetes/

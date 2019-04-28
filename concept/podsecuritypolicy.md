@@ -29,9 +29,9 @@ Pod安全策略是一种集群级别的资源,用于规范控制pod的一些敏�
 | [`defaultAddCapabilities`, `requiredDropCapabilities`, `allowedCapabilities`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#capabilities) | Linux capabilities               |
 | [`seLinux`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#selinux) | 容器的`SELinux`                  |
 | [`allowedProcMountTypes`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#allowedprocmounttypes) | 容器允许的Proc Mount类型         |
-| [AppArmor](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor) | 容器使用的`AppArmor`配置文件     |
-| [seccomp](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp) | 容器使用的`seccomp`配置文件      |
-| [sysctl](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl) | 容器使用的`sysctl`note[p配置文件 |
+| [`AppArmor`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor) | 容器使用的`AppArmor`配置文件     |
+| [`seccomp`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp) | 容器使用的`seccomp`配置文件      |
+| [`sysctl`](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl) | 容器使用的`sysctl`note[p配置文件 |
 
 
 

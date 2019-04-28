@@ -3,6 +3,7 @@
 * [基础知识](README.md)
 
   * [主要概念](concept.md)
+
     * [Node](concept/node.md)
     * [Pod](concept/pod.md)
     * [Namspace](concept/namspaces.md)
@@ -27,27 +28,32 @@
     * [日志审计](concept/Auditing.md)
     * [apiVersion](concept/apiversion.md)
 
-  * [转载的文档]()
+  * [转载的文档](deploy/tsl-bootstrapping.md)
+
     * [Kubernetes TSL bootstrapping (转)](deploy/tsl-bootstrapping.md)
-    * [配置 Aggregation Layer(译)](concept/aggregation.md)
-    * [聊聊K8S里controller和scheduler的leader-elect问题](concept/leader-election.md)
     * [kubectl run时发生了什么(转)](concept/whathappendwhentaskstart.md)
     * [请求都去哪儿了(转)](concept/wheretherequestgo.md)
     * [理解Istio中Envoy代理 Sidecar注入以及流量劫持(转)](concept/sidecar.md)
-    * [通过消除特权容器的需求来提高Istio部署的安全性(译)](concept/istio-controller.md)
     * [Istio流量管理实现机制深度解析(转)](concept/istio-network.md)
     * [Prometheus-func(转)](concept/prometheus-func.md)
-    * [Prometheus-operators(翻译)](concept/operators.md)
     * [Kubernetes安全指南(转)](concept/k8s-security.md)
     * [利用Kubernetes优雅的处理HTTP请求(转)](concept/k8s-http.md)
     * [cni-plugin工作原理(转)](concept/cni-plugin.md)
-    * [Docker中的信号传递(译)](concept/pid1anddocker.md)
-    * [kubernetes可靠性](concept/reliability.md)
-    * [PodSecurityPolices](concept/podsecuritypolicy.md)
+
+    [f翻译的文档](deploy/aggregation.md)
+
+    - [配置 Aggregation Layer(译)](concept/aggregation.md)
+    - [聊聊K8S里controller和scheduler的leader-elect问题(半原创)](concept/leader-election.md)
+    - [通过消除特权容器的需求来提高Istio部署的安全性(译)](concept/istio-controller.md)
+    - [Prometheus-operators(翻译)](concept/operators.md)
+    - [Docker中的信号传递(译)](concept/pid1anddocker.md)
+    - [kubernetes可靠性(译)](concept/reliability.md)
+    - [PodSecurityPolices(译)](concept/podsecuritypolicy.md)
+    - [配置Multiple Schedulers(译)](concept/multi-scueduler.md)
 
   * [关于防火墙](firewall.md)
 
-* [在CentOS7上部署kubernetes1.10.2集群](deploy.md)
+* [在CentOS7上部署kubernetes1.13.4集群](deploy.md)
   * [资源类型](deploy/source.md)
   * [格式化输出](deploy/format-output.md)
   * [自签发证书](deploy/cacert.md)
