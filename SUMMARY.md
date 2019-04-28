@@ -29,7 +29,6 @@
     * [apiVersion](concept/apiversion.md)
 
   * [转载的文档](deploy/tsl-bootstrapping.md)
-
     * [Kubernetes TSL bootstrapping (转)](deploy/tsl-bootstrapping.md)
     * [kubectl run时发生了什么(转)](concept/whathappendwhentaskstart.md)
     * [请求都去哪儿了(转)](concept/wheretherequestgo.md)
@@ -39,9 +38,7 @@
     * [Kubernetes安全指南(转)](concept/k8s-security.md)
     * [利用Kubernetes优雅的处理HTTP请求(转)](concept/k8s-http.md)
     * [cni-plugin工作原理(转)](concept/cni-plugin.md)
-
-    [f翻译的文档](deploy/aggregation.md)
-
+  * [翻译的文档](concept/aggregation.md)
     - [配置 Aggregation Layer(译)](concept/aggregation.md)
     - [聊聊K8S里controller和scheduler的leader-elect问题(半原创)](concept/leader-election.md)
     - [通过消除特权容器的需求来提高Istio部署的安全性(译)](concept/istio-controller.md)
