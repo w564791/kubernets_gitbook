@@ -21,7 +21,7 @@ $ip neighbor
 
 cni-plugin创建了endpoint之后，会将其保存到etcd中，felix从而感知到endpoint的变化。
 
-之后，felix会在host端设置一条静态arp:
+之后，felix会在host端设置一条静态arp: (2021-4-27更正:静态arp 的mac地址在所有容器内都是ee:ee:ee:ee:ee:ee,并且dev是eth0)
 
 ```
 192.168.8.42 dev cali69de609d5af lladdr b2:21:5b:82:e1:27 PERMANENT
